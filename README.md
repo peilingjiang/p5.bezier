@@ -1,9 +1,93 @@
 # p5.bezier
 
-Hi! Don't wait and let **p5.bezier**, a [p5.js](https://p5js.org) library, help you draw the smoothest curves like never before. You can regard the library as an advanced version of the original p5.js `bezier()` function which takes no less or more than 4 points while cannot draw higher level curves. The p5.bezier library allows you to draw continuous and closed bezier curves easily.
+Hi! Don't wait and let **p5.bezier**, a [p5.js](https://p5js.org) library, help you draw the smoothest curves like never before. You can regard the library as an advanced version of the original p5.js `bezier()` function which takes no less or more than 4 points while cannot draw higher level curves. The p5.bezier library allows you to draw continuous and closed Bézier curves easily.
+
+To draw a Bézier curve on canvas, you can simply use `newBezier()`:
+
+```js
+newBezier([[85, 20], [10, 10], [90, 90], [15, 80], [20, 100]]);
+```
+
+**What is Bézier Curve?**
+
+A Bézier curve is a parametric curve used in computer graphics and related fields. The curve, which is related to the Bernstein polynomial, is named after Pierre Bézier, who used it in the 1960s for designing curves for the bodywork of Renault cars. It's continuity creates beautiful textures and shapes. Nowadays, it is an essential part across design domains from products to visualization.
+
+Dive into this document to know more about the library.
+
+## Getting Started
+
+To use p5.bezier library, download [p5.bezier.js](https://github.com/peilingjiang/p5.bezier/blob/master/lib/p5.bezier.js) file into your project directory and add the following line into the your HTML file:
+
+```html
+<script src="p5.bezier.js"></script>
+```
+
+The library is still a work-in-progress project. Therefore, code tends to change from time to time. Please come back once a while to download the latest version of the library.
+
+## Draw a Bézier Curve
+
+The most straightforward and easiest way to use the library is to put `newBezier()` in your `draw()` function. To control the style of the curve, use `fill()` or `strokeWeight()` functions as for other shapes.
 
 ```
-newBezier([[85, 20], [10, 10], [90, 90], [15, 80]]);
+newBezier(pointsArray [, closeType] [, fidelity]);
 ```
 
-**This project is still WIP.**
+**pointsArray**
+
+Takes an array of arrays of *x* and *y* locations of control points of the curve. e.g. `[[10, 30], [5, 100], [25, 60]]`.
+
+**closeType** (Optional)
+
+Takes a string, either `"OPEN"` or `"CLOSE"`. If you want the curve to close itself automatically, put `"CLOSE"` here. Otherwise, leave it as default or put `"OPEN"`. Currently, the close point of the curve cannot guarantee to be continuous.
+
+**fidelity** (Optional)
+
+Takes an integer from `0` to `9`, as default is `7`. How accurate you want the Bézier curve to be. The more inner vertices used to draw the curve, the more accurate it would be, however, the more computation would also be cost.
+
+## Create a Bézier Object
+
+If you want higher-level functions of a Bézier curve, like getting the shortest distance from a point to the curve, you can use `newBezierObj()`. It can also potentially save computation resources (when you put it in `setup()`) since the vertices will only be calculated once and then can be used repeatedly.
+
+The use of it is similar to the previous one, while `newBezierObj()` will return a *Bézier Curve Object* that you can pass into a variable:
+
+```
+let bezierObject = newBezierObj(pointsArray [, closeType] [, fidelity]);
+```
+
+The call of `newBezierObj` will not draw the curve on canvas automatically. To draw the curve, use `.draw()` as one of many functions listed below:
+
+- `.draw([dash])`
+
+  Draw the curve on canvas.
+
+  **dash** (Optional)
+
+  Takes an array of two numbers indicating the length of solid and break parts in one period of the dash Bézier curve. e.g. `[10, 5]` means the first solid part is 10px long and then comes the break part which is 5px long.
+
+- `.update(newPointsArray)`
+
+  Update the locations of control points. The amount of control points must be the same as the time curve was created.
+
+- `.shortest(pointX, pointY [, pointZ])`
+
+  Takes two numbers of *x* and *y* locations of an outside point. Returns an array of location of the point on the curve. e.g. To draw a line between this two points:
+
+  ```js
+  pointOnCurve = bezierObject.shortest(pointX, pointY);
+  line(pointX, pointY, pointOnCurve[0], pointOnCurve[1]);
+  ```
+
+## Examples
+
+To be updated.
+
+## To-Dos
+
+1. `offset()`, `intersection()`, and `curvature()`...
+2. Functions for B-splines.
+3. Continuous close point when close up a Bézier curve.
+
+## References
+
+1. [Bézier curve - Wikipedia](https://en.wikipedia.org/wiki/B%C3%A9zier_curve)
+2. [Bezier.js](https://pomax.github.io/bezierjs/) by [Pomax - GitHub](https://github.com/Pomax) (Concept)
