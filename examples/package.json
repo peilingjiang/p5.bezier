@@ -1,0 +1,11 @@
+{
+  "name": "examples",
+  "version": "1.0.0",
+  "description": "Examples made to demonstrate p5.bezier library.",
+  "main": "server.js",
+  "keywords": [
+    "p5.js"
+  ],
+  "author": "Peiling Jiang",
+  "license": "MIT"
+}
