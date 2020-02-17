@@ -10,7 +10,7 @@ newBezier([[85, 20], [10, 10], [90, 90], [15, 80], [20, 100]]);
 
 **What is Bézier Curve?**
 
-A Bézier curve is a parametric curve used in computer graphics and related fields. The curve, which is related to the Bernstein polynomial, is named after Pierre Bézier, who used it in the 1960s for designing curves for the bodywork of Renault cars. It's continuity creates beautiful textures and shapes. Nowadays, it is an essential part across design domains from products to visualization.
+A Bézier curve is a parametric curve used in computer graphics and related fields. The curve, which is related to the Bernstein polynomial, is named after Pierre Bézier, who used it in the 1960s for designing curves for the bodywork of Renault cars. Its continuity creates beautiful textures and shapes. Nowadays, it is an essential part across design domains from products to visualization.
 
 Dive into this document to know more about the library.
 
@@ -18,8 +18,14 @@ Dive into this document to know more about the library.
 
 To use p5.bezier library, download [p5.bezier.js](https://github.com/peilingjiang/p5.bezier/blob/master/lib/p5.bezier.js) file into your project directory and add the following line into the your HTML file:
 
-```html
+```HTML
 <script src="p5.bezier.js"></script>
+```
+
+You can also use the file through content delivery service by adding the following line:
+
+```HTML
+<script src="https://unpkg.com/p5bezier@0.1.2/p5.bezier.js"></script>
 ```
 
 The library is still a work-in-progress project. Therefore, code tends to change from time to time. Please come back once a while to download the latest version of the library.
@@ -79,13 +85,31 @@ The call of `newBezierObj` will not draw the curve on canvas automatically. To d
 
 ## Examples
 
-To be updated.
+To run the examples locally, please download the repository on your computer. Then, use Terminal and change directory to `examples` folder. Run
+
+```
+npm install
+node server.js name_of_example
+```
+
+For instance, if you want to run the example *basic*, simply type `node server.js basic`. Then, go to the browser of your choice and put `localhost:8000` in the address bar.
+
+Currently available examples:
+
+- **basic** draws a simple Bézier curve with 5 control points across the canvas.
+- **control_points** draws a curve and it's control points, which can be dragged around.
+- **fidelity** draws curves with different fidelities.
+- **basic_object** is similar to basic, while drew with Bézier object.
+- **shortest_point** draws the shortest line from mouse to curve.
+
+More complex examples to be updated.
 
 ## To-Dos
 
-1. `offset()`, `intersection()`, and `curvature()`...
-2. Functions for B-splines.
-3. Continuous close point when close up a Bézier curve.
+1. More examples.
+2. `offset()`, `intersection()`, and `curvature()`... functions for Bézier object.
+3. Draw B-splines.
+4. Continuous close point when close up a Bézier curve.
 
 ## References
 

@@ -7,5 +7,8 @@
     "p5.js"
   ],
   "author": "Peiling Jiang",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
 }
