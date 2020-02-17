@@ -1,0 +1,19 @@
+{
+  "name": "p5bezier",
+  "version": "0.1.5",
+  "description": "p5.bezier.js library for everyone.",
+  "main": "index.js",
+  "keywords": [
+    "p5.js", "Bezier", "Computer Graphics"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/peilingjiang/p5.bezier.git"
+  },
+  "author": "Peiling Jiang",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/peilingjiang/p5.bezier/issues"
+  },
+  "homepage": "https://github.com/peilingjiang/p5.bezier#readme"
+}
