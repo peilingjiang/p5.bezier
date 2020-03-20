@@ -21,7 +21,7 @@ function draw() {
   stroke(color("#FF6464"));
   newBezier(points, "OPEN", 1);
   stroke(color("#DB3056"));
-  newBezier(points, "OPEN", 4);
+  newBezier(points, "OPEN", 3);
   stroke(color("#851D41"));
   newBezier(points, "OPEN", 9);
 
@@ -33,7 +33,7 @@ function draw() {
   fill(color("#FF6464"));
   text("Fidelity 1", 935, 555);
   fill(color("#DB3056"));
-  text("Fidelity 4", 935, 570);
+  text("Fidelity 3", 935, 570);
   fill(color("#851D41"));
   text("Fidelity 9", 935, 585);
   pop();

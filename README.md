@@ -50,7 +50,7 @@ Takes a string, either `"OPEN"` or `"CLOSE"`. If you want the curve to close its
 
 **fidelity** (Optional)
 
-Takes an integer from `0` to `9`, as default is `7`. How accurate you want the Bézier curve to be. The more inner vertices used to draw the curve, the more accurate it would be, however, the more computation would also be cost.
+Takes an integer from `0` to `10`, as default is `7`. How accurate you want the Bézier curve to be. The more inner vertices used to draw the curve, the more accurate it would be, however, the more computation would also be cost.
 
 ## Create a Bézier Object
 
@@ -75,6 +75,16 @@ The call of `newBezierObj` will not draw the curve on canvas automatically. To d
 - `.update(newPointsArray)`
 
   Update the locations of control points. The amount of control points must be the same as the time curve was created.
+
+- `.move(x, y [, z, toDraw, dash])`
+
+  Alternatively, if you want to move the curve as a whole, you can use this function. The function will not mutate the original object but will draw and return a new one. Therefore, if you want to update the curve this way (which is faster than `.update()`), you can:
+
+  ```js
+  bezierObject = bezierObject.move(6, 17, -22, false);
+  ```
+
+  `toDraw` is `true` by default, but if you only want to update the curve while not drawing it simultaneously, you can set it to `false`.
 
 - `.shortest(pointX, pointY [, pointZ])`
 
