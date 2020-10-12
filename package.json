@@ -1,6 +1,6 @@
 {
   "name": "p5bezier",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "p5.bezier.js library for everyone.",
   "main": "dist/p5.bezier.min.js",
   "module": "src/p5.bezier.min.js",
