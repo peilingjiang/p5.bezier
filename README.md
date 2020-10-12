@@ -60,7 +60,8 @@ import { initBezier, newBezier, newBezierObject } from 'p5bezier'
 
 ```js
 function setup() {
-  let c = createCanvas(100, 100) + initBezier(c)
+  let c = createCanvas(100, 100)
++ initBezier(c)
 }
 ```
 
