@@ -1,10 +1,12 @@
 {
   "name": "p5bezier",
-  "version": "0.1.6-b",
+  "version": "0.2.0",
   "description": "p5.bezier.js library for everyone.",
-  "main": "index.js",
+  "main": "lib/index.min.js",
   "keywords": [
-    "p5.js", "Bezier", "Computer Graphics"
+    "p5.js",
+    "Bezier",
+    "Computer Graphics"
   ],
   "repository": {
     "type": "git",
@@ -15,5 +17,23 @@
   "bugs": {
     "url": "https://github.com/peilingjiang/p5.bezier/issues"
   },
-  "homepage": "https://github.com/peilingjiang/p5.bezier#readme"
+  "homepage": "https://github.com/peilingjiang/p5.bezier#readme",
+  "devDependencies": {
+    "eslint": "^7.11.0",
+    "husky": "^4.3.0",
+    "lint-staged": "^10.4.0",
+    "prettier": "2.1.2"
+  },
+  "scripts": {
+    "format": "prettier --write \"**/*.{js,json,md,html,css}\""
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.js": "eslint --cache --fix",
+    "*.{js,json,md,html,css}": "prettier --write"
+  }
 }

@@ -4,30 +4,38 @@
   NYU ITP/IMA 2020
 */
 
-let points = [[0, 0], [100, 1100], [1500, -2200], [1500, 2800], [100, -500], [0, 600]];
-let bezierObject;
+let points = [
+  [0, 0],
+  [100, 1100],
+  [1500, -2200],
+  [1500, 2800],
+  [100, -500],
+  [0, 600],
+]
+let bezierObject
 
 function setup() {
-  createCanvas(1000, 600);
-  noFill();
-  strokeWeight(2);
+  let c = createCanvas(1000, 600)
+  initBezier(c)
+  noFill()
+  strokeWeight(2)
 
-  bezierObject = new newBezierObj(points, "OPEN", 9);
+  bezierObject = new newBezierObj(points, 'OPEN', 9)
 }
 
 function draw() {
-  background(235);
+  background(235)
   // Draw the dash Bezier curve
-  bezierObject.draw([20, 5]);
+  bezierObject.draw([20, 5])
   // Find the closest point and the shortest distance
-  let pointOnCurve = bezierObject.shortest(mouseX, mouseY);
-  let r = dist(mouseX, mouseY, pointOnCurve[0], pointOnCurve[1]);
+  let pointOnCurve = bezierObject.shortest(mouseX, mouseY)
+  let r = dist(mouseX, mouseY, pointOnCurve[0], pointOnCurve[1])
 
   // Draw the line and ellipse from mouse to point
-  line(mouseX, mouseY, pointOnCurve[0], pointOnCurve[1]);
-  push();
-  strokeWeight(1);
-  stroke(color("#F0134D"))
-  ellipse(mouseX, mouseY, 2 * r, 2 * r);
-  pop();
+  line(mouseX, mouseY, pointOnCurve[0], pointOnCurve[1])
+  push()
+  strokeWeight(1)
+  stroke(color('#F0134D'))
+  ellipse(mouseX, mouseY, 2 * r, 2 * r)
+  pop()
 }
