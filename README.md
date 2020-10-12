@@ -4,10 +4,18 @@
 
 Hi! Don't wait and let **p5.bezier**, a [p5.js](https://p5js.org) library, help you draw the smoothest curves like never before. You can regard the library as an advanced version of the original p5.js `bezier()` function which takes no less or more than 4 points while cannot draw higher level curves. The p5.bezier library allows you to draw continuous and closed Bézier curves easily.
 
+**0.2.0 NEW** The library is now independent of p5.js so that you can use it for a wider range of projects (untested). However, an extra `initBezier(canvas)` line is needed before the drawings.
+
 To draw a Bézier curve on canvas, you can simply use `newBezier()`:
 
 ```js
-newBezier([[85, 20], [10, 10], [90, 90], [15, 80], [20, 100]]);
+newBezier([
+  [85, 20],
+  [10, 10],
+  [90, 90],
+  [15, 80],
+  [20, 100],
+])
 ```
 
 **What is Bézier Curve?**
@@ -27,10 +35,34 @@ To use p5.bezier library, download [p5.bezier.js](https://github.com/peilingjian
 You can also use the file through content delivery service by adding the following line:
 
 ```HTML
-<script src="https://unpkg.com/p5bezier@0.1.6-b/lib/p5.bezier.min.js"></script>
+<script src="https://unpkg.com/p5bezier@0.2.0/lib/p5.bezier.min.js"></script>
 ```
 
 The library is still a work-in-progress project. Therefore, code tends to change from time to time. Please come back once a while to download the latest version of the library.
+
+### NPM
+
+You can also install using the package managers NPM (recommended):
+
+```
+npm install --save p5bezier
+```
+
+And then import the modules into your project:
+
+```js
+import { initBezier, newBezier, newBezierObject } from 'p5bezier'
+```
+
+## Init for Bézier
+
+**0.2.0 NEW** You need to let the Bézier drawing system know the canvas you are drawing on. Let's use p5.js as an example:
+
+```js
+function setup() {
+  let c = createCanvas(100, 100) + initBezier(c)
+}
+```
 
 ## Draw a Bézier Curve
 
@@ -42,7 +74,7 @@ newBezier(pointsArray [, closeType] [, fidelity]);
 
 **pointsArray**
 
-Takes an array of arrays of *x* and *y* locations of control points of the curve. e.g. `[[10, 30], [5, 100], [25, 60]]`.
+Takes an array of arrays of _x_ and _y_ locations of control points of the curve. e.g. `[[10, 30], [5, 100], [25, 60]]`.
 
 **closeType** (Optional)
 
@@ -56,7 +88,7 @@ Takes an integer from `0` to `10`, as default is `7`. How accurate you want the 
 
 If you want higher-level functions of a Bézier curve, like getting the shortest distance from a point to the curve, you can use `newBezierObj()`. It can also potentially save computation resources (when you put it in `setup()`) since the vertices will only be calculated once and then can be used repeatedly.
 
-The use of it is similar to the previous one, while `newBezierObj()` will return a *Bézier Curve Object* that you can pass into a variable:
+The use of it is similar to the previous one, while `newBezierObj()` will return a _Bézier Curve Object_ that you can pass into a variable:
 
 ```
 let bezierObject = newBezierObj(pointsArray [, closeType] [, fidelity]);
@@ -81,18 +113,18 @@ The call of `newBezierObj` will not draw the curve on canvas automatically. To d
   Alternatively, if you want to move the curve as a whole, you can use this function. The function will not mutate the original object but will draw and return a new one. Therefore, if you want to update the curve this way (which is faster than `.update()`), you can:
 
   ```js
-  bezierObject = bezierObject.move(6, 17, -22, false);
+  bezierObject = bezierObject.move(6, 17, -22, false)
   ```
 
   `toDraw` is `true` by default, but if you only want to update the curve while not drawing it simultaneously, you can set it to `false`.
 
 - `.shortest(pointX, pointY [, pointZ])`
 
-  Takes two numbers of *x* and *y* locations of an outside point. Returns an array of location of the point on the curve. e.g. To draw a line between this two points:
+  Takes two numbers of _x_ and _y_ locations of an outside point. Returns an array of location of the point on the curve. e.g. To draw a line between this two points:
 
   ```js
-  pointOnCurve = bezierObject.shortest(pointX, pointY);
-  line(pointX, pointY, pointOnCurve[0], pointOnCurve[1]);
+  pointOnCurve = bezierObject.shortest(pointX, pointY)
+  line(pointX, pointY, pointOnCurve[0], pointOnCurve[1])
   ```
 
 ## Examples
@@ -104,7 +136,7 @@ npm install
 node server.js name_of_example
 ```
 
-For instance, if you want to run the example *basic*, simply type `node server.js basic`. Then, go to the browser of your choice and put `localhost:8000` in the address bar.
+For instance, if you want to run the example _basic_, simply type `node server.js basic`. Then, go to the browser of your choice and put `localhost:8000` in the address bar.
 
 Currently available examples:
 
