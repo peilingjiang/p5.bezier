@@ -12,5 +12,5 @@
     "eqeqeq": "warn",
     "no-unused-vars": "warn"
   },
-  "ignorePatterns": ["examples/*", "*.min.js"]
+  "ignorePatterns": ["examples/*", "*.min.js", "*.config.js"]
 }
