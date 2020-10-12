@@ -58,10 +58,10 @@ import { initBezier, newBezier, newBezierObject } from 'p5bezier'
 
 **0.2.0 NEW** You need to let the Bézier drawing system know the canvas you are drawing on. Let's use p5.js as an example:
 
-```
+```diff
 function setup() {
-    let c = createCanvas(100, 100)
-+   initBezier(c)
+  let c = createCanvas(100, 100)
++ initBezier(c)
 }
 ```
 
