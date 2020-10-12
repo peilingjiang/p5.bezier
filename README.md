@@ -42,7 +42,7 @@ The library is still a work-in-progress project. Therefore, code tends to change
 
 ### NPM
 
-You can also install using the package managers NPM (recommended):
+You can also install using the package manager NPM (recommended):
 
 ```
 npm install --save p5bezier
@@ -58,7 +58,7 @@ import { initBezier, newBezier, newBezierObject } from 'p5bezier'
 
 **0.2.0 NEW** You need to let the Bézier drawing system know the canvas you are drawing on. Let's use p5.js as an example:
 
-```js
+```
 function setup() {
   let c = createCanvas(100, 100)
 + initBezier(c)
