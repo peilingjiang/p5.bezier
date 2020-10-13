@@ -6,14 +6,14 @@
 
 function setup() {
   let c = createCanvas(500, 500)
-  initBezier(c)
+  p5bezier.initBezier(c)
   noFill()
 }
 
 function draw() {
   background(235)
   strokeWeight(2)
-  newBezier([
+  p5bezier.newBezier([
     [10, 10],
     [100, 700],
     [500, -800],

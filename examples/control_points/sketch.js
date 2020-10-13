@@ -10,7 +10,7 @@ let pa // a PointArray object
 
 function setup() {
   let c = createCanvas(windowWidth, windowHeight)
-  initBezier(c)
+  p5bezier.initBezier(c)
   noFill()
 
   pa = new PointArray()
@@ -26,7 +26,7 @@ function draw() {
   stroke(color('#FD5E53'))
   strokeWeight(3)
   // Draw an open Bezier curve with fidelity of 9 (highest)
-  newBezier(pa.get(), 'OPEN', 9)
+  p5bezier.newBezier(pa.get(), 'OPEN', 9)
   pa.display()
 }
 
@@ -56,7 +56,7 @@ class PointArray {
 
   get() {
     // Return an array of array
-    // for newBezier function to use
+    // for p5bezier.newBezier function to use
     let positionArray = []
     // point is a Point object
     for (let point of this.pointArray) positionArray.push(point.position)

@@ -17,7 +17,7 @@ let points = [
 
 function setup() {
   let c = createCanvas(1000, 600)
-  initBezier(c)
+  p5bezier.initBezier(c)
   noFill()
 }
 
@@ -25,13 +25,13 @@ function draw() {
   background(235)
   strokeWeight(2)
   stroke(color('#FFB99A'))
-  newBezier(points, 'OPEN', 0)
+  p5bezier.newBezier(points, 'OPEN', 0)
   stroke(color('#FF6464'))
-  newBezier(points, 'OPEN', 1)
+  p5bezier.newBezier(points, 'OPEN', 1)
   stroke(color('#DB3056'))
-  newBezier(points, 'OPEN', 3)
+  p5bezier.newBezier(points, 'OPEN', 3)
   stroke(color('#851D41'))
-  newBezier(points, 'OPEN', 9)
+  p5bezier.newBezier(points, 'OPEN', 9)
 
   // Caption
   push()

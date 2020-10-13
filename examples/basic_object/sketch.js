@@ -8,8 +8,8 @@ let bezierObject
 
 function setup() {
   let c = createCanvas(500, 500)
-  initBezier(c)
-  bezierObject = newBezierObj([
+  p5bezier.initBezier(c)
+  bezierObject = p5bezier.newBezierObj([
     [10, 10],
     [100, 700],
     [500, -800],

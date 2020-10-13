@@ -1,9 +1,8 @@
 {
   "name": "p5bezier",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "description": "p5.bezier.js library for everyone.",
-  "main": "lib/p5.bezier.min.js",
-  "module": "src/p5.bezier.min.js",
+  "main": "lib/p5.bezier.min",
   "keywords": [
     "p5.js",
     "Bezier",
