@@ -38,6 +38,12 @@ You can also use the file through content delivery service by adding the followi
 <script src="https://unpkg.com/p5bezier@0.2.4/lib/p5.bezier.min.js"></script>
 ```
 
+This way the whole library will be wrapped into one `p5bezier` object and to use the functions, you need to put it in front of the function names like this:
+
+```js
+p5bezier.initBezier(c)
+```
+
 The library is still a work-in-progress project. Therefore, code tends to change from time to time. Please come back once a while to download the latest version of the library.
 
 ### NPM
