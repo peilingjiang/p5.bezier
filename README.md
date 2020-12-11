@@ -155,6 +155,13 @@ Currently available examples:
 
 More complex examples to be updated.
 
+### Projects and Live Demo
+
+- [**Hair**](https://no-loss.netlify.app/), a visualization. See the source code here: https://github.com/peilingjiang/hair.
+- *p5.bezier Example - Basic* on [CodePen](https://codepen.io/peilingjiang/pen/ZEOLVPx).
+
+Share your ideas and projects using the library!
+
 ## To-Dos
 
 1. More examples.
