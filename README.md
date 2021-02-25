@@ -4,6 +4,8 @@
 
 Hi! Don't wait and let **p5.bezier**, a [p5.js](https://p5js.org) library, help you draw the smoothest curves like never before. You can regard the library as an advanced version of the original p5.js `bezier()` function which takes no less or more than 4 points while cannot draw higher level curves. The p5.bezier library allows you to draw continuous and closed Bézier curves easily.
 
+[**Try it now on p5.js Web Editor!**](https://editor.p5js.org/peilingjiang/sketches/7Z2pRG-TB)
+
 **0.2.0 NEW** The library is now independent of p5.js so that you can use it for a wider range of projects (untested). However, an extra `initBezier(canvas)` line is needed before the drawings.
 
 To draw a Bézier curve on canvas, you can simply use `newBezier()`:
@@ -21,8 +23,6 @@ newBezier([
 **What is Bézier Curve?**
 
 A Bézier curve is a parametric curve used in computer graphics and related fields. The curve, which is related to the Bernstein polynomial, is named after Pierre Bézier, who used it in the 1960s for designing curves for the bodywork of Renault cars. Its continuity creates beautiful textures and shapes. Nowadays, it is an essential part across design domains from products to visualization.
-
-Dive into this document to know more about the library.
 
 ## Getting Started
 
