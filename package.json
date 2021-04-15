@@ -1,6 +1,6 @@
 {
   "name": "p5bezier",
-  "version": "0.2.4",
+  "version": "0.2.5",
   "description": "p5.bezier.js library for everyone.",
   "main": "lib/p5.bezier.min",
   "keywords": [
@@ -27,11 +27,12 @@
     "webpack-cli": "^4.0.0"
   },
   "scripts": {
-    "format": "prettier --write \"**/*.{js,json,md,html,css}\""
+    "format": "prettier --write \"**/*.{js,json,md,html,css}\"",
+    "build": "webpack --env=production"
   },
   "husky": {
     "hooks": {
-      "pre-commit": "lint-staged"
+      "pre-commit": "lint-staged && npm run build && git add -A"
     }
   },
   "lint-staged": {
