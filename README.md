@@ -35,7 +35,7 @@ To use p5.bezier library, download [p5.bezier.min.js](https://raw.githubusercont
 Or you can also use the file through content delivery service by adding the following line:
 
 ```HTML
-<script src="https://unpkg.com/p5bezier@0.2.5/lib/p5.bezier.min.js"></script>
+<script src="https://unpkg.com/p5bezier@0.2.6/lib/p5.bezier.min.js"></script>
 ```
 
 This way the whole library will be wrapped into one `p5bezier` object and to use the functions, you need to put it in front of the function names like this:

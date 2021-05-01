@@ -319,9 +319,9 @@ class BezierCurve {
     /*
     Update the vertexList when control points change
     */
-    if (newControlList.length !== this.controlPoints) {
+    if (newControlList.length !== this.controlPoints.length) {
       throw 'The number of points changed. (Keep the point array length the same.)'
-    } else if (this.controlPoints === newControlList) {
+    } else if (equalArrays(this.controlPoints, newControlList)) {
       // Do we really need to update? No.
       // return ;
     } else {
@@ -387,3 +387,9 @@ class BezierCurve {
     return minVertex // An array of vertex position
   }
 }
+
+/* --------------------------------- HELPERS -------------------------------- */
+
+// https://www.30secondsofcode.org/blog/s/javascript-array-comparison
+const equalArrays = (a, b) =>
+  a.length === b.length && a.every((v, i) => v === b[i])
