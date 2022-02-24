@@ -1,7 +1,7 @@
 {
   "name": "p5bezier",
   "version": "0.2.8",
-  "description": "p5.bezier.js library for everyone.",
+  "description": "Bezier library for canvas-based graphics on the web, built to work with p5.js.",
   "main": "lib/p5.bezier.min.js",
   "keywords": [
     "p5.js",
