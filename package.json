@@ -19,12 +19,12 @@
   },
   "homepage": "https://github.com/peilingjiang/p5.bezier#readme",
   "devDependencies": {
-    "eslint": "^7.11.0",
-    "husky": "^7.0.1",
-    "lint-staged": "^11.0.0",
-    "prettier": "^2.1.2",
-    "webpack": "^5.44.0",
-    "webpack-cli": "^4.7.2"
+    "eslint": "^8.9.0",
+    "husky": "^7.0.4",
+    "lint-staged": "^12.3.4",
+    "prettier": "^2.5.1",
+    "webpack": "^5.69.1",
+    "webpack-cli": "^4.9.2"
   },
   "scripts": {
     "format": "prettier --write \"**/*.{js,json,md,html,css}\"",
@@ -34,5 +34,8 @@
   "lint-staged": {
     "*.js": "eslint --cache --fix",
     "*.{js,json,md,html,css}": "prettier --write"
-  }
+  },
+  "files": [
+    "lib"
+  ]
 }
