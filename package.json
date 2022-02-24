@@ -23,6 +23,7 @@
     "husky": "^7.0.4",
     "lint-staged": "^12.3.4",
     "prettier": "^2.5.1",
+    "terser-webpack-plugin": "^5.3.1",
     "webpack": "^5.69.1",
     "webpack-cli": "^4.9.2"
   },
