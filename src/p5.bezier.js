@@ -7,18 +7,61 @@ const p5bezierAccuracyListAll = [
   0.2, 0.1, 0.05, 0.04, 0.02, 0.01, 0.008, 0.002, 0.001, 0.0005, 0.0001,
 ]
 
-let _canvas, _ctx, _dimension, _strict
+let _canvas,
+  _ctx,
+  _dimension,
+  _strict,
+  _useP5,
+  _beginPath,
+  _moveTo,
+  _lineTo,
+  _closePath
 
 export function initBezier(canvas, strictMode = false) {
   _canvas = canvas
   _ctx = _canvas.drawingContext
-  _dimension = canvas.isP3D ? 3 : 2
+
+  // eslint-disable-next-line no-undef
+  if (p5 && canvas instanceof p5.Graphics) {
+    // p5 graphics
+    _useP5 = true
+    _dimension = _ctx.constructor.name === 'WebGLRenderingContext' ? 3 : 2
+
+    _beginPath = _canvas.beginShape
+    _moveTo = _canvas.vertex
+    _lineTo = _canvas.vertex
+    _closePath = _canvas.endShape
+    // eslint-disable-next-line no-undef
+  } else if ((p5 && canvas instanceof p5.Renderer) || canvas.drawingContext) {
+    // p5 canvas or other canvas
+    // eslint-disable-next-line no-undef
+    if (!p5 || (p5 && !(canvas instanceof p5.Renderer))) {
+      window.console.warn(
+        '[p5.bezier] Support for non-p5 canvas is not tested.'
+      )
+      _dimension = canvas.isP3D ? 3 : 2
+    } else {
+      _dimension = _ctx.constructor.name === 'WebGLRenderingContext' ? 3 : 2
+    }
+    _useP5 = false
+    _dimension = _ctx.constructor.name === 'WebGLRenderingContext' ? 3 : 2
+
+    _beginPath = _ctx.beginPath.bind(_ctx)
+    _moveTo = _ctx.moveTo.bind(_ctx)
+    _lineTo = _ctx.lineTo.bind(_ctx)
+    _closePath = _ctx.closePath.bind(_ctx)
+  } else {
+    throw new Error('[p5.bezier] Canvas is not supported.')
+  }
+
   _strict = strictMode // Always check and throw errors or not
 }
 
 export function newBezier(pointList, closeType = 'OPEN', accuracy = 7) {
   if (_strict && !Array.isArray(pointList))
-    throw ('newBezier() function expects an array, got %s.', typeof pointList)
+    throw new Error(
+      `[p5.bezier] newBezier() function expects an array, got ${typeof pointList}.`
+    )
 
   // Define the increment of t based on accuracy
   const tIncrement = p5bezierAccuracyListAll[accuracy]
@@ -28,15 +71,17 @@ export function newBezier(pointList, closeType = 'OPEN', accuracy = 7) {
     if (_strict)
       for (let point of pointList)
         if (!Array.isArray(pointList) || point.length !== _dimension)
-          throw 'One or more points in the array are not input correctly.'
+          throw new Error(
+            '[p5.bezier] One or more points in the array are not input correctly.'
+          )
 
     // Add the first point as the last point to close the curve
     if (closeType === 'CLOSE') pointList.push(pointList[0])
     let p = pointList.length // pointList has p points for (p - 1) degree curves
     let n = p - 1
 
-    _ctx.beginPath()
-    _ctx.moveTo(...pointList[0])
+    _beginPath()
+    _moveTo(...pointList[0])
     // Are we drawing 2D or 3D curves
     if (_dimension === 2) {
       // 2-Dimensional bezier curve
@@ -59,9 +104,9 @@ export function newBezier(pointList, closeType = 'OPEN', accuracy = 7) {
             Math.pow(t, i) *
             pointList[i][1]
         }
-        _ctx.lineTo(x, y)
+        _lineTo(x, y)
       }
-      _ctx.lineTo(...pointList.slice(-1)[0])
+      _lineTo(...pointList.slice(-1)[0])
     } else if (_dimension === 3) {
       // 3-Dimensional bezier curve
       let xyz = [0, 0, 0],
@@ -80,14 +125,17 @@ export function newBezier(pointList, closeType = 'OPEN', accuracy = 7) {
               pointList[i][d]
           }
         }
-        _ctx.lineTo(...xyz)
+        _lineTo(...xyz)
       }
-      _ctx.lineTo(...pointList.slice(-1)[0])
+      _lineTo(...pointList.slice(-1)[0])
     }
 
-    if (closeType === 'CLOSE') _ctx.closePath()
+    if (_useP5) _closePath(closeType)
+    else if (closeType === 'CLOSE') _closePath()
     else if (_strict && closeType !== 'OPEN')
-      throw 'Close Type Error. A bezier curve can only be either OPEN or CLOSE.'
+      throw new Error(
+        '[p5.bezier] Close type error. A bezier curve can only be either OPEN or CLOSE.'
+      )
 
     _helper_style()
 
@@ -100,13 +148,17 @@ export function newBezierObj(pointList, closeType = 'OPEN', accuracy = 7) {
   const tIncrement = p5bezierAccuracyListAll[accuracy]
 
   if (_strict && !Array.isArray(pointList))
-    throw ('newBezier() function expects an array, got %s.', typeof pointList)
+    throw new Error(
+      `[p5.bezier] newBezierObj() function expects an array, got ${typeof pointList}.`
+    )
 
   // Check if all points are valid
   if (_strict)
     for (let point of pointList)
       if (!Array.isArray(pointList) || point.length !== _dimension)
-        throw 'One or more points in the array are not input correctly.'
+        throw new Error(
+          '[p5.bezier] One or more points in the array are not input correctly.'
+        )
 
   // All checks done
   let bObj = new BezierCurve(pointList, closeType, tIncrement, _dimension)
@@ -138,12 +190,11 @@ function _helper_style() {
 class BezierCurve {
   // Take pointList, closeType, tIncrement, bezierDimension into constructor
   constructor(pL, closeT, tI, bD, vL = null) {
-    if (_strict && bD !== 2 && bD !== 3) {
-      throw (
-        ("Dimension Error. The bezier curve is %d-dimensional and doesn't belong to our world.",
-        bD)
+    if (_strict && bD !== 2 && bD !== 3)
+      throw new Error(
+        `Dimension error. The bezier curve is ${bD}-dimensional and doesn't belong to our world.`
       )
-    }
+
     this.controlPoints = pL
 
     if (closeT === 'CLOSE') {
@@ -152,7 +203,9 @@ class BezierCurve {
     } else if (closeT === 'OPEN') {
       this.closeType = 'OPEN'
     } else {
-      throw 'Close Type Error. A bezier curve can only be either OPEN or CLOSE.'
+      throw new Error(
+        '[p5.bezier] Close type error. A bezier curve can only be either OPEN or CLOSE.'
+      )
     }
 
     this.dimension = bD
@@ -231,8 +284,8 @@ class BezierCurve {
 
   _addVertex(vArray) {
     // vArray is an array of [x, y] position or [x, y, z] position
-    if (this.dimension === 2 || this.dimension === 3) _ctx.lineTo(...vArray)
-    else throw 'Vertices can only be in 2D or 3D space.'
+    if (this.dimension === 2 || this.dimension === 3) _lineTo(...vArray)
+    else throw new Error('Vertices can only be in 2D or 3D space.')
   }
 
   _distVertex(vArray1, vArray2) {
@@ -254,12 +307,16 @@ class BezierCurve {
 
   draw(dash) {
     if (!dash) {
-      _ctx.beginPath()
+      _beginPath()
       for (let v of this.vertexList) {
         this._addVertex(v)
       }
 
       if (this.closeType === 'CLOSE') _ctx.closePath()
+
+      if (_useP5) _closePath(this.closeType)
+      else if (this.closeType === 'CLOSE') _closePath()
+
       _helper_style()
     } else if (
       Array.isArray(dash) &&
@@ -276,8 +333,8 @@ class BezierCurve {
 
       _ctx.save() // push
       _ctx.fillStyle = 'rgba(0, 0, 0, 0)' // TODO: Enable fill
-      _ctx.beginPath()
-      _ctx.moveTo(...this.vertexList[0])
+      _beginPath()
+      _moveTo(...this.vertexList[0])
       for (let v = 1; v < this.vertexListLen; v++) {
         nowLen += this._distVertex(lastVertex, this.vertexList[v])
         modOnePart = nowLen % onePart
@@ -287,7 +344,7 @@ class BezierCurve {
           // endShape()
           solid = false
         } else if (modOnePart <= solidPart && !solid) {
-          _ctx.moveTo(...this.vertexList[v])
+          _moveTo(...this.vertexList[v])
           solid = true
         }
         lastVertex = this.vertexList[v]
@@ -298,11 +355,14 @@ class BezierCurve {
       // }
       _helper_style()
       _ctx.restore()
-    } else if (this.increment > 0.008) {
-      throw 'Fidelity is too low for a dash line. It should be at least 6.'
-    } else {
-      throw "Your dash array input is not valid. Make sure it's an array of two numbers."
-    }
+    } else if (this.increment > 0.008)
+      throw new Error(
+        'Fidelity is too low for a dash line. It should be at least 6.'
+      )
+    else
+      throw new Error(
+        "Your dash array input is not valid. Make sure it's an array of two numbers."
+      )
   }
 
   update(newControlList) {
@@ -310,7 +370,9 @@ class BezierCurve {
     Update the vertexList when control points change
     */
     if (newControlList.length !== this.controlPoints.length) {
-      throw 'The number of points changed. (Keep the point array length the same.)'
+      throw new Error(
+        'The number of points changed. (Keep the length of the point array the same.)'
+      )
     } else if (equalArrays(this.controlPoints, newControlList)) {
       // Do we really need to update? No.
       // return ;
@@ -327,7 +389,7 @@ class BezierCurve {
     */
     if (z === null && this.dimension === 3) {
       // A 3D curve treated as 2D error
-      throw 'To move a 3D curve, please specify (x, y, z).'
+      throw new Error('To move a 3D curve, please specify (x, y, z).')
     } else {
       let toMove = [x, y]
       if (z !== null) toMove.push(z)

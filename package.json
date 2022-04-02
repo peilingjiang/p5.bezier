@@ -29,6 +29,7 @@
   },
   "scripts": {
     "format": "prettier --write \"**/*.{js,json,md,html,css}\"",
+    "start": "webpack --env=development",
     "build": "webpack --env=production",
     "prepare": "husky install"
   },

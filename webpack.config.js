@@ -5,7 +5,7 @@ const TerserPlugin = require('terser-webpack-plugin')
 
 const packageJSON = require('./package.json')
 
-module.exports = {
+const config = {
   mode: 'production',
   entry: './src/p5.bezier.js',
   output: {
@@ -36,4 +36,18 @@ module.exports = {
       `),
     ],
   },
+}
+
+module.exports = env => {
+  if (env.development) {
+    return Object.assign({}, config, {
+      mode: 'development',
+      optimization: {
+        minimize: false,
+      },
+      watch: true,
+    })
+  } else {
+    return config
+  }
 }
