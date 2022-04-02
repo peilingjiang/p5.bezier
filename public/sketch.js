@@ -1,3 +1,5 @@
+/* eslint-disable no-undef */
+
 /*
   p5.bezier.js control_points example
   Peiling Jiang
