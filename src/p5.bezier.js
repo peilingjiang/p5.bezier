@@ -57,7 +57,7 @@ export function initBezier(canvas, strictMode = false) {
   _strict = strictMode // Always check and throw errors or not
 }
 
-export function newBezier(pointList, closeType = 'OPEN', accuracy = 7) {
+export function newBezier(pointList, closeType = 'OPEN', accuracy = 6) {
   if (_strict && !Array.isArray(pointList))
     throw new Error(
       `[p5.bezier] newBezier() function expects an array, got ${typeof pointList}.`
@@ -143,7 +143,7 @@ export function newBezier(pointList, closeType = 'OPEN', accuracy = 7) {
   }
 }
 
-export function newBezierObj(pointList, closeType = 'OPEN', accuracy = 7) {
+export function newBezierObj(pointList, closeType = 'OPEN', accuracy = 6) {
   // Define the increment of t based on accuracy
   const tIncrement = p5bezierAccuracyListAll[accuracy]
 
