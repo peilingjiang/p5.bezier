@@ -6,7 +6,7 @@
 [![GitHub license](https://img.shields.io/github/license/peilingjiang/p5.bezier?style=flat-square)](https://github.com/peilingjiang/p5.bezier/blob/main/LICENSE)
 [![](https://data.jsdelivr.com/v1/package/npm/p5bezier/badge)](https://www.jsdelivr.com/package/npm/p5bezier)
 
-Hi! Don't wait and let **p5.bezier**, a [p5.js](https://p5js.org) library, help you draw the smoothest curves like never before. You can regard the library as an advanced version of the original p5.js `bezier()` function which takes no less or more than 4 points while cannot draw higher level curves. The p5.bezier library allows you to draw continuous and closed Bézier curves easily.
+Let **p5.bezier**, a [p5.js](https://p5js.org) library, help you draw the smoothest curves like never before. You can regard the library as an advanced version of the original p5.js `bezier()` function which takes no less or more than 4 points while cannot draw higher level curves. The p5.bezier library allows you to draw continuous and closed Bézier curves easily.
 
 <!-- [**Try it now on p5.js Web Editor!**](https://editor.p5js.org/peilingjiang/sketches/7Z2pRG-TB) -->
 [**Try it now on p5.js Web Editor!**](https://editor.p5js.org/peilingjiang/sketches/mVXzWEJbT)
@@ -56,7 +56,7 @@ The library is still a work-in-progress project. Therefore, code tends to change
 You can also install using the package manager NPM (recommended):
 
 ```
-npm install --save p5bezier
+npm install p5bezier
 ```
 
 And then import the modules into your project:
@@ -94,7 +94,7 @@ Takes a string, either `"OPEN"` or `"CLOSE"`. If you want the curve to close its
 
 **fidelity** (Optional)
 
-Takes an integer from `0` to `10`, as default is `7`. How accurate you want the Bézier curve to be. The more inner vertices used to draw the curve, the more accurate it would be, however, the more computation would also be cost.
+Takes an integer from `0` to `10`, as default is `6`. How accurate you want the Bézier curve to be. The more inner vertices used to draw the curve, the more accurate it would be, however, the more computation would also be cost.
 
 ## Create a Bézier Object
 
