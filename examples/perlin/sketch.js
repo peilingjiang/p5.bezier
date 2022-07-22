@@ -1,7 +1,7 @@
 /*
-  p5.bezier.js basic example
+  p5.bezier.js perlin example
   Peiling Jiang
-  NYU ITP/IMA 2020
+  UCSD Design Lab 2022
 */
 
 let xOff = 0

@@ -30,7 +30,7 @@ A Bézier curve is a parametric curve used in computer graphics and related fiel
 
 ## Getting Started
 
-To use p5.bezier library, download [p5.bezier.min.js](https://raw.githubusercontent.com/peilingjiang/p5.bezier/master/lib/p5.bezier.min.js) file into your project directory and add the following line into the your HTML file:
+To use p5.bezier library, download [p5.bezier.min.js](https://raw.githubusercontent.com/peilingjiang/p5.bezier/main/lib/p5.bezier.min.js) file into your project directory and add the following line into the your HTML file:
 
 ```HTML
 <script src="p5.bezier.min.js"></script>
@@ -152,10 +152,13 @@ For instance, if you want to run the example _basic_, simply type `node server.j
 Currently available examples:
 
 - **basic** draws a simple Bézier curve with 5 control points across the canvas.
+- **basic_object** create a simple Bézier object with 5 control points across the canvas.
 - **control_points** draws a curve and it's control points, which can be dragged around.
 - **fidelity** draws curves with different fidelities.
 - **basic_object** is similar to basic, while drew with Bézier object.
 - **shortest_point** draws the shortest line from mouse to curve.
+
+- **perlin** Use Perlin Noise (from p5.js) to control moving Bézier curves.
 
 More complex examples to be updated.
 
@@ -163,6 +166,7 @@ More complex examples to be updated.
 
 - [**Hair**](https://no-loss.netlify.app/), a visualization. See the source code here: https://github.com/peilingjiang/hair.
 - *p5.bezier Example - Basic* on [CodePen](https://codepen.io/peilingjiang/pen/ZEOLVPx).
+- *p5.bezier Example - Perlin* on [CodePen](https://codepen.io/peilingjiang/pen/eYMRJax).
 
 Share your ideas and projects using the library!
 
