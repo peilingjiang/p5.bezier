@@ -14,6 +14,7 @@ const config = {
     library: 'p5bezier',
     libraryTarget: 'umd',
     sourceMapFilename: 'p5.bezier.min.js.map',
+    globalObject: 'this',
   },
   devtool: 'source-map',
   optimization: {
