@@ -1,9 +1,8 @@
 /* eslint-disable no-undef */
 
 /*
-  p5.bezier.js control_points example
   Peiling Jiang
-  NYU ITP/IMA 2020
+  UCSD Design Lab 2023
 */
 
 // DRAG THE POINTS AROUND!
@@ -16,11 +15,10 @@ function setup() {
   noFill()
 
   pa = new PointArray()
-  pa.add(100, 100)
-  pa.add(400, 600)
-  pa.add(500, 400)
-  pa.add(600, 600)
-  pa.add(900, 100)
+  pa.add(100, 400)
+  pa.add(400, 700)
+  pa.add(700, 100)
+  pa.add(1000, 400)
 }
 
 function draw() {
@@ -28,7 +26,7 @@ function draw() {
   stroke(color('#FD5E53'))
   strokeWeight(3)
   // Draw an open Bezier curve with fidelity of 9 (highest)
-  p5bezier.newBezier(pa.get(), 'OPEN', 9)
+  p5bezier.newBezier(pa.get(), 'OPEN', 10)
   pa.display()
 }
 

@@ -1,6 +1,6 @@
 {
   "name": "p5bezier",
-  "version": "0.3.3",
+  "version": "0.5.0",
   "description": "Bezier library for canvas-based graphics on the web, built to work with p5.js.",
   "main": "lib/p5.bezier.min.js",
   "keywords": [
@@ -19,13 +19,15 @@
   },
   "homepage": "https://github.com/peilingjiang/p5.bezier#readme",
   "devDependencies": {
-    "eslint": "^8.33.0",
+    "eslint": "^8.41.0",
     "husky": "^8.0.3",
-    "lint-staged": "^13.1.0",
-    "prettier": "^2.8.3",
-    "terser-webpack-plugin": "^5.3.6",
-    "webpack": "^5.75.0",
-    "webpack-cli": "^5.0.1"
+    "lint-staged": "^13.2.2",
+    "prettier": "^2.8.8",
+    "terser-webpack-plugin": "^5.3.9",
+    "ts-loader": "^9.4.2",
+    "typescript": "^5.0.4",
+    "webpack": "^5.83.1",
+    "webpack-cli": "^5.1.1"
   },
   "scripts": {
     "format": "prettier --write \"**/*.{js,json,md,html,css}\"",

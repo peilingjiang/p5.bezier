@@ -5,7 +5,8 @@ body {
   height: 100%;
 }
 
-body {
+body,
+canvas {
   margin: 0;
   display: flex;
 
@@ -14,4 +15,6 @@ body {
 
   /* This centers our sketch vertically. */
   align-items: center;
+
+  overflow: hidden;
 }

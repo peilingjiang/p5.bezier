@@ -6,12 +6,13 @@
 [![GitHub license](https://img.shields.io/github/license/peilingjiang/p5.bezier?style=flat-square)](https://github.com/peilingjiang/p5.bezier/blob/main/LICENSE)
 [![](https://data.jsdelivr.com/v1/package/npm/p5bezier/badge)](https://www.jsdelivr.com/package/npm/p5bezier)
 
-Let **p5.bezier**, a [p5.js](https://p5js.org) library, help you draw the smoothest curves like never before. You can regard the library as an advanced version of the original p5.js `bezier()` function which takes no less or more than 4 points while cannot draw higher level curves. The p5.bezier library allows you to draw continuous and closed Bézier curves easily.
+Introducing **p5.bezier**, a [p5.js](https://p5js.org) library, engineered to assist you in creating Bézier curves with ease. This library is an enhancement of the original p5.js `bezier()` function, extending its capabilities beyond the limitation of four control points.
 
 <!-- [**Try it now on p5.js Web Editor!**](https://editor.p5js.org/peilingjiang/sketches/7Z2pRG-TB) -->
+
 [**Try it now on p5.js Web Editor!**](https://editor.p5js.org/peilingjiang/sketches/mVXzWEJbT)
 
-**0.2.0 NEW** The library is now independent of p5.js so that you can use it for a wider range of projects (untested). However, an extra `initBezier(canvas)` line is needed before the drawings.
+While **p5.bezier** is designed to integrate with p5.js, it operates independently as well. It's necessary to initialize the library and specify the target canvas by invoking `initBezier(canvas)` at the start of your code.
 
 To draw a Bézier curve on canvas, you can simply use `newBezier()`:
 
@@ -25,41 +26,39 @@ newBezier([
 ])
 ```
 
-**What is Bézier Curve?**
+**What is a Bézier Curve?**
 
-A Bézier curve is a parametric curve used in computer graphics and related fields. The curve, which is related to the Bernstein polynomial, is named after Pierre Bézier, who used it in the 1960s for designing curves for the bodywork of Renault cars. Its continuity creates beautiful textures and shapes. Nowadays, it is an essential part across design domains from products to visualization.
+A Bézier curve is a type of curve that's widely used in computer graphics, design, etc. It was named after Pierre Bézier who employed it in car design during the 1960s. Due to its smooth and continuous nature, it's ideal for creating visually pleasing shapes and textures in various design fields.
 
 ## Getting Started
 
-To use p5.bezier library, download [p5.bezier.min.js](https://raw.githubusercontent.com/peilingjiang/p5.bezier/main/lib/p5.bezier.min.js) file into your project directory and add the following line into the your HTML file:
+To use the p5.bezier library, first download the [p5.bezier.min.js](https://raw.githubusercontent.com/peilingjiang/p5.bezier/main/lib/p5.bezier.min.js) file and place it in your project directory. Then, include the following line in your HTML file:
 
 ```HTML
 <script src="p5.bezier.min.js"></script>
 ```
 
-Or you can also use the file through content delivery service by adding the following line:
+Alternatively, you can use the library through a content delivery network (CDN):
 
 ```HTML
 <script src="https://cdn.jsdelivr.net/npm/p5bezier@latest/lib/p5.bezier.min.js"></script>
 ```
 
-This way the whole library will be wrapped into one `p5bezier` object and to use the functions, you need to put it in front of the function names like this:
+Once included, the entire library is encapsulated within the `p5bezier` object. To call the functions provided by the library, prepend `p5bezier` to the function name:
 
 ```js
 p5bezier.initBezier(c)
 ```
 
-The library is still a work-in-progress project. Therefore, code tends to change from time to time. Please come back once a while to download the latest version of the library.
-
 ### NPM
 
-You can also install using the package manager NPM (recommended):
+You can also install the library using the package manager NPM (recommended):
 
 ```
 npm install p5bezier
 ```
 
-And then import the modules into your project:
+Then, import the modules into your project:
 
 ```js
 import { initBezier, newBezier, newBezierObject } from 'p5bezier'
@@ -67,7 +66,7 @@ import { initBezier, newBezier, newBezierObject } from 'p5bezier'
 
 ## Init for Bézier
 
-**0.2.0 NEW** You need to let the Bézier drawing system know the canvas you are drawing on. Let's use p5.js as an example:
+You must initialize the Bézier drawing system with the canvas you are drawing on. Here's an example with p5.js:
 
 ```diff
 function setup() {
@@ -78,7 +77,7 @@ function setup() {
 
 ## Draw a Bézier Curve
 
-The most straightforward and easiest way to use the library is to put `newBezier()` in your `draw()` function. To control the style of the curve, use `fill()` or `strokeWeight()` functions as for other shapes.
+The simplest way to use the library is to call `newBezier()` in your `draw()` function. You can adjust the curve's style using `fill()` or `strokeWeight()` just like other shapes.
 
 ```
 newBezier(pointsArray [, closeType] [, fidelity]);
@@ -86,21 +85,21 @@ newBezier(pointsArray [, closeType] [, fidelity]);
 
 **pointsArray**
 
-Takes an array of arrays of _x_ and _y_ locations of control points of the curve. e.g. `[[10, 30], [5, 100], [25, 60]]`.
+This is an array of [x, y] pairs, each representing a control point for the curve. For example, `[[10, 30], [5, 100], [25, 60]]`.
 
 **closeType** (Optional)
 
-Takes a string, either `"OPEN"` or `"CLOSE"`. If you want the curve to close itself automatically, put `"CLOSE"` here. Otherwise, leave it as default or put `"OPEN"`. Currently, the close point of the curve cannot guarantee to be continuous.
+This is a string, either `"OPEN"` or `"CLOSE"`. Use `"CLOSE"` to automatically close the curve. The default is `"OPEN"`. Note: continuity of the closing point is not guaranteed.
 
 **fidelity** (Optional)
 
-Takes an integer from `0` to `10`, as default is `6`. How accurate you want the Bézier curve to be. The more inner vertices used to draw the curve, the more accurate it would be, however, the more computation would also be cost.
+This is an integer between `0` and `10`, with a default value of `6`. This value determines the accuracy of the Bézier curve. Higher values mean more vertices are used, leading to a more accurate curve, but at the cost of additional computation.
 
 ## Create a Bézier Object
 
-If you want higher-level functions of a Bézier curve, like getting the shortest distance from a point to the curve, you can use `newBezierObj()`. It can also potentially save computation resources (when you put it in `setup()`) since the vertices will only be calculated once and then can be used repeatedly.
+For advanced operations, such as computing the shortest distance from a point to the curve, use the `newBezierObj()` function. This method can also potentially optimize computation resources if placed within the `setup()` function, as vertices are calculated only once and can then be reused.
 
-The use of it is similar to the previous one, while `newBezierObj()` will return a _Bézier Curve Object_ that you can pass into a variable:
+The usage of `newBezierObj()` is similar to `newBezier()`, but it returns a _Bézier Curve Object_ that can be stored in a variable:
 
 ```
 let bezierObject = newBezierObj(pointsArray [, closeType] [, fidelity]);
@@ -110,29 +109,29 @@ The call of `newBezierObj` will not draw the curve on canvas automatically. To d
 
 - `.draw([dash])`
 
-  Draw the curve on canvas.
+  Renders the curve on the canvas.
 
   **dash** (Optional)
 
-  Takes an array of two numbers indicating the length of solid and break parts in one period of the dash Bézier curve. e.g. `[10, 5]` means the first solid part is 10px long and then comes the break part which is 5px long.
+  Accepts an array of two numbers specifying the length of solid and broken sections of a dashed Bézier curve. For example, `[10, 5]` signifies a solid segment of 10px followed by a 5px break.
 
 - `.update(newPointsArray)`
 
-  Update the locations of control points. The amount of control points must be the same as the time curve was created.
+  Updates the positions of control points. The number of control points should remain consistent with the initial curve configuration.
 
 - `.move(x, y [, z, toDraw, dash])`
 
-  Alternatively, if you want to move the curve as a whole, you can use this function. The function will not mutate the original object but will draw and return a new one. Therefore, if you want to update the curve this way (which is faster than `.update()`), you can:
+  Translates the entire curve. This function does not modify the original object but instead generates and returns a new one. Hence, if you wish to update the curve using this method (which is faster than `.update()`), you may:
 
   ```js
   bezierObject = bezierObject.move(6, 17, -22, false)
   ```
 
-  `toDraw` is `true` by default, but if you only want to update the curve while not drawing it simultaneously, you can set it to `false`.
+  By default, `toDraw` is set to `true`. However, if you wish to only update the curve without drawing it, you can set this parameter to `false`.
 
 - `.shortest(pointX, pointY [, pointZ])`
 
-  Takes two numbers of _x_ and _y_ locations of an outside point. Returns an array of location of the point on the curve. e.g. To draw a line between this two points:
+  Requires the _x_ and _y_ coordinates of an external point as input. It returns an array containing the coordinates of the nearest point on the curve. For instance, to draw a line between these two points:
 
   ```js
   pointOnCurve = bezierObject.shortest(pointX, pointY)
@@ -141,44 +140,41 @@ The call of `newBezierObj` will not draw the curve on canvas automatically. To d
 
 ## Examples
 
-To run the examples locally, please download the repository on your computer. Then, use Terminal and change directory to `examples` folder. Run
+To execute the examples locally, download the repository to your local machine. Then, navigate to the `examples` directory using your terminal. Execute the following command:
 
 ```
 npm install
 node server.js name_of_example
 ```
 
-For instance, if you want to run the example _basic_, simply type `node server.js basic`. Then, go to the browser of your choice and put `localhost:8000` in the address bar.
+For instance, to run the _basic_ example, simply enter `node server.js basic`. Then, open your web browser and navigate to `localhost:8000`.
 
 Currently available examples:
 
 - **basic** draws a simple Bézier curve with 5 control points across the canvas.
 - **basic_object** create a simple Bézier object with 5 control points across the canvas.
-- **control_points** draws a curve and it's control points, which can be dragged around.
-- **fidelity** draws curves with different fidelities.
-- **basic_object** is similar to basic, while drew with Bézier object.
-- **shortest_point** draws the shortest line from mouse to curve.
-
-- **perlin** Use Perlin Noise (from p5.js) to control moving Bézier curves.
+- **control_points** draws a curve and its control points, which can be dragged around.
+- **fidelity** showcases curves drawn with varying levels of fidelity.
+- **shortest_point** draws the shortest line from the mouse pointer to the curve.
+- **animation** draws animated Bézier curves.
 
 More complex examples to be updated.
 
-### Projects and Live Demo
+### Projects and Demos
 
 - [**Hair**](https://no-loss.netlify.app/), a visualization. See the source code here: https://github.com/peilingjiang/hair.
-- *p5.bezier Example - Basic* on [CodePen](https://codepen.io/peilingjiang/pen/ZEOLVPx).
-- *p5.bezier Example - Perlin* on [CodePen](https://codepen.io/peilingjiang/pen/eYMRJax).
+- _p5.bezier Example - Basic_ on [CodePen](https://codepen.io/peilingjiang/pen/ZEOLVPx).
+- _p5.bezier Example - Perlin_ on [CodePen](https://codepen.io/peilingjiang/pen/eYMRJax).
 
 Share your ideas and projects using the library!
 
-## To-Dos
+## TODOs
 
 1. More examples.
 2. `offset()`, `intersection()`, and `curvature()`... functions for Bézier object.
-3. Draw B-splines.
-4. Continuous close point when close up a Bézier curve.
+3. Draw B-Spline curves.
+4. Close a Bézier curve smoothly and continuously.
 
 ## References
 
-1. [Bézier curve - Wikipedia](https://en.wikipedia.org/wiki/B%C3%A9zier_curve)
-2. [Bezier.js](https://pomax.github.io/bezierjs/) by [Pomax - GitHub](https://github.com/Pomax) (Concept)
+- [Bézier curve - Wikipedia](https://en.wikipedia.org/wiki/B%C3%A9zier_curve)

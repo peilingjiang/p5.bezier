@@ -7,13 +7,24 @@ const packageJSON = require('./package.json')
 
 const config = {
   mode: 'production',
-  entry: './src/p5.bezier.js',
+  entry: './src/p5.bezier.ts',
+  module: {
+    rules: [
+      {
+        test: /\.tsx?$/,
+        use: 'ts-loader',
+        exclude: /node_modules/,
+      },
+    ],
+  },
+  resolve: {
+    extensions: ['.ts'],
+  },
   output: {
     path: path.resolve(__dirname, 'lib'),
     filename: 'p5.bezier.min.js',
     library: 'p5bezier',
     libraryTarget: 'umd',
-    sourceMapFilename: 'p5.bezier.min.js.map',
     globalObject: 'this',
   },
   devtool: 'source-map',

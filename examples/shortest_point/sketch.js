@@ -20,7 +20,7 @@ function setup() {
   noFill()
   strokeWeight(2)
 
-  bezierObject = new p5bezier.newBezierObj(points, 'OPEN', 9)
+  bezierObject = new p5bezier.newBezierObj(points, 'OPEN', 10)
 }
 
 function draw() {
