@@ -1,9 +1,9 @@
 /*
   p5.bezier.js fidelity example
   Peiling Jiang
-  NYU ITP/IMA 2020
+  UCSD Design Lab 2023
 
-  Color templet from colorhunt.co
+  color palette from colorhunt.co
 */
 
 let points = [
@@ -31,7 +31,7 @@ function draw() {
   stroke(color('#DB3056'))
   p5bezier.newBezier(points, 'OPEN', 3)
   stroke(color('#851D41'))
-  p5bezier.newBezier(points, 'OPEN', 9)
+  p5bezier.newBezier(points, 'OPEN', 7)
 
   // Caption
   push()
@@ -43,6 +43,6 @@ function draw() {
   fill(color('#DB3056'))
   text('Fidelity 3', 935, 570)
   fill(color('#851D41'))
-  text('Fidelity 9', 935, 585)
+  text('Fidelity 7', 935, 585)
   pop()
 }

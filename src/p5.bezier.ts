@@ -1,12 +1,15 @@
 /*
 p5.bezier library by Peiling Jiang
 2020
+
+updated May 2023
 */
 
 declare const p5: any
 
 window.console.log('[p5.bezier]')
 
+// fidelity 0-10
 const p5bezierAccuracyListAll: number[] = [
   0.2, 0.1, 0.05, 0.04, 0.02, 0.01, 0.008, 0.002, 0.001, 0.0005, 0.0001,
 ]
@@ -128,7 +131,7 @@ export function initBezier(canvas: any, strictMode: boolean = false): void {
 export function newBezier(
   pointList: number[][],
   closeType: string = 'OPEN',
-  accuracy: number = 6
+  accuracy: number = 7
 ): void {
   if (_strict && !Array.isArray(pointList)) {
     throw new Error(
@@ -209,7 +212,7 @@ export function newBezier(
 export function newBezierObj(
   pointList: Array<Array<number>>,
   closeType: string = 'OPEN',
-  accuracy: number = 6
+  accuracy: number = 7
 ): BezierCurve {
   const tIncrement = p5bezierAccuracyListAll[accuracy]
 

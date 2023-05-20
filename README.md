@@ -89,11 +89,11 @@ This is an array of [x, y] pairs, each representing a control point for the curv
 
 **closeType** (Optional)
 
-This is a string, either `"OPEN"` or `"CLOSE"`. Use `"CLOSE"` to automatically close the curve. The default is `"OPEN"`. Note: continuity of the closing point is not guaranteed.
+This is a string, either `"OPEN"` or `"CLOSE"`. Use `"CLOSE"` to automatically close the curve. The default is `"OPEN"`.
 
 **fidelity** (Optional)
 
-This is an integer between `0` and `10`, with a default value of `6`. This value determines the accuracy of the Bézier curve. Higher values mean more vertices are used, leading to a more accurate curve, but at the cost of additional computation.
+This is an integer between `0` and `10`, with a default value of `7`. This value determines the accuracy of the Bézier curve. Higher values mean more vertices are used, leading to a more accurate curve, but at the cost of additional computation.
 
 ## Create a Bézier Object
 
@@ -173,7 +173,6 @@ Share your ideas and projects using the library!
 1. More examples.
 2. `offset()`, `intersection()`, and `curvature()`... functions for Bézier object.
 3. Draw B-Spline curves.
-4. Close a Bézier curve smoothly and continuously.
 
 ## References
 
