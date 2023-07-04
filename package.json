@@ -19,15 +19,15 @@
   },
   "homepage": "https://github.com/peilingjiang/p5.bezier#readme",
   "devDependencies": {
-    "eslint": "^8.41.0",
+    "eslint": "^8.44.0",
     "husky": "^8.0.3",
-    "lint-staged": "^13.2.2",
+    "lint-staged": "^13.2.3",
     "prettier": "^2.8.8",
     "terser-webpack-plugin": "^5.3.9",
-    "ts-loader": "^9.4.2",
-    "typescript": "^5.0.4",
-    "webpack": "^5.83.1",
-    "webpack-cli": "^5.1.1"
+    "ts-loader": "^9.4.4",
+    "typescript": "^5.1.6",
+    "webpack": "^5.88.1",
+    "webpack-cli": "^5.1.4"
   },
   "scripts": {
     "format": "prettier --write \"**/*.{js,json,md,html,css}\"",
