@@ -1,5 +1,5 @@
 {
-  "name": "examples",
+  "name": "p5bezier-examples",
   "version": "1.0.0",
   "description": "Examples made to demonstrate p5.bezier library.",
   "main": "server.js",
@@ -9,6 +9,6 @@
   "author": "Peiling Jiang",
   "license": "MIT",
   "dependencies": {
-    "express": "^4.17.1"
+    "express": "^4.18.2"
   }
 }

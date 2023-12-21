@@ -16,12 +16,14 @@ function setup() {
     [800, 1000],
     [10, 300],
   ])
+
   console.log(bezierObject)
+
   noFill()
 }
 
 function draw() {
   background(235)
   strokeWeight(2)
-  bezierObject.draw()
+  bezierObject.draw([10, 10])
 }

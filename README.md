@@ -6,7 +6,7 @@
 [![GitHub license](https://img.shields.io/github/license/peilingjiang/p5.bezier?style=flat-square)](https://github.com/peilingjiang/p5.bezier/blob/main/LICENSE)
 [![](https://data.jsdelivr.com/v1/package/npm/p5bezier/badge)](https://www.jsdelivr.com/package/npm/p5bezier)
 
-Introducing **p5.bezier**, a [p5.js](https://p5js.org) library, engineered to assist you in creating Bézier curves with ease. This library is an enhancement of the original p5.js `bezier()` function, extending its capabilities beyond the limitation of four control points.
+**p5.bezier** is a [p5.js](https://p5js.org) library engineered to assist you in creating Bézier curves. It is an enhancement of the original p5.js `bezier()` function, extending its capabilities beyond the limitation of _four_ control points.
 
 <!-- [**Try it now on p5.js Web Editor!**](https://editor.p5js.org/peilingjiang/sketches/7Z2pRG-TB) -->
 
@@ -41,7 +41,7 @@ To use the p5.bezier library, first download the [p5.bezier.min.js](https://raw.
 Alternatively, you can use the library through a content delivery network (CDN):
 
 ```HTML
-<script src="https://cdn.jsdelivr.net/npm/p5bezier@latest/lib/p5.bezier.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/p5bezier@latest"></script>
 ```
 
 Once included, the entire library is encapsulated within the `p5bezier` object. To call the functions provided by the library, prepend `p5bezier` to the function name:
@@ -80,7 +80,7 @@ function setup() {
 The simplest way to use the library is to call `newBezier()` in your `draw()` function. You can adjust the curve's style using `fill()` or `strokeWeight()` just like other shapes.
 
 ```
-newBezier(pointsArray [, closeType] [, fidelity]);
+newBezier(pointsArray [, closeType] [, accuracy]);
 ```
 
 **pointsArray**
@@ -91,7 +91,7 @@ This is an array of [x, y] pairs, each representing a control point for the curv
 
 This is a string, either `"OPEN"` or `"CLOSE"`. Use `"CLOSE"` to automatically close the curve. The default is `"OPEN"`.
 
-**fidelity** (Optional)
+**accuracy** (Optional)
 
 This is an integer between `0` and `10`, with a default value of `7`. This value determines the accuracy of the Bézier curve. Higher values mean more vertices are used, leading to a more accurate curve, but at the cost of additional computation.
 
@@ -102,7 +102,7 @@ For advanced operations, such as computing the shortest distance from a point to
 The usage of `newBezierObj()` is similar to `newBezier()`, but it returns a _Bézier Curve Object_ that can be stored in a variable:
 
 ```
-let bezierObject = newBezierObj(pointsArray [, closeType] [, fidelity]);
+let bezierObject = newBezierObj(pointsArray [, closeType] [, accuracy]);
 ```
 
 The call of `newBezierObj` will not draw the curve on canvas automatically. To draw the curve, use `.draw()` as one of many functions listed below:
@@ -154,7 +154,7 @@ Currently available examples:
 - **basic** draws a simple Bézier curve with 5 control points across the canvas.
 - **basic_object** create a simple Bézier object with 5 control points across the canvas.
 - **control_points** draws a curve and its control points, which can be dragged around.
-- **fidelity** showcases curves drawn with varying levels of fidelity.
+- **accuracy** showcases curves drawn with varying levels of accuracy.
 - **shortest_point** draws the shortest line from the mouse pointer to the curve.
 - **animation** draws animated Bézier curves.
 
@@ -164,7 +164,7 @@ More complex examples to be updated.
 
 - [**Hair**](https://no-loss.netlify.app/), a visualization. See the source code here: https://github.com/peilingjiang/hair.
 - _p5.bezier Example - Basic_ on [CodePen](https://codepen.io/peilingjiang/pen/ZEOLVPx).
-- _p5.bezier Example - Perlin_ on [CodePen](https://codepen.io/peilingjiang/pen/eYMRJax).
+- _p5.bezier Example - Animation_ on [CodePen](https://codepen.io/peilingjiang/pen/eYMRJax).
 
 Share your ideas and projects using the library!
 

@@ -1,5 +1,5 @@
 /*
-  p5.bezier.js fidelity example
+  p5.bezier.js accuracy example
   Peiling Jiang
   UCSD Design Lab 2023
 
@@ -37,12 +37,12 @@ function draw() {
   push()
   noStroke()
   fill(color('#FFB99A'))
-  text('Fidelity 0', 935, 540)
+  text('Accuracy 0', 935, 540)
   fill(color('#FF6464'))
-  text('Fidelity 1', 935, 555)
+  text('Accuracy 1', 935, 555)
   fill(color('#DB3056'))
-  text('Fidelity 3', 935, 570)
+  text('Accuracy 3', 935, 570)
   fill(color('#851D41'))
-  text('Fidelity 7', 935, 585)
+  text('Accuracy 7', 935, 585)
   pop()
 }
