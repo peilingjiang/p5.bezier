@@ -140,6 +140,8 @@ The call of `newBezierObj` will not draw the curve on canvas automatically. To d
 
 ## Examples
 
+![cover](img/example.png)
+
 To execute the examples locally, download the repository to your local machine. Then, navigate to the `examples` directory using your terminal. Execute the following command:
 
 ```
