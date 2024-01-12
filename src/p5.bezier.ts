@@ -250,6 +250,8 @@ function newBezierObj(
   return new BezierCurve(pointList, closeType, increment, _dimension)
 }
 
+/* -------------------------------------------------------------------------- */
+
 class BezierCurve {
   controlPoints: PointList
   closeType: CloseType
