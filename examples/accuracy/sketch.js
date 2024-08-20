@@ -6,7 +6,7 @@
   color palette from colorhunt.co
 */
 
-let points = [
+const points = [
   [0, 0],
   [100, 1100],
   [1500, -2200],
@@ -16,8 +16,8 @@ let points = [
 ]
 
 function setup() {
-  let c = createCanvas(1000, 600)
-  p5bezier.initBezier(c)
+  const c = createCanvas(1000, 600)
+  p5bezier.init(c)
   noFill()
 }
 
@@ -25,13 +25,13 @@ function draw() {
   background(235)
   strokeWeight(2)
   stroke(color('#FFB99A'))
-  p5bezier.newBezier(points, 'OPEN', 0)
+  p5bezier.draw(points, 'OPEN', 0)
   stroke(color('#FF6464'))
-  p5bezier.newBezier(points, 'OPEN', 1)
+  p5bezier.draw(points, 'OPEN', 1)
   stroke(color('#DB3056'))
-  p5bezier.newBezier(points, 'OPEN', 3)
+  p5bezier.draw(points, 'OPEN', 3)
   stroke(color('#851D41'))
-  p5bezier.newBezier(points, 'OPEN', 7)
+  p5bezier.draw(points, 'OPEN', 7)
 
   // Caption
   push()

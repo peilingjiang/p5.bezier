@@ -4,7 +4,7 @@
   NYU ITP/IMA 2020
 */
 
-let points = [
+const points = [
   [0, 0],
   [100, 1100],
   [1500, -2200],
@@ -15,7 +15,7 @@ let points = [
 let bezierObject
 
 function setup() {
-  let c = createCanvas(1000, 600)
+  const c = createCanvas(1000, 600)
   p5bezier.initBezier(c)
   noFill()
   strokeWeight(2)
@@ -28,8 +28,8 @@ function draw() {
   // Draw the dash Bezier curve
   bezierObject.draw([20, 5])
   // Find the closest point and the shortest distance
-  let pointOnCurve = bezierObject.shortest(mouseX, mouseY)
-  let r = dist(mouseX, mouseY, pointOnCurve[0], pointOnCurve[1])
+  const pointOnCurve = bezierObject.shortest(mouseX, mouseY)
+  const r = dist(mouseX, mouseY, pointOnCurve[0], pointOnCurve[1])
 
   // Draw the line and ellipse from mouse to point
   line(mouseX, mouseY, pointOnCurve[0], pointOnCurve[1])

@@ -11,8 +11,8 @@ let pa // a PointArray object
 
 // eslint-disable-next-line no-unused-vars
 function setup() {
-  let c = createCanvas(windowWidth, windowHeight)
-  p5bezier.initBezier(c)
+  const c = createCanvas(windowWidth, windowHeight)
+  p5bezier.init(c)
   noFill()
 
   pa = new PointArray()
@@ -28,7 +28,7 @@ function draw() {
   stroke(color('#FD5E53'))
   strokeWeight(3)
   // Draw an open Bezier curve with accuracy of 10 (highest)
-  p5bezier.newBezier(pa.get(), 'OPEN', 10)
+  p5bezier.draw(pa.get(), 'OPEN', 10)
   pa.display(true)
 }
 
@@ -68,7 +68,7 @@ class PointArray {
 
   add(pX, pY) {
     let index = 0
-    for (let point of this.pointArray) {
+    for (const point of this.pointArray) {
       if (pX < point.position[0]) break
       index++
     }
@@ -97,15 +97,15 @@ class PointArray {
       pop()
     }
 
-    for (let point of this.pointArray) point.display()
+    for (const point of this.pointArray) point.display()
   }
 
   get() {
     // Return an array of array
-    // for p5bezier.newBezier function to use
-    let positionArray = []
+    // for p5bezier.draw function to use
+    const positionArray = []
     // point is a Point object
-    for (let point of this.pointArray) positionArray.push(point.position)
+    for (const point of this.pointArray) positionArray.push(point.position)
     return positionArray
   }
 }
@@ -125,7 +125,7 @@ class Point {
     fill(0)
     noStroke()
     text(
-      '(' + this.position[0] + ', ' + this.position[1] + ')',
+      `(${this.position[0]}, ${this.position[1]})`,
       this.position[0] + 10,
       this.position[1] - 10,
     )

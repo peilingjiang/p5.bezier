@@ -5,15 +5,15 @@
 */
 
 function setup() {
-  let c = createCanvas(500, 500)
-  p5bezier.initBezier(c)
+  const c = createCanvas(500, 500)
+  p5bezier.init(c)
   noFill()
 }
 
 function draw() {
   background(235)
   strokeWeight(2)
-  p5bezier.newBezier([
+  p5bezier.draw([
     [10, 10],
     [100, 700],
     [500, -800],

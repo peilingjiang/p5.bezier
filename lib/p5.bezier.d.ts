@@ -25,4 +25,4 @@ declare class BezierCurve {
     move(x: number, y: number, z?: number | null, toDraw?: boolean, dash?: [number, number]): BezierCurve;
     shortest(pX: number, pY: number, pZ?: number): Vertex;
 }
-export { initBezier, newBezier, newBezierObj };
+export { initBezier as init, newBezier as draw, newBezierObj as new };

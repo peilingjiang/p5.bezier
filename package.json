@@ -1,45 +1,41 @@
 {
-  "name": "p5bezier",
-  "version": "0.6.0",
-  "description": "Bezier curves for canvas graphics on the web, built to work with p5.js.",
-  "main": "lib/p5.bezier.min.js",
-  "keywords": [
-    "p5.js",
-    "Bezier",
-    "Computer Graphics"
-  ],
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/peilingjiang/p5.bezier.git"
-  },
-  "author": "Peiling Jiang",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/peilingjiang/p5.bezier/issues"
-  },
-  "homepage": "https://github.com/peilingjiang/p5.bezier#readme",
-  "devDependencies": {
-    "eslint": "^9.9.0",
-    "husky": "^9.1.5",
-    "lint-staged": "^15.2.9",
-    "prettier": "^3.3.3",
-    "terser-webpack-plugin": "^5.3.10",
-    "ts-loader": "^9.5.1",
-    "typescript": "^5.5.4",
-    "webpack": "^5.93.0",
-    "webpack-cli": "^5.1.4"
-  },
-  "scripts": {
-    "format": "prettier --write \"**/*.{js,json,md,html,css}\"",
-    "start": "webpack --env=development",
-    "build": "webpack --env=production",
-    "prepare": "husky"
-  },
-  "lint-staged": {
-    "*.js": "eslint --cache --fix",
-    "*.{js,json,md,html,css}": "prettier --write"
-  },
-  "files": [
-    "lib"
-  ]
+	"name": "p5bezier",
+	"version": "0.6.0",
+	"description": "Bezier curves for canvas graphics on the web, built to work with p5.js",
+	"main": "lib/p5.bezier.min.js",
+	"keywords": ["p5.js", "Bezier", "Computer Graphics"],
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/peilingjiang/p5.bezier.git"
+	},
+	"author": "Peiling Jiang",
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/peilingjiang/p5.bezier/issues"
+	},
+	"homepage": "https://github.com/peilingjiang/p5.bezier#readme",
+	"devDependencies": {
+		"@biomejs/biome": "^1.8.3",
+		"@types/p5": "^1.7.6",
+		"husky": "^9.1.5",
+		"lint-staged": "^15.2.9",
+		"prettier": "^3.3.3",
+		"terser-webpack-plugin": "^5.3.10",
+		"ts-loader": "^9.5.1",
+		"typescript": "^5.5.4",
+		"webpack": "^5.93.0",
+		"webpack-cli": "^5.1.4"
+	},
+	"scripts": {
+		"format": "biome format --write . && prettier --write \"**/*.{css,md,html}\"",
+		"lint": "biome check --write .",
+		"start": "webpack --env=development",
+		"build": "webpack --env=production",
+		"prepare": "husky"
+	},
+	"lint-staged": {
+		"*.{ts,json}": "biome check --write --no-errors-on-unmatched",
+		"*.{css,md,html}": "prettier --write"
+	},
+	"files": ["lib"]
 }

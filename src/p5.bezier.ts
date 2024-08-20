@@ -2,9 +2,10 @@
 p5.bezier library by Peiling Jiang
 2020
 
-updated Dec 2023
+updated Aug 2024
 */
 
+// biome-ignore lint/suspicious/noExplicitAny: p5 typing
 declare const p5: any
 
 type Accuracy = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10
@@ -15,7 +16,7 @@ type PointList = Point[]
 type Vertex = [number, number] | [number, number, number]
 type VertexList = Vertex[]
 
-window.console.log('[p5.bezier]')
+window.console.log('[p5.bezier] 2024')
 
 // accuracy 0 - 10, default 7
 const _p5bezierAccuracyListAll: {
@@ -34,14 +35,16 @@ const _p5bezierAccuracyListAll: {
   10: 0.0001,
 }
 
-let _canvas: any,
-  _ctx: any,
-  _dimension: Dimension,
-  _useP5: boolean,
-  _beginPath: Function,
-  _moveTo: Function,
-  _lineTo: Function,
-  _closePath: Function
+// biome-ignore lint/suspicious/noExplicitAny: p5 typing
+let _canvas: any
+// biome-ignore lint/suspicious/noExplicitAny: p5 typing
+let _ctx: any
+let _dimension: Dimension
+let _useP5: boolean
+let _beginPath: () => void
+let _moveTo: (...args: Vertex) => void
+let _lineTo: (...args: Vertex) => void
+let _closePath: (closeType?: CloseType) => void
 
 const ENSURED_FACTORIAL_COUNT = 10
 const _calculatedFactorials: number[] = [1]
@@ -57,10 +60,12 @@ const _calculatedBinomialCoefficients: {
 /* -------------------------------------------------------------------------- */
 // helpers
 
+// biome-ignore lint/suspicious/noExplicitAny: p5 typing
 function _determineDimension(context: any, isP3D: boolean): Dimension {
   return context.constructor.name === 'WebGLRenderingContext' || isP3D ? 3 : 2
 }
 
+// biome-ignore lint/suspicious/noExplicitAny: p5 typing
 function _setCanvasFunctions(useP5: boolean, canvas: any, context: any) {
   if (useP5) {
     _beginPath = canvas.beginShape
@@ -68,10 +73,17 @@ function _setCanvasFunctions(useP5: boolean, canvas: any, context: any) {
     _lineTo = canvas.vertex
     _closePath = canvas.endShape
   } else {
-    _beginPath = context.beginPath.bind(context)
-    _moveTo = context.moveTo.bind(context)
-    _lineTo = context.lineTo.bind(context)
-    _closePath = context.closePath.bind(context)
+    if (context instanceof WebGLRenderingContext) {
+      _beginPath = () => {}
+      _moveTo = (x, y, z = 0) => context.vertexAttrib3f(0, x, y, z)
+      _lineTo = (x, y, z = 0) => context.vertexAttrib3f(0, x, y, z)
+      _closePath = () => {}
+    } else {
+      _beginPath = context.beginPath.bind(context)
+      _moveTo = context.moveTo.bind(context)
+      _lineTo = context.lineTo.bind(context)
+      _closePath = context.closePath.bind(context)
+    }
   }
 }
 
@@ -109,7 +121,7 @@ function _binomialCoefficient(n: number, i: number): number {
 
 function _helper_dist(...args: number[]): number {
   if (args.length === 4) return Math.hypot(args[0] - args[2], args[1] - args[3])
-  else if (args.length === 6)
+  if (args.length === 6)
     return Math.hypot(args[0] - args[3], args[1] - args[4], args[2] - args[5])
   return 0
 }
@@ -120,20 +132,20 @@ function _helper_style() {
 }
 
 function _deepCopyPoints(arr: PointList): PointList {
-  return arr.map(v => Array.from(v)) as PointList
+  return arr.map((v) => [...v]) as PointList
 }
 
 function _findCloseCurveExtraPoints(pointList: PointList): PointList {
-  let first = pointList[0]
-  let last = pointList[pointList.length - 1]
-  let second = pointList[1]
-  let secondLast = pointList[pointList.length - 2]
+  const first = pointList[0]
+  const last = pointList[pointList.length - 1]
+  const second = pointList[1]
+  const secondLast = pointList[pointList.length - 2]
 
-  let point1 = [
+  const point1 = [
     2 * last[0] - secondLast[0],
     2 * last[1] - secondLast[1],
   ] as Point
-  let point2 = [2 * first[0] - second[0], 2 * first[1] - second[1]] as Point
+  const point2 = [2 * first[0] - second[0], 2 * first[1] - second[1]] as Point
 
   return [point1, point2, first]
 }
@@ -156,6 +168,7 @@ function _interpolateVertex(v1: Vertex, v2: Vertex, t: number): Vertex {
 /* -------------------------------------------------------------------------- */
 /* -------------------------------------------------------------------------- */
 
+// biome-ignore lint/suspicious/noExplicitAny: p5 typing
 function initBezier(canvas: any): void {
   _canvas = canvas
   _ctx = _canvas.drawingContext
@@ -173,7 +186,7 @@ function initBezier(canvas: any): void {
       typeof p5 === 'undefined' ||
       (typeof p5 !== 'undefined' && !(canvas instanceof p5.Renderer))
     )
-      window.console.warn('[p5.bezier] Support beyond p5.js is not tested.')
+      window.console.warn('[p5.bezier] Support beyond p5.js is not tested')
 
     _dimension = _determineDimension(_ctx, canvas.isP3D)
   } else throw new Error('[p5.bezier] Canvas is not supported.')
@@ -186,54 +199,55 @@ function newBezier(
   closeType: CloseType = 'OPEN',
   accuracy: Accuracy = 7,
 ): void {
-  pointList = _deepCopyPoints(pointList)
+  const _pL = _deepCopyPoints(pointList)
 
   if (closeType === 'CLOSE') {
-    const closeCurveExtraPoints = _findCloseCurveExtraPoints(pointList)
-    pointList.push(...closeCurveExtraPoints)
+    const closeCurveExtraPoints = _findCloseCurveExtraPoints(_pL)
+    _pL.push(...closeCurveExtraPoints)
   }
 
   const tIncrement = _p5bezierAccuracyListAll[accuracy]
-  const p = pointList.length // pointList has p points for (p - 1) degree curves
+  const p = _pL.length // pointList has p points for (p - 1) degree curves
   const n = p - 1
 
   _ensureFactorials(n)
 
   _beginPath()
-  _moveTo(...pointList[0])
+  _moveTo(..._pL[0])
 
   if (_dimension === 2) {
-    let x, y, t
+    let x: number
+    let y: number
+    let t: number
 
     for (t = 0; t <= 1; t += tIncrement) {
       x = y = 0
       for (let i = 0; i <= n; i++) {
         const coefficient =
-          _binomialCoefficient(n, i) * Math.pow(1 - t, n - i) * Math.pow(t, i)
+          _binomialCoefficient(n, i) * (1 - t) ** (n - i) * t ** i
 
-        x += coefficient * pointList[i][0]
-        y += coefficient * pointList[i][1]
+        x += coefficient * _pL[i][0]
+        y += coefficient * _pL[i][1]
       }
 
       _lineTo(x, y)
     }
   } else if (_dimension === 3) {
-    let t
+    for (let t = 0; t <= 1; t += tIncrement) {
+      const xyz: [number, number, number] = [0, 0, 0]
 
-    for (t = 0; t <= 1; t += tIncrement) {
-      let xyz: number[] = [0, 0, 0]
       for (let i = 0; i <= n; i++) {
         const coefficient =
-          _binomialCoefficient(n, i) * Math.pow(1 - t, n - i) * Math.pow(t, i)
+          _binomialCoefficient(n, i) * (1 - t) ** (n - i) * t ** i
 
-        for (let d = 0; d < 3; d++) xyz[d] += coefficient * pointList[i][d]
+        for (let d = 0; d < 3; d++) xyz[d] += coefficient * _pL[i][d]
       }
 
       _lineTo(...xyz)
     }
   }
 
-  _lineTo(...pointList.slice(-1)[0])
+  _lineTo(..._pL[_pL.length - 1])
 
   if (_useP5) _closePath(closeType)
   else if (closeType === 'CLOSE') _closePath()
@@ -298,9 +312,8 @@ class BezierCurve {
         let y = 0
 
         for (let i = 0; i <= this.n; i++) {
-          let binomialCoefficient = _binomialCoefficient(this.n, i)
-          let term =
-            binomialCoefficient * Math.pow(1 - t, this.n - i) * Math.pow(t, i)
+          const binomialCoefficient = _binomialCoefficient(this.n, i)
+          const term = binomialCoefficient * (1 - t) ** (this.n - i) * t ** i
 
           x += term * this.controlPoints[i][0]
           y += term * this.controlPoints[i][1]
@@ -310,12 +323,11 @@ class BezierCurve {
       }
     } else if (this.dimension === 3) {
       for (let t = 0; t <= 1; t += this.increment) {
-        let xyz: [number, number, number] = [0, 0, 0]
+        const xyz: [number, number, number] = [0, 0, 0]
 
         for (let i = 0; i <= this.n; i++) {
-          let binomialCoefficient = _binomialCoefficient(this.n, i)
-          let term =
-            binomialCoefficient * Math.pow(1 - t, this.n - i) * Math.pow(t, i)
+          const binomialCoefficient = _binomialCoefficient(this.n, i)
+          const term = binomialCoefficient * (1 - t) ** (this.n - i) * t ** i
 
           for (let d = 0; d < 3; d++) {
             xyz[d] += term * this.controlPoints[i][d]
@@ -347,7 +359,8 @@ class BezierCurve {
         vArray2[1],
         vArray2[2],
       )
-    } else if (this.dimension === 2) {
+    }
+    if (this.dimension === 2) {
       return _helper_dist(vArray1[0], vArray1[1], vArray2[0], vArray2[1])
     }
 
@@ -357,7 +370,7 @@ class BezierCurve {
   draw(dash?: [number, number]): void {
     if (!dash) {
       _beginPath()
-      this.vertexList.map(v => this._addVertex(v))
+      this.vertexList.map((v) => this._addVertex(v))
 
       if (this.closeType === 'CLOSE') _ctx.closePath()
 
@@ -368,21 +381,23 @@ class BezierCurve {
     } else {
       if (this.increment > 0.008) {
         this.increment = 0.008
-        console.warn('[p5.bezier] Accuracy is changed to 6 for a dash curve.')
+        window.console.warn(
+          '[p5.bezier] Accuracy is changed to 6 for a dash curve',
+        )
       }
 
       // draw a dash curve
-      let solidPart: number = Math.abs(dash[0]),
-        gapPart: number = Math.abs(dash[1]),
-        solid: boolean = true
+      const solidPart = Math.abs(dash[0])
+      const gapPart = Math.abs(dash[1])
+      let solid = true
 
       let lastVertex: Vertex = this.vertexList[0]
-      let toUseVertexInd: number = 1,
-        toUseVertex: Vertex = this.vertexList[toUseVertexInd]
+      let toUseVertexInd = 1
+      let toUseVertex: Vertex = this.vertexList[toUseVertexInd]
       let currentVirtualVertex: Vertex = lastVertex
 
-      let availableDist: number = 0,
-        neededDist: number = solid ? solidPart : gapPart
+      let availableDist = 0
+      let neededDist: number = solid ? solidPart : gapPart
 
       _ctx.save() // push
 
@@ -431,55 +446,55 @@ class BezierCurve {
   update(newControlPointList: PointList) {
     if (newControlPointList.length !== this.controlPoints.length) {
       throw new Error('[p5.bezier] The number of control points changed.')
-    } else if (
-      this.controlPoints.every((v, i) => v === newControlPointList[i])
-    ) {
-      return
-    } else {
-      this.controlPoints = newControlPointList
-      this._buildVertexList()
     }
+
+    if (this.controlPoints.every((v, i) => v === newControlPointList[i])) {
+      return
+    }
+
+    this.controlPoints = newControlPointList
+    this._buildVertexList()
   }
 
   move(
     x: number,
     y: number,
     z: number | null = null,
-    toDraw: boolean = true,
+    toDraw = true,
     dash?: [number, number],
   ): BezierCurve {
     if (z === null && this.dimension === 3) {
       throw new Error('[p5.bezier] X, Y, and Z are needed to move a 3D curve.')
-    } else {
-      const toMove: number[] = [x, y]
-      if (z !== null) toMove.push(z)
-
-      const newCurveV: VertexList = this.vertexList.map(
-        v => v.slice() as Vertex,
-      )
-      const newCurveObj: BezierCurve = new BezierCurve(
-        this.controlPoints,
-        this.closeType,
-        this.increment,
-        this.dimension,
-        newCurveV,
-      )
-
-      newCurveObj.vertexList = newCurveObj.vertexList.map(
-        v => v.map((val: number, i: number) => val + toMove[i]) as Vertex,
-      )
-
-      if (toDraw) newCurveObj.draw(dash)
-
-      return newCurveObj
     }
+
+    const toMove: number[] = [x, y]
+    if (z !== null) toMove.push(z)
+
+    const newCurveV: VertexList = this.vertexList.map(
+      (v) => v.slice() as Vertex,
+    )
+    const newCurveObj: BezierCurve = new BezierCurve(
+      this.controlPoints,
+      this.closeType,
+      this.increment,
+      this.dimension,
+      newCurveV,
+    )
+
+    newCurveObj.vertexList = newCurveObj.vertexList.map(
+      (v) => v.map((val: number, i: number) => val + toMove[i]) as Vertex,
+    )
+
+    if (toDraw) newCurveObj.draw(dash)
+
+    return newCurveObj
   }
 
-  shortest(pX: number, pY: number, pZ: number = 0): Vertex {
+  shortest(pX: number, pY: number, pZ = 0): Vertex {
     let minVertex: Vertex = [0, 0, 0]
-    let dMin = Infinity
+    let dMin = Number.POSITIVE_INFINITY
 
-    this.vertexList.map(v => {
+    this.vertexList.map((v) => {
       const nowMin = this._distVertex(v, [pX, pY, pZ])
       if (dMin > nowMin) {
         dMin = nowMin
@@ -491,4 +506,4 @@ class BezierCurve {
   }
 }
 
-export { initBezier, newBezier, newBezierObj }
+export { initBezier as init, newBezier as draw, newBezierObj as new }

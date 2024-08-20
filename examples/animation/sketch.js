@@ -7,9 +7,9 @@
 let t = 0 // set up a variable for time
 
 function setup() {
-  let c = createCanvas(window.innerWidth, window.innerHeight)
+  const c = createCanvas(window.innerWidth, window.innerHeight)
 
-  p5bezier.initBezier(c)
+  p5bezier.init(c)
 
   noFill()
   strokeWeight(5)
@@ -27,9 +27,9 @@ function draw() {
   t += 0.015
 
   stroke('#1363DF')
-  p5bezier.newBezier(getSinPoints(t), 'OPEN', 7)
+  p5bezier.draw(getSinPoints(t), 'OPEN', 7)
   stroke('#DFF6FF')
-  p5bezier.newBezier(getSinPoints(t + 0.5), 'OPEN', 7)
+  p5bezier.draw(getSinPoints(t + 0.5), 'OPEN', 7)
 
   push()
   noStroke()
@@ -38,9 +38,9 @@ function draw() {
   pop()
 
   stroke('#47B5FF')
-  p5bezier.newBezier(getSinPoints(t + 1), 'OPEN', 7)
+  p5bezier.draw(getSinPoints(t + 1), 'OPEN', 7)
   stroke('#D61C4E')
-  p5bezier.newBezier(getSinPoints(t + 1.5), 'OPEN', 8)
+  p5bezier.draw(getSinPoints(t + 1.5), 'OPEN', 8)
 }
 
 function getSinPoints(t) {
