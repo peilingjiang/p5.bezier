@@ -7,7 +7,8 @@ export type PointList = Point[]
 export type Vertex = [number, number] | [number, number, number]
 export type VertexList = Vertex[]
 
-export type BezierCanvas = {
+// @private
+export const B: {
   // biome-ignore lint/suspicious/noExplicitAny: p5 typing
   canvas: any
   // biome-ignore lint/suspicious/noExplicitAny: p5 typing
@@ -18,7 +19,18 @@ export type BezierCanvas = {
   moveTo: (...args: Vertex) => void
   lineTo: (...args: Vertex) => void
   closePath: (closeType?: CloseType) => void
+} = {
+  canvas: null,
+  ctx: null,
+  dimension: 2,
+  useP5: true,
+  beginPath: () => {},
+  moveTo: () => {},
+  lineTo: () => {},
+  closePath: () => {},
 }
+
+/* -------------------------------------------------------------------------- */
 
 export function _getDimension(
   // biome-ignore lint/suspicious/noExplicitAny: p5 typing
@@ -28,23 +40,29 @@ export function _getDimension(
   return context.constructor.name === 'WebGLRenderingContext' || isP3D ? 3 : 2
 }
 
-export function _getCanvasUtils(b: BezierCanvas) {
-  if (b.useP5) {
-    b.beginPath = b.canvas.beginShape
-    b.moveTo = b.canvas.vertex
-    b.lineTo = b.canvas.vertex
-    b.closePath = b.canvas.endShape
+export function _getCanvasUtils(
+  useP5: boolean,
+  // biome-ignore lint/suspicious/noExplicitAny: p5 typing
+  canvas: any,
+  // biome-ignore lint/suspicious/noExplicitAny: p5 typing
+  context: any,
+) {
+  if (useP5) {
+    B.beginPath = canvas.beginShape
+    B.moveTo = canvas.vertex
+    B.lineTo = canvas.vertex
+    B.closePath = canvas.endShape
   } else {
-    if (b.ctx instanceof WebGLRenderingContext) {
-      b.beginPath = () => {}
-      b.moveTo = (x, y, z = 0) => b.ctx.vertexAttrib3f(0, x, y, z)
-      b.lineTo = (x, y, z = 0) => b.ctx.vertexAttrib3f(0, x, y, z)
-      b.closePath = () => {}
+    if (context instanceof WebGLRenderingContext) {
+      B.beginPath = () => {}
+      B.moveTo = (x, y, z = 0) => context.vertexAttrib3f(0, x, y, z)
+      B.lineTo = (x, y, z = 0) => context.vertexAttrib3f(0, x, y, z)
+      B.closePath = () => {}
     } else {
-      b.beginPath = b.ctx.beginPath.bind(b.ctx)
-      b.moveTo = b.ctx.moveTo.bind(b.ctx)
-      b.lineTo = b.ctx.lineTo.bind(b.ctx)
-      b.closePath = b.ctx.closePath.bind(b.ctx)
+      B.beginPath = context.beginPath.bind(context)
+      B.moveTo = context.moveTo.bind(context)
+      B.lineTo = context.lineTo.bind(context)
+      B.closePath = context.closePath.bind(context)
     }
   }
 }
@@ -68,9 +86,9 @@ export function _dist(...args: number[]): number {
   return 0
 }
 
-export function _setStyles(b: BezierCanvas) {
-  if (b.canvas._doFill) b.ctx.fill()
-  if (b.canvas._doStroke) b.ctx.stroke()
+export function _setStyles() {
+  if (B.canvas._doFill) B.ctx.fill()
+  if (B.canvas._doStroke) B.ctx.stroke()
 }
 
 /* -------------------------------------------------------------------------- */

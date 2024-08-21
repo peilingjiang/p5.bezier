@@ -29,7 +29,7 @@ const config = {
     path: path.resolve(__dirname, 'lib'),
     filename: 'p5.bezier.min.js',
     library: {
-      name: 'initBezier',
+      name: 'p5bezier',
       type: 'umd',
       export: 'default',
     },

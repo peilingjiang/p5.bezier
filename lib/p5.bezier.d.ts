@@ -1,12 +1,8 @@
 import { type Accuracy } from './coefficients';
-import { type BezierCanvas, type CloseType, type Dimension, type PointList, type Vertex, type VertexList } from './utils';
-declare class P5Bezier {
-    private b;
-    constructor(canvas: any);
-    draw(pointList: PointList, closeType?: CloseType, accuracy?: Accuracy): PointList;
-    new(pointList: PointList, closeType?: CloseType, accuracy?: Accuracy): BezierCurve;
-}
-declare function initBezier(canvas: any): P5Bezier;
+import { type CloseType, type Dimension, type PointList, type Vertex, type VertexList } from './utils';
+declare function initBezier(canvas: any): void;
+declare function drawBezier(pointList: PointList, closeType?: CloseType, accuracy?: Accuracy): PointList;
+declare function newBezierObj(pointList: PointList, closeType?: CloseType, accuracy?: Accuracy): BezierCurve;
 declare class BezierCurve {
     controlPoints: PointList;
     closeType: CloseType;
@@ -15,8 +11,7 @@ declare class BezierCurve {
     private vertexList;
     private p;
     private n;
-    private b;
-    constructor(points: PointList, closeType: CloseType, increment: number, bezierCanvas: BezierCanvas, vertexList?: VertexList | null);
+    constructor(points: PointList, closeType: CloseType, increment: number, dimension: Dimension, vertexList?: VertexList | null);
     private _buildVertexList;
     private _addVertex;
     private _distVertex;
@@ -27,4 +22,10 @@ declare class BezierCurve {
     move(x: number, y: number, z?: number | null, toDraw?: boolean, dash?: [number, number]): BezierCurve;
     shortest(pX: number, pY: number, pZ?: number): Vertex;
 }
-export default initBezier;
+declare const p5bezier: {
+    init: typeof initBezier;
+    draw: typeof drawBezier;
+    new: typeof newBezierObj;
+};
+export { initBezier as init, drawBezier as draw, newBezierObj as new };
+export default p5bezier;

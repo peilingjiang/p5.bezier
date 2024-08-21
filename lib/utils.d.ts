@@ -4,7 +4,7 @@ export type Point = [number, number] | [number, number, number];
 export type PointList = Point[];
 export type Vertex = [number, number] | [number, number, number];
 export type VertexList = Vertex[];
-export type BezierCanvas = {
+export declare const B: {
     canvas: any;
     ctx: any;
     dimension: Dimension;
@@ -15,9 +15,9 @@ export type BezierCanvas = {
     closePath: (closeType?: CloseType) => void;
 };
 export declare function _getDimension(context: any, isP3D: boolean): Dimension;
-export declare function _getCanvasUtils(b: BezierCanvas): void;
+export declare function _getCanvasUtils(useP5: boolean, canvas: any, context: any): void;
 export declare function _dist(...args: number[]): number;
-export declare function _setStyles(b: BezierCanvas): void;
+export declare function _setStyles(): void;
 export declare function _concentrate(pointList: PointList, close?: boolean): PointList;
 export declare function _getCloseCurvePoints(pointList: PointList): PointList;
 export declare function _interpolateVertex(v1: Vertex, v2: Vertex, t: number): Vertex;
