@@ -299,7 +299,7 @@ new p5(p => {
   }
 }, 'shortest-point-sketch')
 
-// Accuracy
+// Smoothness
 new p5(p => {
   let p5bezier
 
@@ -378,4 +378,4 @@ new p5(p => {
 
     p.pop()
   }
-}, 'accuracy-sketch')
+}, 'smoothness-sketch')

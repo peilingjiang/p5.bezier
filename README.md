@@ -76,7 +76,7 @@ function setup() {
 The simplest way to use the library is to call `p5bezier.draw()` in your `draw()` function. You can adjust the curve's style using `fill()` or `strokeWeight()` just like other shapes.
 
 ```
-p5bezier.draw(pointsArray [, closeType] [, accuracy]);
+p5bezier.draw(pointsArray [, closeType] [, smoothness]);
 ```
 
 **pointsArray**
@@ -87,9 +87,9 @@ This is an array of [x, y] pairs, each representing a control point for the curv
 
 This is a string, either `"OPEN"` or `"CLOSE"`. Use `"CLOSE"` to automatically close the curve. The default is `"OPEN"`.
 
-**accuracy** (Optional)
+**smoothness** (Optional)
 
-This is an integer between `1` and `5`, with a default value of `3`. This value determines the accuracy of the Bézier curve. Higher values mean more vertices are used, leading to a more accurate and smoother curve, but at the cost of additional computation.
+This is an integer between `1` and `5`, with a default value of `3`. This value determines the smoothness of the Bézier curve. Higher values mean more vertices are used, leading to a more accurate and smoother curve, but at the cost of additional computation.
 
 ## Create a Bézier Object
 
@@ -98,7 +98,7 @@ For advanced operations, such as computing the shortest distance from a point to
 The usage of `p5bezier.new()` is similar to `p5bezier.draw()`, but it returns a _Bézier Curve Object_ that can be stored in a variable:
 
 ```
-const bezierObject = p5bezier.new(pointsArray [, closeType] [, accuracy]);
+const bezierObject = p5bezier.new(pointsArray [, closeType] [, smoothness]);
 ```
 
 The call of `p5bezier.new` will not draw the curve on canvas automatically. To draw the curve, use `.draw()` as one of many functions listed below:

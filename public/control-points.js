@@ -24,14 +24,14 @@ function draw() {
   background(255)
   stroke(color('#FD5E53'))
   strokeWeight(3)
-  // Draw an open Bezier curve with accuracy of 10 (highest)
+
   p5bezier.draw(pa.get(), 'OPEN')
   pa.display(true)
 }
 
 let focusedPointInd = -1
 function mousePressed() {
-  const distances = pa.points.map((point) =>
+  const distances = pa.points.map(point =>
     dist(mouseX, mouseY, point.position[0], point.position[1]),
   )
   const minDistance = Math.min(...distances)

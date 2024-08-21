@@ -7,9 +7,9 @@ updated Aug 2024
 
 import packageJson from '../package.json'
 import {
-  type Accuracy,
-  _accuracies,
+  type Smoothness,
   _binomialCoefficient,
+  _smoothness,
 } from './coefficients'
 import {
   type BezierCanvas,
@@ -60,10 +60,10 @@ function _bezierVertex(
 function _drawBezierCurve(
   bezierCanvas: BezierCanvas,
   pointList: PointList,
-  accuracy: Accuracy,
+  smoothness: Smoothness,
 ): void {
   const n = pointList.length - 1
-  const increment = _accuracies[accuracy]
+  const increment = _smoothness[smoothness]
 
   for (let t = 0; t <= 1; t += increment) {
     const v = _bezierVertex(pointList, n, t, bezierCanvas.dimension)
@@ -117,7 +117,7 @@ class P5Bezier {
   draw(
     pointList: PointList,
     closeType: CloseType = 'OPEN',
-    accuracy: Accuracy = 3,
+    smoothness: Smoothness = 3,
   ): PointList {
     const _pL =
       closeType === 'CLOSE'
@@ -127,7 +127,7 @@ class P5Bezier {
     this.b.beginPath()
     this.b.moveTo(..._pL[0])
 
-    _drawBezierCurve(this.b, _pL, accuracy)
+    _drawBezierCurve(this.b, _pL, smoothness)
     this.b.lineTo(..._pL[_pL.length - 1])
 
     if (this.b.useP5) this.b.closePath(closeType)
@@ -141,9 +141,9 @@ class P5Bezier {
   new(
     pointList: PointList,
     closeType: CloseType = 'OPEN',
-    accuracy: Accuracy = 3,
+    smoothness: Smoothness = 3,
   ): BezierCurve {
-    const increment = _accuracies[accuracy]
+    const increment = _smoothness[smoothness]
     return new BezierCurve(pointList, closeType, increment, this.b)
   }
 }
@@ -247,11 +247,9 @@ class BezierCurve {
   }
 
   private _dashedCurve(dash: [number, number]): void {
-    if (this.increment > 0.008) {
-      this.increment = 0.008
-      window.console.warn(
-        '[p5.bezier] Accuracy is changed to 6 for a dash curve',
-      )
+    if (this.increment > 0.001) {
+      this.increment = 0.001
+      window.console.warn('[p5.bezier] Smoothness set to 3 for a dashed curve')
     }
 
     const [solidPart, gapPart] = dash.map(Math.abs)

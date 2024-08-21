@@ -1,10 +1,10 @@
-import { type Accuracy } from './coefficients';
+import { type Smoothness } from './coefficients';
 import { type BezierCanvas, type CloseType, type Dimension, type PointList, type Vertex, type VertexList } from './utils';
 declare class P5Bezier {
     private b;
     constructor(canvas: any);
-    draw(pointList: PointList, closeType?: CloseType, accuracy?: Accuracy): PointList;
-    new(pointList: PointList, closeType?: CloseType, accuracy?: Accuracy): BezierCurve;
+    draw(pointList: PointList, closeType?: CloseType, smoothness?: Smoothness): PointList;
+    new(pointList: PointList, closeType?: CloseType, smoothness?: Smoothness): BezierCurve;
 }
 declare function initBezier(canvas: any): P5Bezier;
 declare class BezierCurve {

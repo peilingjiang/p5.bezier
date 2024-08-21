@@ -1,9 +1,9 @@
 export const MAX_DEGREE = 160
 
-// accuracy 1 - 5, default 3
-export type Accuracy = 1 | 2 | 3 | 4 | 5
-export const _accuracies: {
-  [A in Accuracy]: number
+// smoothness 1 - 5, default 3
+export type Smoothness = 1 | 2 | 3 | 4 | 5
+export const _smoothness: {
+  [A in Smoothness]: number
 } = {
   1: 0.1,
   2: 0.02,
