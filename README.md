@@ -10,7 +10,7 @@
 
 <!-- [**Try it now on p5.js Web Editor!**](https://editor.p5js.org/peilingjiang/sketches/7Z2pRG-TB) -->
 
-[**Try it now on p5.js Web Editor!**](https://editor.p5js.org/peilingjiang/sketches/mVXzWEJbT)
+[**Try it now on p5.js Web Editor!**](https://editor.p5js.org/peilingjiang/sketches/mVXzWEJbT) | [**Play with examples**](https://p5bezier.netlify.app)
 
 While **p5.bezier** is designed to integrate with p5.js, it operates independently as well. To draw a Bézier curve on canvas, you can simply use `p5bezier.draw()`:
 
