@@ -18,7 +18,7 @@ import {
   type PointList,
   type Vertex,
   type VertexList,
-  _copy,
+  _concentrate,
   _dist,
   _getCanvasUtils,
   _getCloseCurvePoints,
@@ -100,20 +100,15 @@ function initBezier(canvas: any): void {
 
 /* -------------------------------------------------------------------------- */
 
-function newBezier(
+function drawBezier(
   pointList: PointList,
   closeType: CloseType = 'OPEN',
   accuracy: Accuracy = 3,
-): void {
-  const _pL = _copy(pointList)
-
-  if (closeType === 'CLOSE') {
-    const closeCurveExtraPoints = _getCloseCurvePoints(_pL)
-    _pL.push(...closeCurveExtraPoints)
-  }
-
-  // const p = _pL.length // pointList has p points for (p - 1) degree curves
-  // const n = p - 1
+): PointList {
+  const _pL =
+    closeType === 'CLOSE'
+      ? [..._concentrate(pointList, true), ..._getCloseCurvePoints(pointList)]
+      : _concentrate(pointList)
 
   B.beginPath()
   B.moveTo(..._pL[0])
@@ -125,6 +120,8 @@ function newBezier(
   else if (closeType === 'CLOSE') B.closePath()
 
   _setStyles()
+
+  return _pL
 }
 
 function newBezierObj(
@@ -155,7 +152,7 @@ class BezierCurve {
     dimension: Dimension,
     vertexList: VertexList | null = null,
   ) {
-    this.controlPoints = _copy(points)
+    this.controlPoints = _concentrate(points, closeType === 'CLOSE')
 
     if (closeType === 'CLOSE') {
       this.controlPoints.push(..._getCloseCurvePoints(this.controlPoints))
@@ -345,9 +342,9 @@ class BezierCurve {
 
 const p5bezier = {
   init: initBezier,
-  draw: newBezier,
+  draw: drawBezier,
   new: newBezierObj,
 }
 
-export { initBezier as init, newBezier as draw, newBezierObj as new }
+export { initBezier as init, drawBezier as draw, newBezierObj as new }
 export default p5bezier

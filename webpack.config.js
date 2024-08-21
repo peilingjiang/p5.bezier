@@ -58,7 +58,7 @@ const config = {
   },
 }
 
-module.exports = env => {
+module.exports = (env) => {
   if (env.development) {
     return Object.assign({}, config, {
       mode: 'development',

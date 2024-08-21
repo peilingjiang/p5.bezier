@@ -1,5 +1,5 @@
 /*
-  p5.bezier.js shortest_point example
+  p5.bezier.js shortest-point example
   Peiling Jiang
   NYU ITP/IMA 2020
 */

@@ -1,4 +1,4 @@
-export const MAX_DEGREE = 150
+export const MAX_DEGREE = 160
 
 // accuracy 1 - 5, default 3
 export type Accuracy = 1 | 2 | 3 | 4 | 5
@@ -52,5 +52,5 @@ export function _binomialCoefficient(n: number, i: number): number {
 
 /* -------------------------------------------------------------------------- */
 
-_helper_ensureFactorials(MAX_DEGREE)
-_helper_ensureBinomialCoefficients(MAX_DEGREE)
+_helper_ensureFactorials(MAX_DEGREE + 1)
+_helper_ensureBinomialCoefficients(MAX_DEGREE + 1)

@@ -1,5 +1,3 @@
-/* eslint-disable no-undef */
-
 /*
   Peiling Jiang
   UCSD Design Lab 2023
@@ -9,11 +7,9 @@
 
 let pa // a PointArray object
 
-// eslint-disable-next-line no-unused-vars
 function setup() {
   const c = createCanvas(windowWidth, windowHeight)
   p5bezier.init(c)
-
   noFill()
 
   pa = new PointArray()
@@ -23,17 +19,17 @@ function setup() {
   pa.add(1000, 400)
 }
 
-// eslint-disable-next-line no-unused-vars
 function draw() {
   background(255)
   stroke(color('#FD5E53'))
   strokeWeight(3)
   // Draw an open Bezier curve with accuracy of 10 (highest)
-  p5bezier.draw(pa.get(), 'OPEN')
+  p5bezier.draw(pa.get(), 'OPEN', 5)
   pa.display(true)
 }
 
 let focusedPointInd = -1
+
 function mousePressed() {
   const distances = pa.points.map((point) =>
     dist(mouseX, mouseY, point.position[0], point.position[1]),

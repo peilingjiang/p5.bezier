@@ -1,3 +1,5 @@
+import { MAX_DEGREE } from './coefficients'
+
 export type CloseType = 'OPEN' | 'CLOSE'
 export type Dimension = 2 | 3
 export type Point = [number, number] | [number, number, number]
@@ -89,24 +91,73 @@ export function _setStyles() {
   if (B.canvas._doStroke) B.ctx.stroke()
 }
 
-export function _copy(arr: PointList): PointList {
+/* -------------------------------------------------------------------------- */
+
+class SeedRandom {
+  private m = 2 ** 31 - 1
+  private a = 1103515245
+  private c = 12345
+  private state: number
+
+  constructor(seed: number) {
+    this.state = seed
+  }
+
+  private r(): number {
+    this.state = (this.a * this.state + this.c) % this.m
+    return this.state / this.m
+  }
+
+  public next(min: number, max: number): number {
+    return Math.floor(this.r() * (max - min + 1)) + min
+  }
+}
+
+const seed = 1234
+
+export function _concentrate(pointList: PointList, close = false): PointList {
+  const save = close ? 3 : 0
+  const limit = MAX_DEGREE - save
+
+  if (pointList.length <= limit) return _copy(pointList)
+
+  const excessPoints = pointList.length - limit
+  const rng = new SeedRandom(seed)
+
+  const rmIndex = new Set<number>()
+  ;[...new Array(excessPoints)].map((_, ind) => {
+    let r = rng.next(5 + ind, limit - 5 + ind)
+    while (rmIndex.has(r)) {
+      r = rng.next(5 + ind, limit - 5 + ind)
+    }
+
+    rmIndex.add(r)
+  })
+
+  return _copy(pointList.filter((_, index) => !rmIndex.has(index)))
+}
+
+function _copy(arr: PointList): PointList {
   return arr.map((v) => v.slice()) as PointList
 }
 
 export function _getCloseCurvePoints(pointList: PointList): PointList {
   const len = pointList.length
+  if (len === 0) return []
 
   const first = pointList[0]
   const last = pointList[len - 1]
 
+  if (len === 1) return _copy([first])
+
   const second = pointList[1]
   const secondLast = pointList[len - 2]
 
-  return [
+  return _copy([
     [2 * last[0] - secondLast[0], 2 * last[1] - secondLast[1]] as Point,
     [2 * first[0] - second[0], 2 * first[1] - second[1]] as Point,
     first,
-  ]
+  ])
 }
 
 export function _interpolateVertex(v1: Vertex, v2: Vertex, t: number): Vertex {

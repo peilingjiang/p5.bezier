@@ -1,5 +1,5 @@
 /*
-  p5.bezier.js basic_object example
+  p5.bezier.js basic-object example
   Peiling Jiang
   NYU ITP/IMA 2020
 */

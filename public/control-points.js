@@ -1,18 +1,16 @@
-/* eslint-disable no-undef */
-
 /*
   Peiling Jiang
-  UCSD Design Lab 2023
+  UCSD Design Lab 2024
 */
 
 // DRAG THE POINTS AROUND!
 
 let pa // a PointArray object
 
-// eslint-disable-next-line no-unused-vars
 function setup() {
   const c = createCanvas(windowWidth, windowHeight)
   p5bezier.init(c)
+
   noFill()
 
   pa = new PointArray()
@@ -22,18 +20,16 @@ function setup() {
   pa.add(1000, 400)
 }
 
-// eslint-disable-next-line no-unused-vars
 function draw() {
   background(255)
   stroke(color('#FD5E53'))
   strokeWeight(3)
   // Draw an open Bezier curve with accuracy of 10 (highest)
-  p5bezier.draw(pa.get(), 'OPEN', 5)
+  p5bezier.draw(pa.get(), 'OPEN')
   pa.display(true)
 }
 
 let focusedPointInd = -1
-// eslint-disable-next-line no-unused-vars
 function mousePressed() {
   const distances = pa.points.map((point) =>
     dist(mouseX, mouseY, point.position[0], point.position[1]),
@@ -46,13 +42,11 @@ function mousePressed() {
   } else focusedPointInd = pa.add(mouseX, mouseY)
 }
 
-// eslint-disable-next-line no-unused-vars
 function mouseDragged() {
   if (focusedPointInd > -1)
     pa.pointArray[focusedPointInd].update(mouseX, mouseY)
 }
 
-// eslint-disable-next-line no-unused-vars
 function mouseUp() {
   focusedPointInd = -1
 }

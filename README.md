@@ -154,10 +154,10 @@ For instance, to run the _basic_ example, simply enter `node server.js basic`. T
 Currently available examples:
 
 - **basic** draws a simple Bézier curve with 5 control points across the canvas.
-- **basic_object** create a simple Bézier object with 5 control points across the canvas.
-- **control_points** draws a curve and its control points, which can be dragged around.
+- **basic-object** create a simple Bézier object with 5 control points across the canvas.
+- **control-points** draws a curve and its control points, which can be dragged around.
 - **accuracy** showcases curves drawn with varying levels of accuracy.
-- **shortest_point** draws the shortest line from the mouse pointer to the curve.
+- **shortest-point** draws the shortest line from the mouse pointer to the curve.
 - **animation** draws animated Bézier curves.
 
 More complex examples to be updated.
