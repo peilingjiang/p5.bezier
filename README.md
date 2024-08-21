@@ -89,7 +89,7 @@ This is a string, either `"OPEN"` or `"CLOSE"`. Use `"CLOSE"` to automatically c
 
 **accuracy** (Optional)
 
-This is an integer between `0` and `10`, with a default value of `7`. This value determines the accuracy of the Bézier curve. Higher values mean more vertices are used, leading to a more accurate curve, but at the cost of additional computation.
+This is an integer between `1` and `5`, with a default value of `3`. This value determines the accuracy of the Bézier curve. Higher values mean more vertices are used, leading to a more accurate and smoother curve, but at the cost of additional computation.
 
 ## Create a Bézier Object
 
