@@ -28,8 +28,11 @@ const config = {
   output: {
     path: path.resolve(__dirname, 'lib'),
     filename: 'p5.bezier.min.js',
-    library: 'p5bezier',
-    libraryTarget: 'umd',
+    library: {
+      name: 'p5bezier',
+      type: 'umd',
+      export: 'default',
+    },
     globalObject: 'this',
   },
   devtool: 'source-map',
@@ -55,7 +58,7 @@ const config = {
   },
 }
 
-module.exports = (env) => {
+module.exports = env => {
   if (env.development) {
     return Object.assign({}, config, {
       mode: 'development',

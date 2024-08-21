@@ -349,4 +349,5 @@ const p5bezier = {
   new: newBezierObj,
 }
 
+export { initBezier as init, newBezier as draw, newBezierObj as new }
 export default p5bezier
