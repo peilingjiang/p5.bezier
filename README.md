@@ -12,12 +12,12 @@
 
 [**Try it now on p5.js Web Editor!**](https://editor.p5js.org/peilingjiang/sketches/mVXzWEJbT)
 
-While **p5.bezier** is designed to integrate with p5.js, it operates independently as well. It's necessary to initialize the library and specify the target canvas by invoking `initBezier(canvas)` at the start of your code.
+While **p5.bezier** is designed to integrate with p5.js, it operates independently as well. It's necessary to initialize the library and specify the target canvas by invoking `p5bezier.init(canvas)` at the start of your code.
 
-To draw a Bézier curve on canvas, you can simply use `newBezier()`:
+To draw a Bézier curve on canvas, you can simply use `p5bezier.draw()`:
 
 ```js
-newBezier([
+p5bezier.draw([
   [85, 20],
   [10, 10],
   [90, 90],
@@ -47,7 +47,7 @@ Alternatively, you can use the library through a content delivery network (CDN):
 Once included, the entire library is encapsulated within the `p5bezier` object. To call the functions provided by the library, prepend `p5bezier` to the function name:
 
 ```js
-p5bezier.initBezier(c)
+p5bezier.init(c)
 ```
 
 ### NPM
@@ -58,10 +58,10 @@ You can also install the library using the package manager NPM (recommended):
 npm install p5bezier
 ```
 
-Then, import the modules into your project:
+Then, import the module into your project:
 
 ```js
-import { initBezier, newBezier, newBezierObject } from 'p5bezier'
+import p5bezier from 'p5bezier'
 ```
 
 ## Init for Bézier
@@ -71,16 +71,16 @@ You must initialize the Bézier drawing system with the canvas you are drawing o
 ```diff
 function setup() {
   let c = createCanvas(100, 100)
-+ initBezier(c)
++ p5bezier.init(c)
 }
 ```
 
 ## Draw a Bézier Curve
 
-The simplest way to use the library is to call `newBezier()` in your `draw()` function. You can adjust the curve's style using `fill()` or `strokeWeight()` just like other shapes.
+The simplest way to use the library is to call `p5bezier.draw()` in your `draw()` function. You can adjust the curve's style using `fill()` or `strokeWeight()` just like other shapes.
 
 ```
-newBezier(pointsArray [, closeType] [, accuracy]);
+p5bezier.draw(pointsArray [, closeType] [, accuracy]);
 ```
 
 **pointsArray**
@@ -97,15 +97,15 @@ This is an integer between `0` and `10`, with a default value of `7`. This value
 
 ## Create a Bézier Object
 
-For advanced operations, such as computing the shortest distance from a point to the curve, use the `newBezierObj()` function. This method can also potentially optimize computation resources if placed within the `setup()` function, as vertices are calculated only once and can then be reused.
+For advanced operations, such as computing the shortest distance from a point to the curve, use the `p5bezier.new()` function. This method can also potentially optimize computation resources if placed within the `setup()` function, as vertices are calculated only once and can then be reused.
 
-The usage of `newBezierObj()` is similar to `newBezier()`, but it returns a _Bézier Curve Object_ that can be stored in a variable:
+The usage of `p5bezier.new()` is similar to `p5bezier.draw()`, but it returns a _Bézier Curve Object_ that can be stored in a variable:
 
 ```
-let bezierObject = newBezierObj(pointsArray [, closeType] [, accuracy]);
+const bezierObject = p5bezier.new(pointsArray [, closeType] [, accuracy]);
 ```
 
-The call of `newBezierObj` will not draw the curve on canvas automatically. To draw the curve, use `.draw()` as one of many functions listed below:
+The call of `p5bezier.new` will not draw the curve on canvas automatically. To draw the curve, use `.draw()` as one of many functions listed below:
 
 - `.draw([dash])`
 
