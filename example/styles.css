@@ -1,5 +1,6 @@
 body {
   font-family:
+    Inter,
     system-ui,
     -apple-system,
     BlinkMacSystemFont,
@@ -42,22 +43,45 @@ h1 {
   background: #fff;
   border-radius: 0.5rem;
   box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.1);
-  padding: 1rem 0 0 0;
+  padding: 0;
   width: 100%;
   overflow: hidden;
 
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-.sketch h2 {
-  color: #2c3e50;
-  margin-top: 0;
+.sketch .info {
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 1rem;
+  font-size: 0.8rem;
+
+  display: flex;
+  gap: 1rem;
 }
 
-@media (max-width: 768px) {
-  .sketch {
-    width: 100%;
-  }
+.sketch .info * {
+  text-decoration: none;
+  opacity: 0.75;
+}
+
+.sketch .info span {
+  pointer-events: none;
+  user-select: none;
+}
+
+.sketch .info a {
+  pointer-events: initial;
+}
+
+.sketch .info *:hover {
+  opacity: 1;
+}
+
+.sketch .info.white * {
+  color: white;
 }

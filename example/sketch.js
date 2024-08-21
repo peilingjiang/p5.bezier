@@ -1,90 +1,6 @@
 const parent = document.querySelector('.sketch')
 const width = parent.clientWidth
 
-// Accuracy
-new p5(p => {
-  let p5bezier
-
-  p.setup = () => {
-    const c = p.createCanvas(width, 300)
-    p5bezier = initBezier(c)
-
-    p.noFill()
-  }
-
-  p.draw = () => {
-    const points = [
-      [-300, 800],
-      [width * 0.5, -750],
-      [width + 300, 800],
-    ]
-
-    p.background(255)
-    p.strokeWeight(2)
-    p.stroke(p.color('#FFB99A'))
-    p5bezier.draw(points, 'OPEN', 1)
-
-    const offset = 40
-
-    p.stroke(p.color('#FF6464'))
-    p5bezier.draw(
-      points.map(point => [point[0], point[1] + offset]),
-      'OPEN',
-      2,
-    )
-
-    p.stroke(p.color('#DB3056'))
-    p5bezier.draw(
-      points.map(point => [point[0], point[1] + offset * 2]),
-      'OPEN',
-      3,
-    )
-
-    p.stroke(p.color('#851D41'))
-    p5bezier.draw(
-      points.map(point => [point[0], point[1] + offset * 3]),
-      'OPEN',
-      4,
-    )
-
-    p.stroke(p.color('#000'))
-    p5bezier.draw(
-      points.map(point => [point[0], point[1] + offset * 4]),
-      'OPEN',
-      5,
-    )
-
-    p.push()
-    p.noStroke()
-    p.textSize(36)
-    p.textStyle(p.BOLD)
-    p.textFont('Inter')
-
-    const tX = width * 0.5
-    const tY = 45
-    const dX = 0
-    const dY = 40
-
-    p.textAlign(p.CENTER, p.CENTER)
-    p.fill(p.color('#FFB99A'))
-    p.text('1', width * 0.5, tY)
-
-    p.fill(p.color('#FF6464'))
-    p.text('2', tX + dX, tY + dY)
-
-    p.fill(p.color('#DB3056'))
-    p.text('3', tX + dX * 2, tY + dY * 2)
-
-    p.fill(p.color('#851D41'))
-    p.text('4', tX + dX * 3, tY + dY * 3)
-
-    p.fill(p.color('#000'))
-    p.text('5', tX + dX * 4, tY + dY * 4)
-
-    p.pop()
-  }
-}, 'accuracy-sketch')
-
 // Animation
 new p5(p => {
   let p5bezier
@@ -96,27 +12,34 @@ new p5(p => {
 
     p.noFill()
     p.strokeWeight(5)
+
     p.textStyle(p.BOLD)
-    p.textSize(40)
+    p.textSize(64)
     p.textAlign(p.CENTER, p.CENTER)
-    p.textFont('Arial')
+    p.textFont('Inter')
   }
 
   p.draw = () => {
     p.background('#06283D')
+
     t += 0.015
+
     p.stroke('#1363DF')
     p5bezier.draw(getSinPoints(p, t), 'OPEN', 3)
+
     p.stroke('#DFF6FF')
     p5bezier.draw(getSinPoints(p, t + 0.5), 'OPEN', 3)
+
     p.push()
     p.noStroke()
-    p.fill('#FFFFFFEE')
+    p.fill('#FFFFFFE0')
     p.text('p5.bezier', p.width / 2, p.height / 2)
     p.pop()
+
     p.stroke('#47B5FF')
     p5bezier.draw(getSinPoints(p, t + 1), 'OPEN', 3)
-    p.stroke('#D61C4E')
+
+    p.stroke('#FD5E53')
     p5bezier.draw(getSinPoints(p, t + 1.5), 'OPEN', 3)
   }
 
@@ -127,9 +50,77 @@ new p5(p => {
         p.height / 2 + (p.sin(t * 2 + pointX * 0.012) * p.height) / 2
       points.push([pointX, pointY])
     }
+
     return points
   }
 }, 'animation-sketch')
+
+// Draw!
+new p5(p => {
+  let p5bezier
+
+  const lines = []
+  let currentLine = []
+  let pointCount = 0
+
+  p.setup = () => {
+    const c = p.createCanvas(width, 600)
+    p5bezier = initBezier(c)
+  }
+
+  p.draw = () => {
+    p.background(255)
+
+    for (let i = 0; i < lines.length; i++) {
+      drawLine(lines[i], i)
+    }
+
+    if (currentLine.length > 0) {
+      drawLine(currentLine, lines.length)
+    }
+  }
+
+  function drawLine(line) {
+    p.push()
+    p.noFill()
+    p.stroke(p.color('#FD5E53'))
+    p.strokeWeight(3)
+
+    const pl = p5bezier.draw(line)
+
+    p.pop()
+
+    // points
+    for (const point of pl) {
+      p.fill(p.color('#541690'))
+      p.ellipse(point[0], point[1], 5, 5)
+    }
+
+    // point count
+    p.fill(0)
+    p.noStroke()
+    p.text(
+      line.length,
+      line[line.length - 1][0] + 10,
+      line[line.length - 1][1] + 10,
+    )
+  }
+
+  p.mousePressed = () => {
+    currentLine = []
+    pointCount = 0
+  }
+
+  p.mouseDragged = () => {
+    currentLine.push([p.mouseX, p.mouseY])
+    pointCount++
+  }
+
+  p.mouseReleased = () => {
+    if (currentLine.length > 1) lines.push(currentLine)
+    currentLine = []
+  }
+}, 'draw-sketch')
 
 // Control Points
 new p5(p => {
@@ -142,6 +133,7 @@ new p5(p => {
     const c = p.createCanvas(width, 600)
     p5bezier = initBezier(c)
     p.noFill()
+
     pa = new PointArray(p)
     pa.add(100, 300)
     pa.add(width / 4, 550)
@@ -153,26 +145,32 @@ new p5(p => {
     p.background(255)
     p.stroke(p.color('#FD5E53'))
     p.strokeWeight(3)
+
     p5bezier.draw(pa.get(), 'OPEN', 5)
+
     pa.display(true)
   }
 
   p.mousePressed = () => {
+    if (p.mouseX < 0 || p.mouseX > width || p.mouseY < 0 || p.mouseY > 600)
+      return false
+
     const distances = pa.points.map(point =>
       p.dist(p.mouseX, p.mouseY, point.position[0], point.position[1]),
     )
+
     const minDistance = Math.min(...distances)
-    if (minDistance < 60) {
-      focusedPointInd = distances.indexOf(minDistance)
-    } else {
-      focusedPointInd = pa.add(p.mouseX, p.mouseY)
-    }
+
+    if (minDistance < 60) focusedPointInd = distances.indexOf(minDistance)
+    else focusedPointInd = pa.add(p.mouseX, p.mouseY)
   }
 
   p.mouseDragged = () => {
-    if (focusedPointInd > -1) {
+    if (p.mouseX < 0 || p.mouseX > width || p.mouseY < 0 || p.mouseY > 600)
+      return false
+
+    if (focusedPointInd > -1)
       pa.pointArray[focusedPointInd].update(p.mouseX, p.mouseY)
-    }
   }
 
   p.mouseReleased = () => {
@@ -196,6 +194,7 @@ new p5(p => {
         index++
       }
       this.pointArray.splice(index, 0, new Point(this.p, pX, pY))
+
       return index
     }
 
@@ -204,6 +203,7 @@ new p5(p => {
         this.p.push()
         this.p.stroke(50)
         this.p.strokeWeight(1)
+
         for (
           let pointIndex = 0;
           pointIndex < this.pointArray.length - 1;
@@ -216,8 +216,10 @@ new p5(p => {
             this.pointArray[pointIndex + 1].position[1],
           )
         }
+
         this.p.pop()
       }
+
       for (const point of this.pointArray) point.display()
     }
 
@@ -255,36 +257,124 @@ new p5(p => {
   }
 }, 'drag-points-sketch')
 
-// // Shortest Point Example
-// new p5(p => {
-//   const points = [
-//     [0, 0],
-//     [100, 1100],
-//     [1500, -2200],
-//     [1500, 2800],
-//     [100, -500],
-//     [0, 600],
-//   ]
-//   let bezierObject
+// Shortest Point
+new p5(p => {
+  let p5bezier
 
-//   p.setup = () => {
-//     const c = p.createCanvas(600, 400)
-//     p5bezier.init(c)
-//     p.noFill()
-//     p.strokeWeight(2)
-//     bezierObject = new p5bezier.new(points, 'OPEN', 5)
-//   }
+  const points = [
+    [0, 0],
+    [100, 1100],
+    [1500, -2200],
+    [1500, 2800],
+    [100, -500],
+    [0, 600],
+  ]
+  let bezierObject
 
-//   p.draw = () => {
-//     p.background(235)
-//     bezierObject.draw([20, 5])
-//     const pointOnCurve = bezierObject.shortest(p.mouseX, p.mouseY)
-//     const r = p.dist(p.mouseX, p.mouseY, pointOnCurve[0], pointOnCurve[1])
-//     p.line(p.mouseX, p.mouseY, pointOnCurve[0], pointOnCurve[1])
-//     p.push()
-//     p.strokeWeight(1)
-//     p.stroke(p.color('#F0134D'))
-//     p.ellipse(p.mouseX, p.mouseY, 2 * r, 2 * r)
-//     p.pop()
-//   }
-// }, 'shortest-point-sketch')
+  p.setup = () => {
+    const c = p.createCanvas(width, 600)
+
+    p5bezier = initBezier(c)
+    bezierObject = p5bezier.new(points, 'OPEN', 5)
+
+    p.noFill()
+    p.strokeWeight(2)
+  }
+
+  p.draw = () => {
+    p.background(235)
+
+    bezierObject.draw([20, 5])
+    const pointOnCurve = bezierObject.shortest(p.mouseX, p.mouseY)
+
+    const r = p.dist(p.mouseX, p.mouseY, pointOnCurve[0], pointOnCurve[1])
+    p.line(p.mouseX, p.mouseY, pointOnCurve[0], pointOnCurve[1])
+
+    p.push()
+    p.strokeWeight(3)
+    p.stroke(p.color('#FD5E53'))
+    p.ellipse(p.mouseX, p.mouseY, 2 * r, 2 * r)
+    p.pop()
+  }
+}, 'shortest-point-sketch')
+
+// Accuracy
+new p5(p => {
+  let p5bezier
+
+  p.setup = () => {
+    const c = p.createCanvas(width, 300)
+    p5bezier = initBezier(c)
+
+    p.noFill()
+  }
+
+  p.draw = () => {
+    const points = [
+      [-300, 800],
+      [width * 0.5, -750],
+      [width + 300, 800],
+    ]
+
+    p.background(255)
+    p.strokeWeight(2)
+
+    const offset = 40
+
+    p.stroke(p.color('#666'))
+    p5bezier.draw(points, 'OPEN', 1)
+
+    p5bezier.draw(
+      points.map(point => [point[0], point[1] + offset]),
+      'OPEN',
+      2,
+    )
+
+    p.push()
+    p.strokeWeight(3)
+    p.stroke(p.color('#FD5E53'))
+    p5bezier.draw(
+      points.map(point => [point[0], point[1] + offset * 2]),
+      'OPEN',
+      3,
+    )
+    p.pop()
+
+    p5bezier.draw(
+      points.map(point => [point[0], point[1] + offset * 3]),
+      'OPEN',
+      4,
+    )
+
+    p5bezier.draw(
+      points.map(point => [point[0], point[1] + offset * 4]),
+      'OPEN',
+      5,
+    )
+
+    p.push()
+    p.noStroke()
+    p.textSize(16)
+    p.textStyle(p.BOLD)
+    p.textFont('Inter')
+    p.textAlign(p.CENTER, p.CENTER)
+
+    const tX = width * 0.5
+    const tY = 40
+    const dX = 0
+    const dY = 40
+
+    p.fill(p.color('#666'))
+    p.text('1', width * 0.5, tY)
+    p.text('2', tX + dX, tY + dY)
+
+    p.fill(p.color('#FD5E53'))
+    p.text('3', tX + dX * 2, tY + dY * 2)
+
+    p.fill(p.color('#666'))
+    p.text('4', tX + dX * 3, tY + dY * 3)
+    p.text('5', tX + dX * 4, tY + dY * 4)
+
+    p.pop()
+  }
+}, 'accuracy-sketch')
