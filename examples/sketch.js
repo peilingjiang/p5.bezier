@@ -201,7 +201,7 @@ new p5(p => {
     display(lines = false) {
       if (lines) {
         this.p.push()
-        this.p.stroke(50)
+        this.p.stroke(p.color('#666'))
         this.p.strokeWeight(1)
 
         for (
@@ -238,10 +238,10 @@ new p5(p => {
     display() {
       this.p.push()
       this.p.fill(255)
-      this.p.stroke(0)
+      this.p.stroke(p.color('#666'))
       this.p.strokeWeight(2)
       this.p.ellipse(this.position[0], this.position[1], 2 * this.r, 2 * this.r)
-      this.p.fill(0)
+      this.p.fill(p.color('#666'))
       this.p.noStroke()
       this.p.text(
         `(${Math.round(this.position[0])}, ${Math.round(this.position[1])})`,
@@ -257,7 +257,7 @@ new p5(p => {
   }
 }, 'drag-points-sketch')
 
-// Shortest Point
+// Closest Point
 new p5(p => {
   let p5bezier
 
@@ -282,8 +282,9 @@ new p5(p => {
   }
 
   p.draw = () => {
-    p.background(235)
+    p.background(255)
 
+    p.stroke(p.color('#666'))
     bezierObject.draw([20, 5])
     const pointOnCurve = bezierObject.shortest(p.mouseX, p.mouseY)
 
