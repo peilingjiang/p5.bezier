@@ -12,7 +12,7 @@ import {
   _binomialCoefficient,
 } from './coefficients'
 import {
-  B,
+  type BezierCanvas,
   type CloseType,
   type Dimension,
   type PointList,
@@ -57,14 +57,18 @@ function _bezierVertex(
   return vertex as Vertex
 }
 
-function _drawBezierCurve(pointList: PointList, accuracy: Accuracy): void {
+function _drawBezierCurve(
+  bezierCanvas: BezierCanvas,
+  pointList: PointList,
+  accuracy: Accuracy,
+): void {
   const n = pointList.length - 1
   const increment = _accuracies[accuracy]
 
   for (let t = 0; t <= 1; t += increment) {
-    const v = _bezierVertex(pointList, n, t, B.dimension)
+    const v = _bezierVertex(pointList, n, t, bezierCanvas.dimension)
 
-    B.lineTo(...v)
+    bezierCanvas.lineTo(...v)
   }
 }
 
@@ -72,65 +76,81 @@ function _drawBezierCurve(pointList: PointList, accuracy: Accuracy): void {
 /* -------------------------------------------------------------------------- */
 /* -------------------------------------------------------------------------- */
 
+class P5Bezier {
+  private b: BezierCanvas = {
+    canvas: null,
+    ctx: null,
+    dimension: 2,
+    useP5: true,
+    beginPath: () => {},
+    moveTo: () => {},
+    lineTo: () => {},
+    closePath: () => {},
+  }
+
+  // biome-ignore lint/suspicious/noExplicitAny: p5 typing
+  constructor(canvas: any) {
+    this.b.canvas = canvas
+    this.b.ctx = this.b.canvas.drawingContext
+
+    if (typeof p5 !== 'undefined' && canvas instanceof p5.Graphics) {
+      this.b.useP5 = true
+      this.b.dimension = _getDimension(this.b.ctx, false)
+    } else if (
+      (typeof p5 !== 'undefined' && canvas instanceof p5.Renderer) ||
+      canvas.drawingContext
+    ) {
+      this.b.useP5 = false
+
+      if (
+        typeof p5 === 'undefined' ||
+        (typeof p5 !== 'undefined' && !(canvas instanceof p5.Renderer))
+      )
+        window.console.warn('[p5.bezier] Support beyond p5.js is not tested')
+
+      this.b.dimension = _getDimension(this.b.ctx, canvas.isP3D)
+    } else throw new Error('[p5.bezier] Canvas is not supported')
+
+    _getCanvasUtils(this.b)
+  }
+
+  draw(
+    pointList: PointList,
+    closeType: CloseType = 'OPEN',
+    accuracy: Accuracy = 3,
+  ): PointList {
+    const _pL =
+      closeType === 'CLOSE'
+        ? [..._concentrate(pointList, true), ..._getCloseCurvePoints(pointList)]
+        : _concentrate(pointList)
+
+    this.b.beginPath()
+    this.b.moveTo(..._pL[0])
+
+    _drawBezierCurve(this.b, _pL, accuracy)
+    this.b.lineTo(..._pL[_pL.length - 1])
+
+    if (this.b.useP5) this.b.closePath(closeType)
+    else if (closeType === 'CLOSE') this.b.closePath()
+
+    _setStyles(this.b)
+
+    return _pL
+  }
+
+  new(
+    pointList: PointList,
+    closeType: CloseType = 'OPEN',
+    accuracy: Accuracy = 3,
+  ): BezierCurve {
+    const increment = _accuracies[accuracy]
+    return new BezierCurve(pointList, closeType, increment, this.b)
+  }
+}
+
 // biome-ignore lint/suspicious/noExplicitAny: p5 typing
-function initBezier(canvas: any): void {
-  B.canvas = canvas
-  B.ctx = B.canvas.drawingContext
-
-  if (typeof p5 !== 'undefined' && canvas instanceof p5.Graphics) {
-    B.useP5 = true
-    B.dimension = _getDimension(B.ctx, false)
-  } else if (
-    (typeof p5 !== 'undefined' && canvas instanceof p5.Renderer) ||
-    canvas.drawingContext
-  ) {
-    B.useP5 = false
-
-    if (
-      typeof p5 === 'undefined' ||
-      (typeof p5 !== 'undefined' && !(canvas instanceof p5.Renderer))
-    )
-      window.console.warn('[p5.bezier] Support beyond p5.js is not tested')
-
-    B.dimension = _getDimension(B.ctx, canvas.isP3D)
-  } else throw new Error('[p5.bezier] Canvas is not supported')
-
-  _getCanvasUtils(B.useP5, B.canvas, B.ctx)
-}
-
-/* -------------------------------------------------------------------------- */
-
-function drawBezier(
-  pointList: PointList,
-  closeType: CloseType = 'OPEN',
-  accuracy: Accuracy = 3,
-): PointList {
-  const _pL =
-    closeType === 'CLOSE'
-      ? [..._concentrate(pointList, true), ..._getCloseCurvePoints(pointList)]
-      : _concentrate(pointList)
-
-  B.beginPath()
-  B.moveTo(..._pL[0])
-
-  _drawBezierCurve(_pL, accuracy)
-  B.lineTo(..._pL[_pL.length - 1])
-
-  if (B.useP5) B.closePath(closeType)
-  else if (closeType === 'CLOSE') B.closePath()
-
-  _setStyles()
-
-  return _pL
-}
-
-function newBezierObj(
-  pointList: PointList,
-  closeType: CloseType = 'OPEN',
-  accuracy: Accuracy = 3,
-): BezierCurve {
-  const increment = _accuracies[accuracy]
-  return new BezierCurve(pointList, closeType, increment, B.dimension)
+function initBezier(canvas: any): P5Bezier {
+  return new P5Bezier(canvas)
 }
 
 /* -------------------------------------------------------------------------- */
@@ -144,12 +164,13 @@ class BezierCurve {
   private vertexList: VertexList
   private p: number
   private n: number
+  private b: BezierCanvas
 
   constructor(
     points: PointList,
     closeType: CloseType,
     increment: number,
-    dimension: Dimension,
+    bezierCanvas: BezierCanvas,
     vertexList: VertexList | null = null,
   ) {
     this.controlPoints = _concentrate(points, closeType === 'CLOSE')
@@ -159,11 +180,13 @@ class BezierCurve {
       this.closeType = 'CLOSE'
     } else this.closeType = 'OPEN'
 
-    this.dimension = dimension
+    this.dimension = bezierCanvas.dimension
     this.increment = increment
     this.vertexList = []
     this.p = this.controlPoints.length // has p points for (p - 1) degree curves
     this.n = this.p - 1 // degree
+
+    this.b = bezierCanvas
 
     if (vertexList === null) this._buildVertexList()
     else this.vertexList = [...vertexList]
@@ -185,7 +208,7 @@ class BezierCurve {
   }
 
   private _addVertex(vArray: Vertex): void {
-    B.lineTo(...vArray)
+    this.b.lineTo(...vArray)
   }
 
   private _distVertex(vArray1: Vertex, vArray2: Vertex): number {
@@ -212,15 +235,15 @@ class BezierCurve {
   }
 
   private _solidCurve(): void {
-    B.beginPath()
+    this.b.beginPath()
     this.vertexList.map((v) => this._addVertex(v))
 
-    if (this.closeType === 'CLOSE') B.closePath()
+    if (this.closeType === 'CLOSE') this.b.closePath()
 
-    if (B.useP5) B.closePath(this.closeType)
-    else if (this.closeType === 'CLOSE') B.closePath()
+    if (this.b.useP5) this.b.closePath(this.closeType)
+    else if (this.closeType === 'CLOSE') this.b.closePath()
 
-    _setStyles()
+    _setStyles(this.b)
   }
 
   private _dashedCurve(dash: [number, number]): void {
@@ -239,11 +262,11 @@ class BezierCurve {
     let availableDist = 0
     let neededDist = solidPart
 
-    B.ctx.save()
-    B.ctx.fillStyle = 'rgba(0, 0, 0, 0)'
+    this.b.ctx.save()
+    this.b.ctx.fillStyle = 'rgba(0, 0, 0, 0)'
 
-    B.beginPath()
-    B.moveTo(...lastVertex)
+    this.b.beginPath()
+    this.b.moveTo(...lastVertex)
 
     while (toUseVertexInd < this.vertexList.length) {
       const toUseVertex = this.vertexList[toUseVertexInd]
@@ -256,8 +279,8 @@ class BezierCurve {
           neededDist / availableDist,
         )
         solid
-          ? B.lineTo(...currentVirtualVertex)
-          : B.moveTo(...currentVirtualVertex)
+          ? this.b.lineTo(...currentVirtualVertex)
+          : this.b.moveTo(...currentVirtualVertex)
 
         availableDist -= neededDist
         solid = !solid
@@ -265,7 +288,7 @@ class BezierCurve {
         neededDist = solid ? solidPart : gapPart
       }
 
-      solid ? B.lineTo(...toUseVertex) : B.moveTo(...toUseVertex)
+      solid ? this.b.lineTo(...toUseVertex) : this.b.moveTo(...toUseVertex)
       neededDist -= this._distVertex(currentVirtualVertex, toUseVertex)
 
       lastVertex = toUseVertex
@@ -273,8 +296,8 @@ class BezierCurve {
       toUseVertexInd++
     }
 
-    _setStyles()
-    B.ctx.restore()
+    _setStyles(this.b)
+    this.b.ctx.restore()
   }
 
   update(newControlPointList: PointList) {
@@ -311,7 +334,7 @@ class BezierCurve {
       this.controlPoints,
       this.closeType,
       this.increment,
-      this.dimension,
+      this.b,
       newCurveV,
     )
 
@@ -340,11 +363,4 @@ class BezierCurve {
   }
 }
 
-const p5bezier = {
-  init: initBezier,
-  draw: drawBezier,
-  new: newBezierObj,
-}
-
-export { initBezier as init, drawBezier as draw, newBezierObj as new }
-export default p5bezier
+export default initBezier

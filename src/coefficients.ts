@@ -6,7 +6,7 @@ export const _accuracies: {
   [A in Accuracy]: number
 } = {
   1: 0.1,
-  2: 0.005,
+  2: 0.02,
   3: 0.001,
   4: 0.0005,
   5: 0.0002,
