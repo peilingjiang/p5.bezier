@@ -5,7 +5,7 @@ p5.bezier library by Peiling Jiang
 updated Aug 2024
 */
 
-import { version } from '../package.json'
+import packageJson from '../package.json'
 import {
   type Accuracy,
   _accuracies,
@@ -30,7 +30,7 @@ import {
 // biome-ignore lint/suspicious/noExplicitAny: p5 typing
 declare const p5: any
 
-window.console.log(`[p5.bezier] ${version}`)
+window.console.log(`[p5.bezier] ${packageJson.version}`)
 
 /* -------------------------------------------------------------------------- */
 /* -------------------------------------------------------------------------- */
