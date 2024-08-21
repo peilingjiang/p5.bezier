@@ -27,11 +27,6 @@ body {
   padding: 2rem 0;
 }
 
-h1 {
-  text-align: center;
-  color: #2c3e50;
-}
-
 .sketch-container {
   display: flex;
   flex-wrap: wrap;
@@ -65,8 +60,9 @@ h1 {
 }
 
 .sketch .info * {
+  color: #333;
   text-decoration: none;
-  opacity: 0.75;
+  opacity: 0.6;
 }
 
 .sketch .info span {
