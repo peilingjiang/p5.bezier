@@ -36,7 +36,8 @@
 		"lint": "biome check --write .",
 		"start": "webpack --env=development",
 		"build": "webpack --env=production",
-		"prepare": "husky"
+		"prepare": "husky",
+		"netlify": "cp -r ./lib ./examples/"
 	},
 	"types": "lib/p5.bezier.d.ts"
 }
