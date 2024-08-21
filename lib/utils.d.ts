@@ -1,0 +1,23 @@
+export type CloseType = 'OPEN' | 'CLOSE';
+export type Dimension = 2 | 3;
+export type Point = [number, number] | [number, number, number];
+export type PointList = Point[];
+export type Vertex = [number, number] | [number, number, number];
+export type VertexList = Vertex[];
+export declare const B: {
+    canvas: any;
+    ctx: any;
+    dimension: Dimension;
+    useP5: boolean;
+    beginPath: () => void;
+    moveTo: (...args: Vertex) => void;
+    lineTo: (...args: Vertex) => void;
+    closePath: (closeType?: CloseType) => void;
+};
+export declare function _getDimension(context: any, isP3D: boolean): Dimension;
+export declare function _getCanvasUtils(useP5: boolean, canvas: any, context: any): void;
+export declare function _dist(...args: number[]): number;
+export declare function _setStyles(): void;
+export declare function _copy(arr: PointList): PointList;
+export declare function _getCloseCurvePoints(pointList: PointList): PointList;
+export declare function _interpolateVertex(v1: Vertex, v2: Vertex, t: number): Vertex;

@@ -3,6 +3,7 @@
 	"version": "0.6.0",
 	"description": "Bezier curves for canvas graphics on the web, built to work with p5.js",
 	"main": "lib/p5.bezier.min.js",
+	"types": "lib/p5.bezier.d.ts",
 	"keywords": ["p5.js", "Bezier", "Computer Graphics"],
 	"repository": {
 		"type": "git",

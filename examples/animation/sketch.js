@@ -27,9 +27,9 @@ function draw() {
   t += 0.015
 
   stroke('#1363DF')
-  p5bezier.draw(getSinPoints(t), 'OPEN', 7)
+  p5bezier.draw(getSinPoints(t), 'OPEN', 3)
   stroke('#DFF6FF')
-  p5bezier.draw(getSinPoints(t + 0.5), 'OPEN', 7)
+  p5bezier.draw(getSinPoints(t + 0.5), 'OPEN', 3)
 
   push()
   noStroke()
@@ -38,9 +38,9 @@ function draw() {
   pop()
 
   stroke('#47B5FF')
-  p5bezier.draw(getSinPoints(t + 1), 'OPEN', 7)
+  p5bezier.draw(getSinPoints(t + 1), 'OPEN', 3)
   stroke('#D61C4E')
-  p5bezier.draw(getSinPoints(t + 1.5), 'OPEN', 8)
+  p5bezier.draw(getSinPoints(t + 1.5), 'OPEN', 3)
 }
 
 function getSinPoints(t) {

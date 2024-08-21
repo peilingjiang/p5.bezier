@@ -2,15 +2,15 @@
 // NYU ITP/IMA 2020
 
 // Create server
-let port = process.env.PORT || 8000
-let express = require('express')
-let app = express()
-let server = require('http')
+const port = process.env.PORT || 8000
+const express = require('express')
+const app = express()
+const server = require('node:http')
   .createServer(app)
-  .listen(port, function () {
+  .listen(port, () => {
     console.log('Server listening at port: ', port)
   })
 
 // Take argv and process into address
-var myArgs = process.argv.slice(2)
+const myArgs = process.argv.slice(2)
 app.use(express.static(myArgs[0]))

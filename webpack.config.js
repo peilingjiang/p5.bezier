@@ -1,4 +1,4 @@
-const path = require('path')
+const path = require('node:path')
 
 const webpack = require('webpack')
 const TerserPlugin = require('terser-webpack-plugin')
@@ -15,10 +15,15 @@ const config = {
         use: 'ts-loader',
         exclude: /node_modules/,
       },
+      {
+        test: /\.json$/,
+        type: 'json',
+        exclude: /node_modules/,
+      },
     ],
   },
   resolve: {
-    extensions: ['.ts'],
+    extensions: ['.ts', '.json'],
   },
   output: {
     path: path.resolve(__dirname, 'lib'),
@@ -50,7 +55,7 @@ const config = {
   },
 }
 
-module.exports = env => {
+module.exports = (env) => {
   if (env.development) {
     return Object.assign({}, config, {
       mode: 'development',
@@ -59,7 +64,7 @@ module.exports = env => {
       },
       watch: true,
     })
-  } else {
-    return config
   }
+
+  return config
 }

@@ -16,11 +16,11 @@ let bezierObject
 
 function setup() {
   const c = createCanvas(1000, 600)
-  p5bezier.initBezier(c)
+  p5bezier.init(c)
   noFill()
   strokeWeight(2)
 
-  bezierObject = new p5bezier.newBezierObj(points, 'OPEN', 10)
+  bezierObject = new p5bezier.new(points, 'OPEN', 5)
 }
 
 function draw() {
