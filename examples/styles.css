@@ -25,6 +25,10 @@ body {
   margin: auto;
 
   padding: 2rem 0;
+
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
 }
 
 .sketch-container {
@@ -80,4 +84,20 @@ body {
 
 .sketch .info.white * {
   color: white;
+}
+
+#footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
+#footer * {
+  font-size: 0.8rem;
+}
+
+#footer a {
+  text-decoration: none;
+  color: #666;
 }
