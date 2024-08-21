@@ -1,3 +1,4 @@
+import { type Smoothness } from './coefficients';
 export type CloseType = 'OPEN' | 'CLOSE';
 export type Dimension = 2 | 3;
 export type Point = [number, number] | [number, number, number];
@@ -18,6 +19,7 @@ export declare function _getDimension(context: any, isP3D: boolean): Dimension;
 export declare function _getCanvasUtils(b: BezierCanvas): void;
 export declare function _dist(...args: number[]): number;
 export declare function _setStyles(b: BezierCanvas): void;
+export declare function _validateSmoothness(smoothness: number): Smoothness;
 export declare function _concentrate(pointList: PointList, close?: boolean): PointList;
 export declare function _getCloseCurvePoints(pointList: PointList): PointList;
 export declare function _interpolateVertex(v1: Vertex, v2: Vertex, t: number): Vertex;

@@ -1,4 +1,4 @@
-import { MAX_DEGREE } from './coefficients'
+import { MAX_DEGREE, type Smoothness } from './coefficients'
 
 export type CloseType = 'OPEN' | 'CLOSE'
 export type Dimension = 2 | 3
@@ -71,6 +71,23 @@ export function _dist(...args: number[]): number {
 export function _setStyles(b: BezierCanvas) {
   if (b.canvas._doFill) b.ctx.fill()
   if (b.canvas._doStroke) b.ctx.stroke()
+}
+
+let warnedSmoothness = false
+
+export function _validateSmoothness(smoothness: number): Smoothness {
+  if (smoothness < 1 || smoothness > 5 || !Number.isInteger(smoothness)) {
+    if (!warnedSmoothness) {
+      warnedSmoothness = true
+      window.console.warn(
+        '[p5.bezier] Smoothness should be an integer between 1 and 5',
+      )
+    }
+
+    return Math.round(Math.max(1, Math.min(5, smoothness))) as Smoothness
+  }
+
+  return smoothness as Smoothness
 }
 
 /* -------------------------------------------------------------------------- */

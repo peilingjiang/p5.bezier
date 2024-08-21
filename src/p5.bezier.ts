@@ -25,6 +25,7 @@ import {
   _getDimension,
   _interpolateVertex,
   _setStyles,
+  _validateSmoothness,
 } from './utils'
 
 // biome-ignore lint/suspicious/noExplicitAny: p5 typing
@@ -63,7 +64,7 @@ function _drawBezierCurve(
   smoothness: Smoothness,
 ): void {
   const n = pointList.length - 1
-  const increment = _smoothness[smoothness]
+  const increment = _smoothness[_validateSmoothness(smoothness)]
 
   for (let t = 0; t <= 1; t += increment) {
     const v = _bezierVertex(pointList, n, t, bezierCanvas.dimension)
@@ -143,7 +144,7 @@ class P5Bezier {
     closeType: CloseType = 'OPEN',
     smoothness: Smoothness = 3,
   ): BezierCurve {
-    const increment = _smoothness[smoothness]
+    const increment = _smoothness[_validateSmoothness(smoothness)]
     return new BezierCurve(pointList, closeType, increment, this.b)
   }
 }

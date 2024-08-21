@@ -3,19 +3,22 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
     <title>p5.bezier Examples</title>
     <meta
       name="description"
       content="Examples of p5.bezier library, drawing bezier curves with p5.js"
     />
+    <meta name="author" content="Peiling Jiang" />
+
     <link
       rel="icon"
       href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧵</text></svg>"
     />
-
     <link rel="stylesheet" href="styles.css" type="text/css" />
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.6.0/p5.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.10.0/p5.min.js"></script>
+
     <!-- <script src="https://cdn.jsdelivr.net/npm/p5bezier@latest"></script> -->
     <script src="lib/p5.bezier.min.js"></script>
   </head>
@@ -36,27 +39,27 @@
           <div class="info">
             <span>Draw!</span>
             <a
-              href="https://github.com/peilingjiang/p5.bezier/tree/main/examples/sketch.js#L58"
+              href="https://github.com/peilingjiang/p5.bezier/tree/main/examples/draw.js"
               >Source</a
             >
           </div>
         </div>
 
-        <div class="sketch" id="drag-points-sketch">
+        <div class="sketch" id="control-points-sketch">
           <div class="info">
             <span>Control Points</span>
             <a
-              href="https://github.com/peilingjiang/p5.bezier/tree/main/examples/sketch.js#L125"
+              href="https://github.com/peilingjiang/p5.bezier/tree/main/examples/control-points.js"
               >Source</a
             >
           </div>
         </div>
 
-        <div class="sketch" id="shortest-point-sketch">
+        <div class="sketch" id="closest-point-sketch">
           <div class="info">
             <span>Closest Point</span>
             <a
-              href="https://github.com/peilingjiang/p5.bezier/tree/main/examples/sketch.js#L260"
+              href="https://github.com/peilingjiang/p5.bezier/tree/main/examples/closest-point.js"
               >Source</a
             >
           </div>
@@ -66,7 +69,7 @@
           <div class="info">
             <span>Smoothness</span>
             <a
-              href="https://github.com/peilingjiang/p5.bezier/tree/main/examples/sketch.js#L302"
+              href="https://github.com/peilingjiang/p5.bezier/tree/main/examples/smoothness.js"
               >Source</a
             >
           </div>
@@ -77,6 +80,16 @@
         <a href="https://www.netlify.com/">Deploys by Netlify</a>
       </div>
     </div>
-    <script src="sketch.js"></script>
+
+    <script>
+      const parent = document.querySelector('.sketch')
+      const width = parent.clientWidth
+    </script>
+
+    <script src="animation.js"></script>
+    <script src="draw.js"></script>
+    <script src="control-points.js"></script>
+    <script src="closest-point.js"></script>
+    <script src="smoothness.js"></script>
   </body>
 </html>

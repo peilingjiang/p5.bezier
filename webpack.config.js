@@ -1,11 +1,9 @@
 const path = require('node:path')
-
-const webpack = require('webpack')
+const { BannerPlugin } = require('webpack')
 const TerserPlugin = require('terser-webpack-plugin')
+const { name, version } = require('./package.json')
 
-const packageJSON = require('./package.json')
-
-const config = {
+const config = outputDir => ({
   mode: 'production',
   entry: './src/p5.bezier.ts',
   module: {
@@ -26,7 +24,7 @@ const config = {
     extensions: ['.ts', '.json'],
   },
   output: {
-    path: path.resolve(__dirname, 'lib'),
+    path: path.resolve(__dirname, outputDir),
     filename: 'p5.bezier.min.js',
     library: {
       name: 'initBezier',
@@ -46,9 +44,9 @@ const config = {
           },
         },
       }),
-      new webpack.BannerPlugin(`
+      new BannerPlugin(`
       @license
-      ${packageJSON.name} Version ${packageJSON.version}
+      ${name} Version ${version}
       https://github.com/peilingjiang/p5.bezier
       
       Copyright 2018-${new Date().getFullYear()} Peiling Jiang
@@ -56,11 +54,11 @@ const config = {
       `),
     ],
   },
-}
+})
 
-module.exports = (env) => {
+module.exports = env => {
   if (env.development) {
-    return Object.assign({}, config, {
+    return Object.assign({}, config('examples/lib'), {
       mode: 'development',
       optimization: {
         minimize: false,
@@ -69,5 +67,5 @@ module.exports = (env) => {
     })
   }
 
-  return config
+  return config('lib')
 }
