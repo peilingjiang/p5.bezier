@@ -4,7 +4,7 @@
 	"author": "Peiling Jiang",
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/peilingjiang/p5.bezier.git"
+		"url": "git+https://github.com/peilingjiang/p5.bezier.git"
 	},
 	"main": "lib/p5.bezier.min.js",
 	"devDependencies": {
