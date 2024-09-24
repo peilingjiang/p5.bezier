@@ -48,7 +48,7 @@ new p5(p => {
     p5bezier.draw(
       points.map(point => [point[0], point[1] + offset * 4]),
       'OPEN',
-      6,
+      5,
     )
 
     p.push()

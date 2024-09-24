@@ -23,6 +23,8 @@ new p5(p => {
   }
 
   function drawLine(line) {
+    if (line.length < 2) return
+
     p.push()
     p.noFill()
     p.stroke(p.color('#FD5E53'))

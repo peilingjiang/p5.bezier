@@ -11,8 +11,9 @@ new p5(p => {
 
     pa = new PointArray(p)
     pa.add(100, 300)
-    pa.add(width / 4, 550)
-    pa.add((width / 4) * 3, 50)
+    pa.add(Math.max(width / 5, 200), 570)
+    pa.add(Math.max(width / 5, 200), 30)
+    pa.add((width / 4) * 3, 30)
     pa.add(width - 100, 300)
   }
 

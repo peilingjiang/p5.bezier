@@ -138,7 +138,7 @@ The call of `p5bezier.new` will not draw the curve on canvas automatically. To d
 
 ![cover](img/example.png)
 
-Check out the examples page and their [source code](https://github.com/peilingjiang/p5.bezier/tree/main/examples/sketch.js).
+Check out the [examples page](https://p5bezier.netlify.app) and their [source code](https://github.com/peilingjiang/p5.bezier/tree/main/examples/).
 
 ### Projects and Demos
 

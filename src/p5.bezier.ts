@@ -73,6 +73,40 @@ function _drawBezierCurve(
   }
 }
 
+// function _drawBSplineCurve(
+//   bezierCanvas: BezierCanvas,
+//   pointList: PointList,
+//   smoothness: Smoothness,
+// ): void {
+//   const increment = _smoothness[_validateSmoothness(smoothness)]
+//   const n = pointList.length - 1
+
+//   for (let i = 0; i < n - 2; i++) {
+//     const b0 = pointList[i]
+//     const b1 = pointList[i + 1]
+//     const b2 = pointList[i + 2]
+//     const b3 = pointList[i + 3]
+
+//     for (let t = 0; t <= 1; t += increment) {
+//       const t2 = t * t
+//       const t3 = t2 * t
+
+//       const vertex = bezierCanvas.dimension === 2 ? [0, 0] : [0, 0, 0]
+
+//       for (let d = 0; d < bezierCanvas.dimension; d++) {
+//         vertex[d] =
+//           (1 / 6) *
+//           ((-b0[d] + 3 * b1[d] - 3 * b2[d] + b3[d]) * t3 +
+//             (3 * b0[d] - 6 * b1[d] + 3 * b2[d]) * t2 +
+//             (-3 * b0[d] + 3 * b2[d]) * t +
+//             (b0[d] + 4 * b1[d] + b2[d]))
+//       }
+
+//       bezierCanvas.lineTo(vertex[0], vertex[1], vertex[2])
+//     }
+//   }
+// }
+
 /* -------------------------------------------------------------------------- */
 /* -------------------------------------------------------------------------- */
 /* -------------------------------------------------------------------------- */
@@ -120,6 +154,12 @@ class P5Bezier {
     closeType: CloseType = 'OPEN',
     smoothness: Smoothness = 3,
   ): PointList {
+    if (pointList.length < 2) {
+      throw new Error(
+        '[p5.bezier] At least 2 points are needed to draw a curve',
+      )
+    }
+
     const _pL =
       closeType === 'CLOSE'
         ? [..._concentrate(pointList, true), ..._getCloseCurvePoints(pointList)]
@@ -129,6 +169,7 @@ class P5Bezier {
     this.b.moveTo(..._pL[0])
 
     _drawBezierCurve(this.b, _pL, smoothness)
+
     this.b.lineTo(..._pL[_pL.length - 1])
 
     if (this.b.useP5) this.b.closePath(closeType)
@@ -138,6 +179,40 @@ class P5Bezier {
 
     return _pL
   }
+
+  // bSpline(
+  //   pointList: PointList,
+  //   closeType: CloseType = 'OPEN',
+  //   smoothness: Smoothness = 3,
+  // ): PointList {
+  //   if (pointList.length < 2) {
+  //     throw new Error(
+  //       '[p5.bezier] At least 2 points are needed to draw a curve',
+  //     )
+  //   }
+
+  //   const _pL =
+  //     closeType === 'CLOSE'
+  //       ? [...pointList, ...pointList.slice(0, 3)]
+  //       : pointList
+
+  //   this.b.beginPath()
+  //   // this.b.moveTo(..._pL[0])
+
+  //   _drawBSplineCurve(this.b, _pL, smoothness)
+
+  //   // this.b.lineTo(..._pL[_pL.length - 1])
+
+  //   if (this.b.useP5) {
+  //     this.b.closePath(closeType)
+  //   } else if (closeType === 'CLOSE') {
+  //     this.b.closePath()
+  //   }
+
+  //   _setStyles(this.b)
+
+  //   return _pL
+  // }
 
   new(
     pointList: PointList,
