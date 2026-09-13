@@ -1,0 +1,18 @@
+# p5.bezier
+
+> MIT-licensed JavaScript library by Peiling Jiang for Bézier curves beyond four control points. Works with p5.js renderers, graphics buffers, WebGL with 3D points, and a native Canvas 2D adapter. Repository version: 0.8.0.
+
+## Start here
+
+- [Homepage](./): interactive experiments, install instructions, and a complete API reference in the initial HTML.
+- [Full reference and runnable examples](reference.md): Markdown quickstart, exact method signatures, return values, caveats, and seven complete p5.js sketches.
+- [Quickstart](./#quickstart): complete HTML and npm installation.
+- [API reference](./#reference): initBezier, draw, new, update, move, shortest, and the native Canvas adapter.
+
+## Source
+
+- [Repository](https://github.com/peilingjiang/p5.bezier): source code and development instructions.
+- [Library bundle](../lib/p5.bezier.min.js): the browser build used by this site.
+- [Type declarations](../lib/p5.bezier.d.ts): TypeScript method signatures.
+
+This is a browser library, not an HTTP service. No authentication, MCP server, or REST API is needed. Read the reference caveats before generating code, particularly for closed-curve updates, sampled nearest points, and native Canvas initialization.

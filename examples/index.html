@@ -2,94 +2,790 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-    <title>p5.bezier Examples</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>p5.bezier — Bézier curves for p5.js</title>
     <meta
       name="description"
-      content="Examples of p5.bezier library, drawing bezier curves with p5.js"
+      content="A small JavaScript library for Bézier curves with more than four control points. Interactive examples, setup instructions, and API reference."
     />
     <meta name="author" content="Peiling Jiang" />
-
-    <link
-      rel="icon"
-      href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧵</text></svg>"
+    <meta name="theme-color" content="#ffffff" />
+    <meta property="og:title" content="p5.bezier — Bézier curves for p5.js" />
+    <meta
+      property="og:description"
+      content="Interactive examples and documentation for p5.bezier."
     />
-    <link rel="stylesheet" href="styles.css" type="text/css" />
-
-    <script src="https://cdn.jsdelivr.net/npm/p5@2.3.3/lib/p5.min.js"></script>
-
-    <!-- <script src="https://cdn.jsdelivr.net/npm/p5bezier@latest"></script> -->
-    <script src="../lib/p5.bezier.min.js"></script>
+    <meta property="og:type" content="website" />
+    <link
+      rel="alternate"
+      type="text/markdown"
+      href="reference.md"
+      title="p5.bezier reference in Markdown"
+    />
+    <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+    <link
+      rel="preload"
+      href="fonts/geist-variable.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link rel="stylesheet" href="styles.css?v=simplify-1" />
+    <script src="../lib/p5.bezier.min.js" defer></script>
+    <script type="module" src="studio.mjs?v=simplify-1"></script>
   </head>
   <body>
-    <div class="container">
-      <div class="sketch-container">
-        <div class="sketch" id="animation-sketch">
-          <div class="info white">
-            <a
-              href="https://github.com/peilingjiang/p5.bezier?tab=readme-ov-file#p5bezier"
-              >Getting Started</a
+    <a class="skip-link" href="#main">Skip to content</a>
+    <header class="site-header page-width">
+      <a class="wordmark" href="#" aria-label="p5.bezier home"
+        ><svg viewBox="0 0 32 32" aria-hidden="true">
+          <path d="M4 25C4 2 28 30 28 7" />
+          <circle cx="4" cy="25" r="2" />
+          <circle cx="28" cy="7" r="2" /></svg
+        >p5.bezier</a
+      >
+      <nav aria-label="Main navigation">
+        <a href="#playground">Playground</a><a href="#quickstart">Setup</a
+        ><a href="#reference">API</a>
+      </nav>
+      <a class="header-source" href="https://github.com/peilingjiang/p5.bezier"
+        >GitHub
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M7 17 17 7M7 7h10v10" /></svg
+      ></a>
+    </header>
+    <main id="main" class="page-width">
+      <section class="hero" aria-labelledby="hero-heading">
+        <div class="hero-copy">
+          <h1 id="hero-heading">Bézier curves for p5.js.</h1>
+          <p>
+            Draw curves with more than four control points.<br
+              class="desktop-break"
+            />
+            A small library for p5.js, Canvas 2D, and WebGL.
+          </p>
+          <div class="hero-actions">
+            <a class="button primary" href="#playground"
+              >Open playground<svg
+                class="icon"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+              >
+                <path d="M5 12h14m-5-5 5 5-5 5" /></svg></a
+            ><button
+              class="button install-button"
+              data-copy="npm-install"
+              type="button"
             >
-            <a href="https://jiang.pl">Created by Peiling Jiang</a>
+              <code>npm install p5bezier</code
+              ><svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                <rect x="8" y="8" width="12" height="13" rx="2" />
+                <path d="M16 8V3H3v13h5" />
+              </svg>
+            </button>
+          </div>
+          <span id="npm-install" hidden>npm install p5bezier</span>
+        </div>
+        <figure class="hero-art">
+          <canvas
+            id="ribbon"
+            aria-label="A family of sweeping Bézier curves drawn with p5.bezier"
+            >Bézier curves drawn with the library.</canvas
+          >
+          <figcaption>
+            <span>Created by <a href="https://jiang.pl">Peiling Jiang</a></span
+            ><button
+              class="quiet-button"
+              id="pause-art"
+              type="button"
+              aria-pressed="false"
+            >
+              Pause motion</button
+            ><span>v0.8.0 / MIT</span>
+          </figcaption>
+        </figure>
+      </section>
+      <section
+        id="playground"
+        class="playground"
+        aria-labelledby="playground-heading"
+      >
+        <div class="section-heading">
+          <div>
+            <h2 id="playground-heading">Playground</h2>
+            <p>Edit a curve. Copy the code.</p>
+          </div>
+          <a class="text-link" href="#reference"
+            >API reference
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M7 17 17 7M7 7h10v10" /></svg
+          ></a>
+        </div>
+        <div
+          class="experiment-tabs"
+          role="group"
+          aria-label="Choose an example"
+        >
+          <button type="button" data-mode="points" aria-pressed="true">
+            Control points</button
+          ><button type="button" data-mode="draw" aria-pressed="false">
+            Freehand</button
+          ><button type="button" data-mode="dash" aria-pressed="false">
+            Dashes</button
+          ><button type="button" data-mode="closest" aria-pressed="false">
+            Closest point</button
+          ><button type="button" data-mode="smoothness" aria-pressed="false">
+            Smoothness</button
+          ><button type="button" data-mode="move" aria-pressed="false">
+            Translation</button
+          ><button type="button" data-mode="webgl" aria-pressed="false">
+            WebGL
+          </button>
+        </div>
+        <div class="studio-shell">
+          <div class="studio-visual">
+            <div class="canvas-toolbar">
+              <span id="experiment-name">Control points</span
+              ><button type="button" id="reset" class="quiet-button">
+                Reset<svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M4 10a8 8 0 1 1 0 5M4 4v6h6" />
+                </svg>
+              </button>
+            </div>
+            <div id="canvas-stage" class="canvas-stage">
+              <canvas
+                id="play-canvas"
+                aria-label="Interactive Bézier curve. Drag a control point or use arrow keys."
+                >A curve with six control points.</canvas
+              >
+              <div id="point-handles" aria-label="Control points"></div>
+              <div id="webgl-stage" hidden></div>
+              <p id="canvas-message" class="canvas-message" hidden></p>
+            </div>
+            <div class="canvas-caption">
+              <span id="canvas-hint">Drag a control point to edit.</span
+              ><span id="curve-measure" class="measurement"
+                >6 points · degree 5</span
+              >
+            </div>
+          </div>
+          <aside class="studio-controls" aria-label="Curve settings">
+            <div class="controls-intro">
+              <h3 id="control-title">Control points</h3>
+              <p id="experiment-description">
+                Drag a control point or use the arrow keys.
+              </p>
+            </div>
+            <div class="control-row">
+              <label for="point-count">Points</label
+              ><output id="point-count-value" for="point-count">6</output
+              ><input
+                id="point-count"
+                type="range"
+                min="3"
+                max="12"
+                value="6"
+              />
+            </div>
+            <div class="control-row">
+              <label for="smoothness">Smoothness</label
+              ><output id="smoothness-value" for="smoothness">3</output
+              ><input id="smoothness" type="range" min="1" max="5" value="3" />
+            </div>
+            <div class="control-row" id="dash-control" hidden>
+              <label for="dash-length">Dash length</label
+              ><output id="dash-value" for="dash-length">16 px</output
+              ><input
+                id="dash-length"
+                type="range"
+                min="4"
+                max="40"
+                value="16"
+              />
+            </div>
+            <label class="toggle-row" id="close-control"
+              ><span>Closed curve</span
+              ><input id="close-curve" type="checkbox" /><span
+                class="toggle-track"
+                aria-hidden="true"
+              ></span
+            ></label>
+            <label class="toggle-row" id="guides-control"
+              ><span>Control lines</span
+              ><input id="show-guides" type="checkbox" checked /><span
+                class="toggle-track"
+                aria-hidden="true"
+              ></span
+            ></label>
+            <label class="toggle-row" id="motion-control" hidden
+              ><span>Rotate</span><input id="animate-3d" type="checkbox" /><span
+                class="toggle-track"
+                aria-hidden="true"
+              ></span
+            ></label>
+            <button class="button secondary" type="button" id="export-image">
+              Save PNG<svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M12 3v12m-5-5 5 5 5-5M4 16v5h16v-5" />
+              </svg>
+            </button>
+          </aside>
+          <details class="code-panel">
+            <summary>Code <span>p5.js</span></summary>
+            <div class="code-toolbar">
+              <span>sketch.js</span>
+              <div>
+                <button type="button" id="download-sketch" class="quiet-button">
+                  Download HTML</button
+                ><button type="button" id="copy-sketch" class="quiet-button">
+                  Copy code
+                  <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                    <rect x="8" y="8" width="12" height="13" rx="2" />
+                    <path d="M16 8V3H3v13h5" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+            <pre
+              tabindex="0"
+              aria-label="Complete runnable p5.js sketch"
+            ><code class="language-javascript" id="live-code">// Select an example to view its code.
+// Complete examples are also available in the API reference below.</code></pre>
+          </details>
+        </div>
+        <noscript
+          ><p class="notice">
+            Enable JavaScript to use the playground. Setup, API documentation,
+            and runnable examples are available below.
+          </p></noscript
+        >
+      </section>
+      <section
+        id="quickstart"
+        class="split-section"
+        aria-labelledby="quickstart-heading"
+      >
+        <div class="section-intro">
+          <h2 id="quickstart-heading">Setup</h2>
+          <p>
+            Load p5.js and p5.bezier, then pass your canvas to
+            <code>initBezier()</code>.
+          </p>
+          <p>With a bundler:</p>
+          <pre
+            class="import-code"
+          ><code>import initBezier from 'p5bezier'</code></pre>
+          <a
+            class="text-link"
+            href="https://editor.p5js.org/peilingjiang/sketches/mVXzWEJbT"
+            >Open in p5.js editor
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M7 17 17 7M7 7h10v10" /></svg
+          ></a>
+        </div>
+        <div class="quickstart-code">
+          <div class="code-toolbar">
+            <span>index.html</span
+            ><button
+              type="button"
+              class="quiet-button"
+              data-copy="starter-code"
+            >
+              Copy HTML
+              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                <rect x="8" y="8" width="12" height="13" rx="2" />
+                <path d="M16 8V3H3v13h5" />
+              </svg>
+            </button>
+          </div>
+          <pre
+            tabindex="0"
+          ><code id="starter-code" class="language-html">&lt;!doctype html&gt;
+&lt;html lang="en"&gt;
+&lt;meta charset="utf-8"&gt;
+&lt;meta name="viewport" content="width=device-width, initial-scale=1"&gt;
+&lt;title&gt;p5.bezier example&lt;/title&gt;
+&lt;script src="https://cdn.jsdelivr.net/npm/p5@2.3.3/lib/p5.min.js"&gt;&lt;/script&gt;
+&lt;script src="https://cdn.jsdelivr.net/npm/p5bezier@0.8.0"&gt;&lt;/script&gt;
+&lt;script&gt;
+function setup() {
+  const curves = initBezier(createCanvas(600, 400));
+  background('#ffffff');
+  noFill();
+  stroke('#171717');
+  strokeWeight(2);
+  curves.draw([
+    [60, 320], [60, 40], [540, 40],
+    [540, 360], [240, 360], [240, 160]
+  ]);
+}
+&lt;/script&gt;
+&lt;/html&gt;</code></pre>
+        </div>
+      </section>
+      <section
+        id="reference"
+        class="split-section reference"
+        aria-labelledby="reference-heading"
+      >
+        <div class="section-intro">
+          <h2 id="reference-heading">API</h2>
+          <p>Initialization, drawing, and curve methods.</p>
+          <div id="agents" class="agent-resources">
+            <h3>For agents</h3>
+            <a class="text-link" href="reference.md"
+              >Markdown reference
+              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M7 17 17 7M7 7h10v10" /></svg></a
+            ><a class="text-link" href="llms.txt"
+              >llms.txt
+              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M7 17 17 7M7 7h10v10" /></svg></a
+            ><button class="button secondary" type="button" id="copy-agent">
+              Copy documentation
+              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                <rect x="8" y="8" width="12" height="13" rx="2" />
+                <path d="M16 8V3H3v13h5" />
+              </svg>
+            </button>
           </div>
         </div>
+        <div class="reference-content">
+          <div class="api-list">
+            <details id="api-init">
+              <summary>
+                <code>initBezier(canvas)</code
+                ><span>Initialize a drawing system</span>
+              </summary>
+              <div class="api-body">
+                <p>
+                  Pass a renderer from <code>createCanvas()</code> or a buffer
+                  from <code>createGraphics()</code>. Returns a drawing system
+                  with <code>draw()</code> and <code>new()</code>. For WebGL,
+                  supply <code>[x, y, z]</code> points. Raw WebGL contexts are
+                  unsupported.
+                </p>
+                <pre><code class="language-javascript">const curves = initBezier(createCanvas(600, 400));
+const buffer = createGraphics(300, 300, WEBGL);
+const curves3D = initBezier(buffer);</code></pre>
+                <p>
+                  For native Canvas 2D, use the adapter in
+                  <a href="#native-canvas">Canvas without p5.js</a>.
+                </p>
+              </div>
+            </details>
+            <details id="api-draw">
+              <summary>
+                <code>curves.draw(points, closeType?, smoothness?)</code
+                ><span>Draw a curve</span>
+              </summary>
+              <div class="api-body">
+                <p>
+                  At least two <code>[x, y]</code> points, or
+                  <code>[x, y, z]</code> in WebGL. <code>closeType</code> is
+                  <code>'OPEN'</code> (default) or <code>'CLOSE'</code>.
+                  Smoothness is an integer from 1 to 5; default 3. Higher values
+                  sample more vertices. Uses the target's current stroke, fill,
+                  and transforms. Returns processed control points, not sampled
+                  vertices. Very large point lists are reduced internally.
+                </p>
+                <pre><code class="language-javascript">curves.draw([[20, 160], [100, 20], [220, 180]], 'OPEN', 3);</code></pre>
+              </div>
+            </details>
+            <details id="api-new">
+              <summary>
+                <code>curves.new(points, closeType?, smoothness?)</code
+                ><span>Create a reusable curve</span>
+              </summary>
+              <div class="api-body">
+                <p>
+                  Creates a reusable curve object with precomputed vertices.
+                  Accepts the same arguments as <code>curves.draw()</code>, but
+                  does not draw until you call the object's
+                  <code>draw()</code> method.
+                </p>
+                <pre><code class="language-javascript">const curve = curves.new([[20, 160], [100, 20], [220, 180]]);
+curve.draw();</code></pre>
+              </div>
+            </details>
+            <details id="api-dash">
+              <summary>
+                <code>curve.draw(dash?)</code
+                ><span>Draw a solid or dashed curve</span>
+              </summary>
+              <div class="api-body">
+                <p>
+                  Omit <code>dash</code> for a solid curve. Pass
+                  <code>[solidLength, gapLength]</code> for dashes. Use positive
+                  nonzero lengths. Dashed curves draw only the stroke and
+                  restore fill afterward. Create dashed objects at smoothness 3
+                  or higher.
+                </p>
+                <pre><code class="language-javascript">curve.draw([16, 8]);</code></pre>
+              </div>
+            </details>
+            <details id="api-update">
+              <summary>
+                <code>curve.update(points)</code
+                ><span>Update control points</span>
+              </summary>
+              <div class="api-body">
+                <p>
+                  Recomputes vertices without drawing. Pass fresh coordinate
+                  arrays with the same count as
+                  <code>curve.controlPoints</code>; mutating stored arrays in
+                  place can skip the update. Closed curves add internal closure
+                  points, so rebuild a closed object from your original points
+                  instead.
+                </p>
+                <pre><code class="language-javascript">curve.update([[20, 100], [100, 60], [220, 140]]);
+curve.draw();</code></pre>
+              </div>
+            </details>
+            <details id="api-move">
+              <summary>
+                <code>curve.move(x, y, z?, toDraw?, dash?)</code
+                ><span>Translate a curve</span>
+              </summary>
+              <div class="api-body">
+                <p>
+                  Returns a translated copy, preserving the original. Draws the
+                  copy by default. Pass <code>false</code> as the fourth
+                  argument to defer drawing. A 3D curve requires a Z offset.
+                </p>
+                <pre><code class="language-javascript">const shifted = curve.move(20, 10, null, false);
+shifted.draw();</code></pre>
+              </div>
+            </details>
+            <details id="api-shortest">
+              <summary>
+                <code>curve.shortest(x, y, z?)</code
+                ><span>Find the nearest sampled point</span>
+              </summary>
+              <div class="api-body">
+                <p>
+                  Returns coordinates of the nearest sampled vertex. Supply Z
+                  for a 3D curve. Precision depends on smoothness; this is a
+                  sampled lookup, not an exact analytic projection.
+                </p>
+                <pre><code class="language-javascript">const nearest = curve.shortest(mouseX, mouseY);
+line(mouseX, mouseY, nearest[0], nearest[1]);</code></pre>
+              </div>
+            </details>
+            <details id="native-canvas">
+              <summary>
+                <code>Canvas without p5.js</code
+                ><span>Use a native Canvas 2D context</span>
+              </summary>
+              <div class="api-body">
+                <p>
+                  Native canvases need a renderer-shaped adapter with a 2D
+                  drawing context and explicit stroke/fill flags. The 2D
+                  experiments on this page use this approach.
+                </p>
+                <pre><code class="language-javascript">const canvas = document.querySelector('canvas');
+const ctx = canvas.getContext('2d');
+const curves = initBezier({
+  drawingContext: ctx, _doStroke: true, _doFill: false
+});
+ctx.strokeStyle = '#171717';
+ctx.lineWidth = 3;
+curves.draw([[20, 160], [100, 20], [220, 180]]);</code></pre>
+              </div>
+            </details>
+          </div>
+          <details class="example-index">
+            <summary>Complete examples <span>7 sketches</span></summary>
+            <div id="static-examples">
+              <!-- examples:start -->
+              <article id="example-points">
+                <h3>Control points</h3>
+                <p>Change the control points and update the curve.</p>
+                <pre
+                  tabindex="0"
+                ><code class="language-javascript">let curves, curve;
+const points = [[90,310],[650,360],[650,40],[90,40],[90,360],[650,310]];
 
-        <div class="sketch" id="draw-sketch">
-          <div class="info">
-            <span>Draw! (Use your mouse to draw on the empty canvas)</span>
-            <a
-              href="https://github.com/peilingjiang/p5.bezier/tree/main/examples/draw.js"
-              >Source</a
-            >
-          </div>
-        </div>
+function setup() {
+  curves = initBezier(createCanvas(720, 400));
+  curve = curves.new(points, 'OPEN', 3);
+  noLoop();
+}
 
-        <div class="sketch" id="control-points-sketch">
-          <div class="info">
-            <span>Control Points</span>
-            <a
-              href="https://github.com/peilingjiang/p5.bezier/tree/main/examples/control-points.js"
-              >Source</a
-            >
-          </div>
-        </div>
+function draw() {
+  background('#ffffff');
+  noFill();
+  stroke('#171717');
+  strokeWeight(3);
+  curve.draw();
+  stroke('#d4d4d4');
+  strokeWeight(1);
+  for (let i = 1; i &lt; points.length; i++) line(...points[i - 1], ...points[i]);
+  fill('#ffffff');
+  stroke('#171717');
+  for (const [x, y] of points) circle(x, y, 10);
+}
 
-        <div class="sketch" id="closest-point-sketch">
-          <div class="info">
-            <span>Closest Point</span>
-            <a
-              href="https://github.com/peilingjiang/p5.bezier/tree/main/examples/closest-point.js"
-              >Source</a
-            >
-          </div>
-        </div>
+// Drag a control point. Rebuild closed curves to regenerate closure points.
+let selected = -1;
+function mousePressed() {
+  selected = points.findIndex(([x, y]) =&gt; dist(x, y, mouseX, mouseY) &lt; 20);
+}
+function mouseDragged() {
+  if (selected &lt; 0) return;
+  points[selected] = [constrain(mouseX, 0, width), constrain(mouseY, 0, height)];
+  curve.update(points.map(point =&gt; [...point]));
+  redraw();
+}
+function mouseReleased() { selected = -1; }</code></pre>
+              </article>
+              <article id="example-draw">
+                <h3>Freehand</h3>
+                <p>
+                  Use a stroke as control points. Each stroke replaces the
+                  previous curve.
+                </p>
+                <pre tabindex="0"><code class="language-javascript">let curves;
+let points = [[90,310],[650,360],[650,40],[90,40],[90,360],[650,310]];
 
-        <div class="sketch" id="smoothness-sketch">
-          <div class="info">
-            <span>Smoothness (Default to 3)</span>
-            <a
-              href="https://github.com/peilingjiang/p5.bezier/tree/main/examples/smoothness.js"
-              >Source</a
-            >
-          </div>
+function setup() {
+  curves = initBezier(createCanvas(720, 400));
+  noLoop();
+}
+
+function draw() {
+  background('#ffffff');
+  noFill();
+  stroke('#171717');
+  strokeWeight(3);
+  if (points.length &gt; 1) curves.draw(points, 'OPEN', 3);
+}
+
+function mousePressed() {
+  if (mouseX &lt; 0 || mouseX &gt; width || mouseY &lt; 0 || mouseY &gt; height) return;
+  points = [[mouseX, mouseY]];
+  redraw();
+}
+function mouseDragged() {
+  const next = [constrain(mouseX, 0, width), constrain(mouseY, 0, height)];
+  if (points.length === 0) return;
+  const last = points[points.length - 1];
+  if (dist(...last, ...next) &lt; 8) return;
+  if (points.length &gt;= 80) points = points.filter((_, i) =&gt; i % 2 === 0);
+  points.push(next);
+  redraw();
+}</code></pre>
+              </article>
+              <article id="example-dash">
+                <h3>Dashed curves</h3>
+                <p>Draw a cached curve with a dash and gap pattern.</p>
+                <pre
+                  tabindex="0"
+                ><code class="language-javascript">let curves, curve;
+const points = [[90,310],[650,360],[650,40],[90,40],[90,360],[650,310]];
+
+function setup() {
+  curves = initBezier(createCanvas(720, 400));
+  curve = curves.new(points, 'OPEN', 3);
+  noLoop();
+}
+
+function draw() {
+  background('#ffffff');
+  noFill();
+  stroke('#171717');
+  strokeWeight(3);
+  curve.draw([16, 8]);
+  stroke('#d4d4d4');
+  strokeWeight(1);
+  for (let i = 1; i &lt; points.length; i++) line(...points[i - 1], ...points[i]);
+  fill('#ffffff');
+  stroke('#171717');
+  for (const [x, y] of points) circle(x, y, 10);
+}
+
+// Drag a control point. Rebuild closed curves to regenerate closure points.
+let selected = -1;
+function mousePressed() {
+  selected = points.findIndex(([x, y]) =&gt; dist(x, y, mouseX, mouseY) &lt; 20);
+}
+function mouseDragged() {
+  if (selected &lt; 0) return;
+  points[selected] = [constrain(mouseX, 0, width), constrain(mouseY, 0, height)];
+  curve.update(points.map(point =&gt; [...point]));
+  redraw();
+}
+function mouseReleased() { selected = -1; }</code></pre>
+              </article>
+              <article id="example-closest">
+                <h3>Closest point</h3>
+                <p>Find the nearest sampled vertex to the pointer.</p>
+                <pre
+                  tabindex="0"
+                ><code class="language-javascript">let curves, curve;
+const points = [[90,310],[650,360],[650,40],[90,40],[90,360],[650,310]];
+let probe = [440,130];
+
+function setup() {
+  curves = initBezier(createCanvas(720, 400));
+  curve = curves.new(points, 'OPEN', 3);
+  noLoop();
+}
+
+function draw() {
+  background('#ffffff');
+  noFill();
+  stroke('#171717');
+  strokeWeight(3);
+  curve.draw();
+  const nearest = curve.shortest(probe[0], probe[1]);
+  stroke('#a3a3a3');
+  strokeWeight(1);
+  line(probe[0], probe[1], nearest[0], nearest[1]);
+  fill('#171717');
+  noStroke();
+  circle(nearest[0], nearest[1], 9);
+  noFill();
+  stroke('#171717');
+  circle(probe[0], probe[1], 12);
+}
+
+function mouseMoved() {
+  probe = [constrain(mouseX, 0, width), constrain(mouseY, 0, height)];
+  redraw();
+}</code></pre>
+              </article>
+              <article id="example-smoothness">
+                <h3>Smoothness</h3>
+                <p>
+                  Compare five sampling levels. The selected level is drawn in
+                  black.
+                </p>
+                <pre tabindex="0"><code class="language-javascript">let curves;
+const points = [[90,310],[650,360],[650,40],[90,40],[90,360],[650,310]];
+
+function setup() {
+  curves = initBezier(createCanvas(720, 400));
+  noLoop();
+}
+
+function draw() {
+  background('#ffffff');
+  noFill();
+  stroke('#171717');
+  strokeWeight(3);
+  for (let level = 1; level &lt;= 5; level++) {
+    stroke(level === 3 ? '#171717' : '#a3a3a3');
+    strokeWeight(level === 3 ? 3 : 1);
+    const shifted = points.map(([x, y]) =&gt; [x, y * 0.6 + level * 25]);
+    curves.draw(shifted, 'OPEN', level);
+  }
+}</code></pre>
+              </article>
+              <article id="example-move">
+                <h3>Translation</h3>
+                <p>
+                  Translate cached vertices to draw twelve copies of a curve.
+                </p>
+                <pre
+                  tabindex="0"
+                ><code class="language-javascript">let curves, curve;
+const points = [[90,310],[650,360],[650,40],[90,40],[90,360],[650,310]];
+
+function setup() {
+  curves = initBezier(createCanvas(720, 400));
+  curve = curves.new(points, 'OPEN', 3);
+  noLoop();
+}
+
+function draw() {
+  background('#ffffff');
+  noFill();
+  stroke('#171717');
+  strokeWeight(3);
+  for (let i = 11; i &gt;= 0; i--) {
+    stroke(i === 0 ? '#171717' : '#a3a3a3');
+    strokeWeight(i === 0 ? 3 : 1);
+    curve.move(i * -6, i * 6);
+  }
+  stroke('#d4d4d4');
+  strokeWeight(1);
+  for (let i = 1; i &lt; points.length; i++) line(...points[i - 1], ...points[i]);
+  fill('#ffffff');
+  stroke('#171717');
+  for (const [x, y] of points) circle(x, y, 10);
+}
+
+// Drag a control point. Rebuild closed curves to regenerate closure points.
+let selected = -1;
+function mousePressed() {
+  selected = points.findIndex(([x, y]) =&gt; dist(x, y, mouseX, mouseY) &lt; 20);
+}
+function mouseDragged() {
+  if (selected &lt; 0) return;
+  points[selected] = [constrain(mouseX, 0, width), constrain(mouseY, 0, height)];
+  curve.update(points.map(point =&gt; [...point]));
+  redraw();
+}
+function mouseReleased() { selected = -1; }</code></pre>
+              </article>
+              <article id="example-webgl">
+                <h3>WebGL</h3>
+                <p>Draw 3D curves with a p5.js WebGL graphics buffer.</p>
+                <pre
+                  tabindex="0"
+                ><code class="language-javascript">let buffer, curve;
+const points = [[90,310],[650,360],[650,40],[90,40],[90,360],[650,310]].map(([x, y], i) =&gt; [x - 360, y - 200, Math.sin(i * 1.4) * 140]);
+
+function setup() {
+  createCanvas(720, 400);
+  buffer = createGraphics(720, 400, WEBGL);
+  const curves = initBezier(buffer);
+  curve = curves.new(points, 'OPEN', 3);
+  noLoop();
+}
+
+function draw() {
+  buffer.background('#0a0a0a');
+  buffer.push();
+  buffer.scale(0.48);
+  buffer.rotateY(0.45);
+  buffer.rotateX(-0.25);
+  buffer.noFill();
+  buffer.strokeWeight(2);
+  for (let i = 0; i &lt; 14; i++) {
+    buffer.stroke(i % 3 === 0 ? '#ffffff' : '#a3a3a3');
+    buffer.push();
+    buffer.translate(0, (i - 7) * 9, (i - 7) * 8);
+    curve.draw();
+    buffer.pop();
+  }
+  buffer.pop();
+  image(buffer, 0, 0);
+}</code></pre>
+              </article>
+              <!-- examples:end -->
+            </div>
+          </details>
         </div>
+      </section>
+    </main>
+    <footer class="site-footer page-width">
+      <span
+        >p5.bezier <span class="muted">by</span>
+        <a href="https://jiang.pl">Peiling Jiang</a></span
+      >
+      <div>
+        <a href="https://github.com/peilingjiang/p5.bezier">GitHub</a
+        ><a href="https://github.com/peilingjiang/p5.bezier/blob/main/LICENSE"
+          >MIT License</a
+        ><span>v0.8.0</span>
       </div>
-
-      <div id="footer">
-        <a href="https://www.netlify.com/">Deploys by Netlify</a>
-      </div>
-    </div>
-
-    <script>
-      const parent = document.querySelector('.sketch')
-      const width = parent.clientWidth
-    </script>
-
-    <script src="animation.js"></script>
-    <script src="draw.js"></script>
-    <script src="control-points.js"></script>
-    <script src="closest-point.js"></script>
-    <script src="smoothness.js"></script>
+    </footer>
+    <div
+      id="status"
+      class="status-toast"
+      role="status"
+      aria-live="polite"
+    ></div>
   </body>
 </html>

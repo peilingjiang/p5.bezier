@@ -36,7 +36,8 @@
 		"start": "webpack --env=development",
 		"build": "webpack --env=production",
 		"prepare": "husky",
-		"netlify": "cp -r ./lib ./examples/"
+		"build:examples": "node scripts/build-site.mjs",
+		"test:examples": "node --test tests/*.test.mjs"
 	},
 	"types": "lib/p5.bezier.d.ts"
 }

@@ -10,7 +10,7 @@
 
 <!-- [**Try it now on p5.js Web Editor!**](https://editor.p5js.org/peilingjiang/sketches/7Z2pRG-TB) -->
 
-[**Try it now on p5.js Web Editor!**](https://editor.p5js.org/peilingjiang/sketches/mVXzWEJbT) | [**Play with examples**](https://p5bezier.netlify.app)
+[**Try it now on p5.js Web Editor!**](https://editor.p5js.org/peilingjiang/sketches/mVXzWEJbT) | [**Examples**](examples/)
 
 While **p5.bezier** is designed to integrate with p5.js, it operates independently as well. To draw a Bézier curve on canvas, you can simply use `p5bezier.draw()`:
 
@@ -155,13 +155,13 @@ The call of `p5bezier.new` will not draw the curve on canvas automatically. To d
 
 ## Examples
 
-![cover](img/example.png)
+The [examples page](examples/) includes control points, freehand drawing, dashes, closest-point queries, smoothness, translated curves, and a WebGL graphics buffer. Each experiment produces a complete p5.js sketch you can copy or download as HTML. You can also save the canvas as a PNG. See [Development](#development) to run it locally.
 
-Check out the [examples page](https://p5bezier.netlify.app) and their [source code](https://github.com/peilingjiang/p5.bezier/tree/main/examples/).
+Read the [API and runnable examples in Markdown](examples/reference.md), the [agent index](examples/llms.txt), or the [homepage source](examples/). The complete reference is also present in the homepage HTML, so it is readable without JavaScript.
 
 ### Projects and Demos
 
-- [**Hair**](https://no-loss.netlify.app/), a visualization. See the source code at https://github.com/peilingjiang/hair.
+- [**Hair**](https://github.com/peilingjiang/hair), a visualization.
 - _p5.bezier Example - Basic_ on [CodePen](https://codepen.io/peilingjiang/pen/ZEOLVPx).
 - _p5.bezier Example - Animation_ on [CodePen](https://codepen.io/peilingjiang/pen/eYMRJax).
 
@@ -181,6 +181,18 @@ bun run build # build the library
 # or
 bun run start # rebuild the library as you edit the source
 ```
+
+Build and preview the homepage from the repository root:
+
+```sh
+npm run build # build the library
+npm run build:examples # build the static examples and Markdown reference
+python3 -m http.server 4173
+# Open http://localhost:4173/examples/
+npm run test:examples
+```
+
+The homepage uses plain HTML, CSS, and JavaScript modules. Edit API prose in `examples/index.html` and runnable sketches in `examples/recipes.mjs`, then run `npm run build:examples` to regenerate the static examples and Markdown mirror. The 2D playground uses the local library bundle; the 3D experiment loads p5.js 2.3.3 on demand. Downloaded sketches load p5.js 2.3.3 and p5bezier 0.8.0 from jsDelivr.
 
 ## References
 
