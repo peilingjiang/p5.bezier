@@ -1,4 +1,6 @@
 .cache
+.agents
 package.json
 package-lock.json
+skills-lock.json
 *.min.js
