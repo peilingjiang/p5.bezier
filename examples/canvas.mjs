@@ -28,8 +28,14 @@ export function surface(canvas, width = 720, height = 400) {
   return { ctx, curves, begin }
 }
 export function circle(ctx, x, y, radius, fill, stroke) {
+  ctx.save()
+  // The responsive surface scales each axis separately. Keep marker radii
+  // uniform while their centers still follow the curve's logical coordinates.
+  const { a: scaleX, d: scaleY } = ctx.getTransform()
+  ctx.translate(x, y)
+  ctx.scale(1, scaleX / scaleY)
   ctx.beginPath()
-  ctx.arc(x, y, radius, 0, Math.PI * 2)
+  ctx.arc(0, 0, radius, 0, Math.PI * 2)
   if (fill) {
     ctx.fillStyle = fill
     ctx.fill()
@@ -38,6 +44,7 @@ export function circle(ctx, x, y, radius, fill, stroke) {
     ctx.strokeStyle = stroke
     ctx.stroke()
   }
+  ctx.restore()
 }
 export function segment(ctx, a, b) {
   ctx.beginPath()

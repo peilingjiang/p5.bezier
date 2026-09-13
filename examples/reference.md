@@ -89,7 +89,7 @@ curve.draw([16, 8])
 
 ## curve.update(points)
 
-Recomputes vertices without drawing. Pass fresh coordinate arrays with the same count as `curve.controlPoints`; mutating stored arrays in place can skip the update. Closed curves add internal closure points, so rebuild a closed object from your original points instead.
+Recomputes vertices without drawing. Coordinates are copied, so the same input array can be edited and passed again. Unchanged coordinates skip resampling. Keep the same count as `curve.controlPoints`. Closed curves add internal closure points, so rebuild a closed object from your original points instead.
 
 ```javascript
 curve.update([
@@ -469,4 +469,4 @@ function draw() {
 
 ## Limitations
 
-Smoothness trades computation for sampling precision. shortest() returns a sampled vertex. update() expects a consistent count and fresh arrays. For closed curves, reconstruct the object to regenerate closure points. The library internally reduces very large point lists; this playground bounds freehand input to 80 points. Raw WebGL contexts are unsupported. Intersection, offset, curvature, and B-spline methods are not implemented. No authentication or HTTP API is required: this is a client-side JavaScript library.
+Smoothness trades computation for sampling precision. shortest() returns a sampled vertex. update() copies coordinates and expects a consistent count; repeated in-place edits are supported. For closed curves, reconstruct the object to regenerate closure points. The library internally reduces very large point lists; this playground bounds freehand input to 80 points. Raw WebGL contexts are unsupported. Intersection, offset, curvature, and B-spline methods are not implemented. No authentication or HTTP API is required: this is a client-side JavaScript library.

@@ -10,8 +10,8 @@ export type VertexList = Vertex[]
 export type BezierCanvas = {
   dimension: Dimension
   beginPath: () => void
-  moveTo: (...args: Vertex) => void
-  lineTo: (...args: Vertex) => void
+  moveTo: (x: number, y: number, z?: number) => void
+  lineTo: (x: number, y: number, z?: number) => void
   closePath: (closeType?: CloseType) => void
   beginDash: () => void
   endDash: () => void
@@ -46,8 +46,8 @@ export function _getCanvasUtils(canvas: any): BezierCanvas {
     return {
       dimension,
       beginPath: ctx.beginPath.bind(ctx),
-      moveTo: ctx.moveTo.bind(ctx),
-      lineTo: ctx.lineTo.bind(ctx),
+      moveTo: (x, y) => ctx.moveTo(x, y),
+      lineTo: (x, y) => ctx.lineTo(x, y),
       closePath: (closeType) => {
         if (closeType === 'CLOSE') ctx.closePath()
         if (renderer._doFill) ctx.fill()
@@ -100,37 +100,22 @@ export function _getCanvasUtils(canvas: any): BezierCanvas {
   }
 }
 
-export function _dist(...args: number[]): number {
-  const len = args.length
-
-  if (len === 4) {
-    const dx = args[0] - args[2]
-    const dy = args[1] - args[3]
-    return Math.sqrt(dx * dx + dy * dy)
-  }
-
-  if (len === 6) {
-    const dx = args[0] - args[3]
-    const dy = args[1] - args[4]
-    const dz = args[2] - args[5]
-    return Math.sqrt(dx * dx + dy * dy + dz * dz)
-  }
-
-  return 0
-}
-
 let warnedSmoothness = false
 
 export function _validateSmoothness(smoothness: number): Smoothness {
   if (smoothness < 1 || smoothness > 5 || !Number.isInteger(smoothness)) {
     if (!warnedSmoothness) {
       warnedSmoothness = true
-      window.console.warn(
+      console.warn(
         '[p5.bezier] Smoothness should be an integer between 1 and 5',
       )
     }
 
-    return Math.round(Math.max(1, Math.min(5, smoothness))) as Smoothness
+    return (
+      Number.isNaN(smoothness)
+        ? 3
+        : Math.round(Math.max(1, Math.min(5, smoothness)))
+    ) as Smoothness
   }
 
   return smoothness as Smoothness
@@ -182,8 +167,30 @@ export function _concentrate(pointList: PointList, close = false): PointList {
   return _copy(pointList.filter((_, index) => !rmIndex.has(index)))
 }
 
-function _copy(arr: PointList): PointList {
-  return arr.map((v) => v.slice()) as PointList
+export function _copy(arr: PointList, target: PointList = []): PointList {
+  target.length = arr.length
+  for (let i = 0; i < arr.length; i++) {
+    const source = arr[i]
+    const point = target[i]
+    if (point) {
+      point.length = source.length
+      for (let d = 0; d < source.length; d++) point[d] = source[d]
+    } else {
+      target[i] = source.slice() as Point
+    }
+  }
+  return target
+}
+
+export function _samePoints(a: PointList, b: PointList): boolean {
+  if (a.length !== b.length) return false
+  for (let i = 0; i < a.length; i++) {
+    if (a[i].length !== b[i].length) return false
+    for (let d = 0; d < a[i].length; d++) {
+      if (a[i][d] !== b[i][d]) return false
+    }
+  }
+  return true
 }
 
 export function _getCloseCurvePoints(pointList: PointList): PointList {

@@ -34,7 +34,7 @@
     />
     <link rel="stylesheet" href="styles.css?v=simplify-1" />
     <script src="../lib/p5.bezier.min.js" defer></script>
-    <script type="module" src="studio.mjs?v=simplify-1"></script>
+    <script type="module" src="studio.mjs?v=round-markers-1"></script>
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
@@ -432,12 +432,12 @@ curve.draw();</code></pre>
               </summary>
               <div class="api-body">
                 <p>
-                  Recomputes vertices without drawing. Pass fresh coordinate
-                  arrays with the same count as
-                  <code>curve.controlPoints</code>; mutating stored arrays in
-                  place can skip the update. Closed curves add internal closure
-                  points, so rebuild a closed object from your original points
-                  instead.
+                  Recomputes vertices without drawing. Coordinates are copied,
+                  so the same input array can be edited and passed again.
+                  Unchanged coordinates skip resampling. Keep the same count as
+                  <code>curve.controlPoints</code>. Closed curves add internal
+                  closure points, so rebuild a closed object from your original
+                  points instead.
                 </p>
                 <pre><code class="language-javascript">curve.update([[20, 100], [100, 60], [220, 140]]);
 curve.draw();</code></pre>

@@ -1,16 +1,7 @@
-/*
-p5.bezier library by Peiling Jiang
-2020
+/* p5.bezier library by Peiling Jiang */
 
-updated Aug 2024
-*/
-
-import packageJson from '../package.json'
-import {
-  type Smoothness,
-  _binomialCoefficient,
-  _smoothness,
-} from './coefficients'
+import { type Smoothness, _smoothness } from './coefficients'
+import { _sampleBezier } from './sampling'
 import {
   type BezierCanvas,
   type CloseType,
@@ -19,95 +10,42 @@ import {
   type Vertex,
   type VertexList,
   _concentrate,
-  _dist,
+  _copy,
   _getCanvasUtils,
   _getCloseCurvePoints,
-  _interpolateVertex,
+  _samePoints,
   _validateSmoothness,
 } from './utils'
 
-window.console.log(`[p5.bezier] ${packageJson.version}`)
-
-/* -------------------------------------------------------------------------- */
-/* -------------------------------------------------------------------------- */
-/* -------------------------------------------------------------------------- */
-// helpers
-
-function _bezierVertex(
-  pointList: PointList,
-  n: number,
-  t: number,
-  dimension: number,
-): Vertex {
-  const vertex: number[] = new Array(dimension).fill(0)
-  const oneMinusT = 1 - t
-
-  for (let i = 0; i <= n; i++) {
-    const coefficient =
-      _binomialCoefficient(n, i) * oneMinusT ** (n - i) * t ** i
-
-    for (let d = 0; d < dimension; d++)
-      vertex[d] += coefficient * pointList[i][d]
+function _preparePoints(points: PointList, closeType: CloseType): PointList {
+  if (points.length < 2) {
+    throw new Error('[p5.bezier] At least 2 points are needed to draw a curve')
   }
-
-  return vertex as Vertex
+  const prepared = _concentrate(points, closeType === 'CLOSE')
+  if (closeType === 'CLOSE') prepared.push(..._getCloseCurvePoints(prepared))
+  return prepared
 }
 
-function _drawBezierCurve(
-  bezierCanvas: BezierCanvas,
-  pointList: PointList,
-  smoothness: Smoothness,
+function _drawVertices(
+  canvas: BezierCanvas,
+  vertices: VertexList,
+  closeType: CloseType,
 ): void {
-  const n = pointList.length - 1
-  const increment = _smoothness[_validateSmoothness(smoothness)]
-
-  for (let t = 0; t <= 1; t += increment) {
-    const v = _bezierVertex(pointList, n, t, bezierCanvas.dimension)
-
-    bezierCanvas.lineTo(...v)
+  canvas.beginPath()
+  const first = vertices[0]
+  canvas.moveTo(first[0], first[1], first[2])
+  for (let i = 1; i < vertices.length; i++) {
+    const vertex = vertices[i]
+    canvas.lineTo(vertex[0], vertex[1], vertex[2])
   }
+  canvas.closePath(closeType)
 }
-
-// function _drawBSplineCurve(
-//   bezierCanvas: BezierCanvas,
-//   pointList: PointList,
-//   smoothness: Smoothness,
-// ): void {
-//   const increment = _smoothness[_validateSmoothness(smoothness)]
-//   const n = pointList.length - 1
-
-//   for (let i = 0; i < n - 2; i++) {
-//     const b0 = pointList[i]
-//     const b1 = pointList[i + 1]
-//     const b2 = pointList[i + 2]
-//     const b3 = pointList[i + 3]
-
-//     for (let t = 0; t <= 1; t += increment) {
-//       const t2 = t * t
-//       const t3 = t2 * t
-
-//       const vertex = bezierCanvas.dimension === 2 ? [0, 0] : [0, 0, 0]
-
-//       for (let d = 0; d < bezierCanvas.dimension; d++) {
-//         vertex[d] =
-//           (1 / 6) *
-//           ((-b0[d] + 3 * b1[d] - 3 * b2[d] + b3[d]) * t3 +
-//             (3 * b0[d] - 6 * b1[d] + 3 * b2[d]) * t2 +
-//             (-3 * b0[d] + 3 * b2[d]) * t +
-//             (b0[d] + 4 * b1[d] + b2[d]))
-//       }
-
-//       bezierCanvas.lineTo(vertex[0], vertex[1], vertex[2])
-//     }
-//   }
-// }
-
-/* -------------------------------------------------------------------------- */
-/* -------------------------------------------------------------------------- */
-/* -------------------------------------------------------------------------- */
 
 class P5Bezier {
   private b: BezierCanvas
+  private points: PointList = []
+  private vertices: VertexList = []
+  private increment = 0
 
   // biome-ignore lint/suspicious/noExplicitAny: p5 typing
   constructor(canvas: any) {
@@ -119,62 +57,16 @@ class P5Bezier {
     closeType: CloseType = 'OPEN',
     smoothness: Smoothness = 3,
   ): PointList {
-    if (pointList.length < 2) {
-      throw new Error(
-        '[p5.bezier] At least 2 points are needed to draw a curve',
-      )
+    const points = _preparePoints(pointList, closeType)
+    const increment = _smoothness[_validateSmoothness(smoothness)]
+    if (increment !== this.increment || !_samePoints(points, this.points)) {
+      _sampleBezier(points, this.b.dimension, increment, this.vertices)
+      _copy(points, this.points)
+      this.increment = increment
     }
-
-    const _pL =
-      closeType === 'CLOSE'
-        ? [..._concentrate(pointList, true), ..._getCloseCurvePoints(pointList)]
-        : _concentrate(pointList)
-
-    this.b.beginPath()
-    this.b.moveTo(..._pL[0])
-
-    _drawBezierCurve(this.b, _pL, smoothness)
-
-    this.b.lineTo(..._pL[_pL.length - 1])
-
-    this.b.closePath(closeType)
-
-    return _pL
+    _drawVertices(this.b, this.vertices, closeType)
+    return points
   }
-
-  // bSpline(
-  //   pointList: PointList,
-  //   closeType: CloseType = 'OPEN',
-  //   smoothness: Smoothness = 3,
-  // ): PointList {
-  //   if (pointList.length < 2) {
-  //     throw new Error(
-  //       '[p5.bezier] At least 2 points are needed to draw a curve',
-  //     )
-  //   }
-
-  //   const _pL =
-  //     closeType === 'CLOSE'
-  //       ? [...pointList, ...pointList.slice(0, 3)]
-  //       : pointList
-
-  //   this.b.beginPath()
-  //   // this.b.moveTo(..._pL[0])
-
-  //   _drawBSplineCurve(this.b, _pL, smoothness)
-
-  //   // this.b.lineTo(..._pL[_pL.length - 1])
-
-  //   if (this.b.useP5) {
-  //     this.b.closePath(closeType)
-  //   } else if (closeType === 'CLOSE') {
-  //     this.b.closePath()
-  //   }
-
-  //   _setStyles(this.b)
-
-  //   return _pL
-  // }
 
   new(
     pointList: PointList,
@@ -191,8 +83,6 @@ function initBezier(canvas: any): P5Bezier {
   return new P5Bezier(canvas)
 }
 
-/* -------------------------------------------------------------------------- */
-
 class BezierCurve {
   controlPoints: PointList
   closeType: CloseType
@@ -200,8 +90,8 @@ class BezierCurve {
   increment: number
 
   private vertexList: VertexList
-  private p: number
-  private n: number
+  private sampledPoints: PointList
+  private sampledIncrement: number
   private b: BezierCanvas
 
   constructor(
@@ -211,139 +101,109 @@ class BezierCurve {
     bezierCanvas: BezierCanvas,
     vertexList: VertexList | null = null,
   ) {
-    this.controlPoints = _concentrate(points, closeType === 'CLOSE')
-
-    if (closeType === 'CLOSE') {
-      this.controlPoints.push(..._getCloseCurvePoints(this.controlPoints))
-      this.closeType = 'CLOSE'
-    } else this.closeType = 'OPEN'
-
+    // A supplied vertex list is already sampled, including closure. This is
+    // used by move() and must not append closing control points a second time.
+    this.controlPoints =
+      vertexList === null ? _preparePoints(points, closeType) : _copy(points)
+    this.closeType = closeType === 'CLOSE' ? 'CLOSE' : 'OPEN'
     this.dimension = bezierCanvas.dimension
     this.increment = increment
-    this.vertexList = []
-    this.p = this.controlPoints.length // has p points for (p - 1) degree curves
-    this.n = this.p - 1 // degree
-
     this.b = bezierCanvas
-
+    this.vertexList = vertexList === null ? [] : vertexList.slice()
+    this.sampledPoints = []
+    this.sampledIncrement = increment
     if (vertexList === null) this._buildVertexList()
-    else this.vertexList = [...vertexList]
+    else _copy(this.controlPoints, this.sampledPoints)
   }
 
-  private _buildVertexList(): VertexList {
-    this.vertexList = []
-
-    for (let t = 0; t <= 1; t += this.increment) {
-      const v = _bezierVertex(this.controlPoints, this.n, t, this.dimension)
-
-      this.vertexList.push(v)
-    }
-
-    // Sampling may stop just short of t=1 because of floating-point increments.
-    // Building or updating a curve must not issue any drawing commands.
-    this.vertexList.push(
-      this.controlPoints[this.controlPoints.length - 1].slice() as Vertex,
+  private _buildVertexList(): void {
+    _sampleBezier(
+      this.controlPoints,
+      this.dimension,
+      this.increment,
+      this.vertexList,
     )
-    this.dimension = this.vertexList[0].length
-
-    return this.vertexList
-  }
-
-  private _addVertex(vArray: Vertex): void {
-    this.b.lineTo(...vArray)
-  }
-
-  private _distVertex(vArray1: Vertex, vArray2: Vertex): number {
-    return this.dimension === 3 && vArray1.length === 3 && vArray2.length === 3
-      ? _dist(
-          vArray1[0],
-          vArray1[1],
-          vArray1[2],
-          vArray2[0],
-          vArray2[1],
-          vArray2[2],
-        )
-      : this.dimension === 2
-        ? _dist(vArray1[0], vArray1[1], vArray2[0], vArray2[1])
-        : 0
+    _copy(this.controlPoints, this.sampledPoints)
+    this.sampledIncrement = this.increment
   }
 
   draw(dash?: [number, number]): void {
-    if (!dash) {
-      this._solidCurve()
-    } else {
-      this._dashedCurve(dash)
-    }
-  }
-
-  private _solidCurve(): void {
-    this.b.beginPath()
-    this.vertexList.map((v) => this._addVertex(v))
-
-    this.b.closePath(this.closeType)
+    if (dash) this._dashedCurve(dash)
+    else _drawVertices(this.b, this.vertexList, this.closeType)
   }
 
   private _dashedCurve(dash: [number, number]): void {
+    const solidPart = Math.abs(dash[0])
+    const gapPart = Math.abs(dash[1])
+    if (!Number.isFinite(solidPart) || !Number.isFinite(gapPart)) {
+      throw new Error('[p5.bezier] Dash lengths must be finite')
+    }
     if (this.increment > 0.001) {
       this.increment = 0.001
-      window.console.warn('[p5.bezier] Smoothness set to 3 for a dashed curve')
+      this._buildVertexList()
+      console.warn('[p5.bezier] Smoothness set to 3 for a dashed curve')
     }
-
-    const [solidPart, gapPart] = dash.map(Math.abs)
-    let solid = true
-    let lastVertex = this.vertexList[0]
-    let toUseVertexInd = 1
-    let currentVirtualVertex = lastVertex
-    let availableDist = 0
-    let neededDist = solidPart
+    if (solidPart === 0 && gapPart > 0) return
 
     this.b.beginDash()
-
-    this.b.beginPath()
-    this.b.moveTo(...lastVertex)
-
-    while (toUseVertexInd < this.vertexList.length) {
-      const toUseVertex = this.vertexList[toUseVertexInd]
-      availableDist = this._distVertex(lastVertex, toUseVertex)
-
-      while (availableDist >= neededDist) {
-        currentVirtualVertex = _interpolateVertex(
-          currentVirtualVertex,
-          toUseVertex,
-          neededDist / availableDist,
-        )
-        solid
-          ? this.b.lineTo(...currentVirtualVertex)
-          : this.b.moveTo(...currentVirtualVertex)
-
-        availableDist -= neededDist
-        solid = !solid
-
-        neededDist = solid ? solidPart : gapPart
+    try {
+      if (gapPart === 0) {
+        _drawVertices(this.b, this.vertexList, this.closeType)
+        return
       }
-
-      solid ? this.b.lineTo(...toUseVertex) : this.b.moveTo(...toUseVertex)
-      neededDist -= this._distVertex(currentVirtualVertex, toUseVertex)
-
-      lastVertex = toUseVertex
-      currentVirtualVertex = lastVertex
-      toUseVertexInd++
+      let solid = true
+      let needed = solidPart
+      const first = this.vertexList[0]
+      this.b.beginPath()
+      this.b.moveTo(first[0], first[1], first[2])
+      for (let i = 1; i < this.vertexList.length; i++) {
+        const previous = this.vertexList[i - 1]
+        const next = this.vertexList[i]
+        let x = previous[0]
+        let y = previous[1]
+        let z = previous[2] ?? 0
+        const nx = next[0]
+        const ny = next[1]
+        const nz = next[2] ?? 0
+        const dx = nx - x
+        const dy = ny - y
+        const dz = nz - z
+        let available = Math.sqrt(dx * dx + dy * dy + dz * dz)
+        while (available >= needed) {
+          const ratio = needed / available
+          x += (nx - x) * ratio
+          y += (ny - y) * ratio
+          z += (nz - z) * ratio
+          if (solid) this.b.lineTo(x, y, z)
+          else this.b.moveTo(x, y, z)
+          available -= needed
+          solid = !solid
+          needed = solid ? solidPart : gapPart
+        }
+        if (solid) this.b.lineTo(nx, ny, nz)
+        needed -= available
+      }
+      this.b.closePath('OPEN')
+    } finally {
+      this.b.endDash()
     }
-
-    this.b.closePath('OPEN')
-    this.b.endDash()
   }
 
-  update(newControlPointList: PointList) {
+  update(newControlPointList: PointList): void {
     if (newControlPointList.length !== this.controlPoints.length) {
       throw new Error('[p5.bezier] The number of control points changed')
     }
-
-    if (this.controlPoints.every((v, i) => v === newControlPointList[i])) {
+    if (
+      this.increment === this.sampledIncrement &&
+      _samePoints(this.sampledPoints, newControlPointList)
+    ) {
+      if (!_samePoints(this.controlPoints, newControlPointList)) {
+        this.controlPoints = _copy(newControlPointList)
+      }
       return
     }
 
-    this.controlPoints = newControlPointList
+    this.controlPoints = _copy(newControlPointList)
     this._buildVertexList()
   }
 
@@ -357,43 +217,43 @@ class BezierCurve {
     if (z === null && this.dimension === 3) {
       throw new Error('[p5.bezier] X, Y, and Z are needed to move a 3D curve')
     }
-
-    const toMove: number[] = [x, y]
-    if (z !== null) toMove.push(z)
-
-    const newCurveV: VertexList = this.vertexList.map(
-      (v) => v.slice() as Vertex,
-    )
-    const newCurveObj: BezierCurve = new BezierCurve(
-      this.controlPoints,
+    const translate = (points: PointList): PointList => {
+      const result: PointList = new Array(points.length)
+      for (let i = 0; i < points.length; i++) {
+        const point = points[i]
+        result[i] =
+          this.dimension === 3
+            ? [point[0] + x, point[1] + y, (point[2] as number) + (z as number)]
+            : [point[0] + x, point[1] + y]
+      }
+      return result
+    }
+    const moved = new BezierCurve(
+      translate(this.controlPoints),
       this.closeType,
       this.increment,
       this.b,
-      newCurveV,
+      translate(this.vertexList),
     )
-
-    newCurveObj.vertexList = newCurveObj.vertexList.map(
-      (v) => v.map((val: number, i: number) => val + toMove[i]) as Vertex,
-    )
-
-    if (toDraw) newCurveObj.draw(dash)
-
-    return newCurveObj
+    if (toDraw) moved.draw(dash)
+    return moved
   }
 
   shortest(pX: number, pY: number, pZ = 0): Vertex {
-    let minVertex: Vertex = [0, 0, 0]
-    let dMin = Number.POSITIVE_INFINITY
-
-    this.vertexList.map((v) => {
-      const nowMin = this._distVertex(v, [pX, pY, pZ])
-      if (dMin > nowMin) {
-        dMin = nowMin
-        minVertex = [...v] as Vertex
+    let closest = this.vertexList[0]
+    let minimum = Number.POSITIVE_INFINITY
+    for (let i = 0; i < this.vertexList.length; i++) {
+      const vertex = this.vertexList[i]
+      const dx = vertex[0] - pX
+      const dy = vertex[1] - pY
+      const dz = this.dimension === 3 ? (vertex[2] as number) - pZ : 0
+      const distance = dx * dx + dy * dy + dz * dz
+      if (distance < minimum) {
+        minimum = distance
+        closest = vertex
       }
-    })
-
-    return minVertex
+    }
+    return closest.slice() as Vertex
   }
 }
 

@@ -37,6 +37,8 @@
 		"build": "webpack --env=production",
 		"prepare": "husky",
 		"build:examples": "node scripts/build-site.mjs",
+		"test": "npm run build && node --test tests/*.test.mjs",
+		"benchmark": "npm run build && node scripts/benchmark.mjs",
 		"test:examples": "node --test tests/*.test.mjs"
 	},
 	"types": "lib/p5.bezier.d.ts"

@@ -22,5 +22,7 @@ jobs:
         run: bun install --frozen-lockfile
       - name: Build
         run: bun run build
+      - name: Test the built package
+        run: node --test tests/*.test.mjs
       - name: Publish
         run: npm publish --access public --registry=https://registry.npmjs.org/

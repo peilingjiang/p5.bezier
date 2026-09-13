@@ -1,5 +1,5 @@
 import { startArtwork } from './artwork.mjs?v=wave-2'
-import { circle, segment, surface } from './canvas.mjs?v=grid-5'
+import { circle, segment, surface } from './canvas.mjs?v=round-markers-1'
 import {
   DEFAULT_POINTS,
   DESCRIPTIONS,
@@ -150,8 +150,7 @@ function startStudio() {
       )
       cacheKey = key
     } else if (cachedPoints !== pointsKey) {
-      // update() retains its argument; keep the editable state independent.
-      cachedCurve.update(state.points.map((point) => [...point]))
+      cachedCurve.update(state.points)
     }
     cachedPoints = pointsKey
     return cachedCurve

@@ -134,6 +134,8 @@ The call of `p5bezier.new` will not draw the curve on canvas automatically. To d
 
   Updates the positions of control points. The number of control points should remain consistent with the initial curve configuration.
 
+  Coordinates are copied, so you can edit the same input array and call `.update(points)` each frame. Unchanged coordinates skip resampling. For closed curves, pass the same number of points as `curve.controlPoints`, including its closure points, or create a new closed curve from your original points to regenerate the closure.
+
 - `.move(x, y [, z, toDraw, dash])`
 
   Translates the entire curve. This function does not modify the original object but instead generates and returns a new one. Hence, if you wish to update the curve using this method (which is faster than `.update()`), you may:
@@ -170,6 +172,33 @@ Read the [API and runnable examples in Markdown](https://bezier.jiang.pl/referen
 1. More examples
 2. `offset()`, `intersection()`, and `curvature()`... functions for Bézier object
 3. Draw B-Spline curves
+
+## Performance
+
+The sampler reuses Bézier weights across curves with the same control-point count and precision. Animated draws and updates reuse their vertex arrays; unchanged updates and consecutive `draw()` calls with identical coordinates skip sampling. The shared weight cache retains at most 8 MiB and evicts older entries. No runtime dependencies are required.
+
+Precision levels still use 10, 50, 1,000, 2,000, and 5,000 line segments respectively. Samples use exact endpoints without cumulative floating-point drift. `shortest()` continues to return the closest sampled vertex. Rendering still submits every segment, so p5.js WebGL tessellation can dominate drawing time even with faster sampling.
+
+Measured against 0.8.1 on macOS arm64, Node.js 26.8.2, at precision 5:
+
+| Animated `draw()`  |   Before |   After | Speedup |
+| ------------------ | -------: | ------: | ------: |
+| 32 control points  |  2.53 ms | 0.20 ms |   12.5× |
+| 160 control points | 11.54 ms | 0.96 ms |   12.0× |
+
+These are median CPU times per call after warmup with a no-op renderer, not frame-rate guarantees. A browser check with actual p5.js 2D drawing measured 11.6 ms → 1.2 ms for the 160-point case; WebGL remained limited by renderer work. First use and workloads cycling through large degrees or precision levels may rebuild evicted weights. The benchmark's mixed-degree case cycles through 157–160 control points, exceeding the cache budget; that case measured a 3.2× speedup.
+
+For curves drawn repeatedly, retain `curves.new(points, 'OPEN', 5)` and call `curve.update(points)` only when editing the controls. For translation, `curve.move(dx, dy, null, false)` reuses the sampled shape without evaluating the Bézier polynomial again.
+
+Run correctness tests and benchmarks locally:
+
+```sh
+npm test
+npm run benchmark
+
+# Compare two built bundles, baseline first:
+node scripts/benchmark.mjs /path/to/baseline.js lib/p5.bezier.min.js
+```
 
 ## Development
 
