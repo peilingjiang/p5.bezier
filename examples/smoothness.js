@@ -1,4 +1,4 @@
-new p5(p => {
+new p5((p) => {
   let p5bezier
 
   p.setup = () => {
@@ -24,7 +24,7 @@ new p5(p => {
     p5bezier.draw(points, 'OPEN', 1)
 
     p5bezier.draw(
-      points.map(point => [point[0], point[1] + offset]),
+      points.map((point) => [point[0], point[1] + offset]),
       'OPEN',
       2,
     )
@@ -33,20 +33,20 @@ new p5(p => {
     p.strokeWeight(3)
     p.stroke(p.color('#FD5E53'))
     p5bezier.draw(
-      points.map(point => [point[0], point[1] + offset * 2]),
+      points.map((point) => [point[0], point[1] + offset * 2]),
       'OPEN',
       3,
     )
     p.pop()
 
     p5bezier.draw(
-      points.map(point => [point[0], point[1] + offset * 3]),
+      points.map((point) => [point[0], point[1] + offset * 3]),
       'OPEN',
       4,
     )
 
     p5bezier.draw(
-      points.map(point => [point[0], point[1] + offset * 4]),
+      points.map((point) => [point[0], point[1] + offset * 4]),
       'OPEN',
       5,
     )

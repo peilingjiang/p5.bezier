@@ -3,7 +3,7 @@ const { BannerPlugin } = require('webpack')
 const TerserPlugin = require('terser-webpack-plugin')
 const { name, version } = require('./package.json')
 
-const config = outputDir => ({
+const config = (outputDir) => ({
   mode: 'production',
   entry: './src/p5.bezier.ts',
   module: {
@@ -56,7 +56,7 @@ const config = outputDir => ({
   },
 })
 
-module.exports = env => {
+module.exports = (env) => {
   if (env.development) {
     return Object.assign({}, config('lib'), {
       mode: 'development',

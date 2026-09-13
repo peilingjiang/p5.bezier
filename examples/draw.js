@@ -1,4 +1,4 @@
-new p5(p => {
+new p5((p) => {
   let p5bezier
 
   const lines = []

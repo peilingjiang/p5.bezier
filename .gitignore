@@ -8,5 +8,14 @@ node_modules/
 .vscode
 examples/lib
 
-.agents
+# Local agent context and planning
+.agents/
+.impeccable/
+docs/superpowers/
+/DESIGN.md
+/PRODUCT.md
 skills-lock.json
+
+# Local verification and package artifacts
+.cache/
+*.tgz

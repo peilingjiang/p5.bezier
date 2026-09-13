@@ -1,4 +1,4 @@
-new p5(p => {
+new p5((p) => {
   let p5bezier
 
   let pa
@@ -31,7 +31,7 @@ new p5(p => {
     if (p.mouseX < 0 || p.mouseX > width || p.mouseY < 0 || p.mouseY > 600)
       return false
 
-    const distances = pa.points.map(point =>
+    const distances = pa.points.map((point) =>
       p.dist(p.mouseX, p.mouseY, point.position[0], point.position[1]),
     )
 
@@ -100,7 +100,7 @@ new p5(p => {
     }
 
     get() {
-      return this.pointArray.map(point => point.position)
+      return this.pointArray.map((point) => point.position)
     }
   }
 
