@@ -1,6 +1,6 @@
 # p5.bezier
 
-> MIT-licensed JavaScript library by Peiling Jiang for Bézier curves beyond four control points. Works with p5.js renderers, graphics buffers, WebGL with 3D points, and a native Canvas 2D adapter. Repository version: 0.8.0.
+> MIT-licensed JavaScript library by Peiling Jiang for Bézier curves beyond four control points. Works with p5.js renderers, graphics buffers, WebGL with 3D points, and a native Canvas 2D adapter. Repository version: 0.8.1.
 
 ## Start here
 

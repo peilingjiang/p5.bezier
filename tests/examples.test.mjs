@@ -31,7 +31,7 @@ test('every experiment exports a complete executable p5 sketch', () => {
     assert.match(sketch, /initBezier\(/)
     const html = makeDocument(sketch)
     assert.match(html, /p5@2\.3\.3/)
-    assert.match(html, /p5bezier@0\.8\.0/)
+    assert.match(html, /p5bezier@0\.8\.1/)
   }
 })
 

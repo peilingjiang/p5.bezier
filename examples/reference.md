@@ -1,6 +1,6 @@
 # p5.bezier
 
-> Bézier curves beyond four control points, by Peiling Jiang. MIT licensed. Repository version 0.8.0.
+> Bézier curves beyond four control points, by Peiling Jiang. MIT licensed. Repository version 0.8.1.
 
 - [Homepage and interactive playground](https://bezier.jiang.pl/)
 - [Agent index](https://bezier.jiang.pl/llms.txt)
@@ -17,7 +17,7 @@ Install with `npm install p5bezier`, then `import initBezier from 'p5bezier'` in
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>p5.bezier example</title>
   <script src="https://cdn.jsdelivr.net/npm/p5@2.3.3/lib/p5.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/p5bezier@0.8.0"></script>
+  <script src="https://cdn.jsdelivr.net/npm/p5bezier@0.8.1"></script>
   <script>
     function setup() {
       const curves = initBezier(createCanvas(600, 400))

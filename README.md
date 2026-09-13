@@ -194,7 +194,7 @@ python3 -m http.server 4173
 npm run test:examples
 ```
 
-The homepage uses plain HTML, CSS, and JavaScript modules. Edit API prose in `examples/index.html` and runnable sketches in `examples/recipes.mjs`, then run `npm run build:examples` to regenerate the static examples and Markdown mirror. The 2D playground uses the local library bundle; the 3D experiment loads p5.js 2.3.3 on demand. Downloaded sketches load p5.js 2.3.3 and p5bezier 0.8.0 from jsDelivr.
+The homepage uses plain HTML, CSS, and JavaScript modules. Edit API prose in `examples/index.html` and runnable sketches in `examples/recipes.mjs`, then run `npm run build:examples` to regenerate the static examples and Markdown mirror. The 2D playground uses the local library bundle; the 3D experiment loads p5.js 2.3.3 on demand. Downloaded sketches load p5.js 2.3.3 and p5bezier 0.8.1 from jsDelivr.
 
 ## References
 

@@ -211,7 +211,7 @@ export function makeDocument(sketch) {
 <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>My p5.bezier sketch</title>
 <style>body{margin:0;min-height:100svh;display:grid;place-items:center;background:#ffffff}canvas{max-width:100%;height:auto!important}</style>
 <script src="https://cdn.jsdelivr.net/npm/p5@2.3.3/lib/p5.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/p5bezier@0.8.0"></script>
+<script src="https://cdn.jsdelivr.net/npm/p5bezier@0.8.1"></script>
 </head><body><script>
 ${sketch.replaceAll('</script', '<\\/script')}
 </script></body></html>`
