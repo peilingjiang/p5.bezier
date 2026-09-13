@@ -10,7 +10,7 @@
 
 <!-- [**Try it now on p5.js Web Editor!**](https://editor.p5js.org/peilingjiang/sketches/7Z2pRG-TB) -->
 
-[**Try it now on p5.js Web Editor!**](https://editor.p5js.org/peilingjiang/sketches/mVXzWEJbT) | [**Examples**](examples/)
+[**Try it now on p5.js Web Editor!**](https://editor.p5js.org/peilingjiang/sketches/mVXzWEJbT) | [**Homepage**](https://bezier.jiang.pl)
 
 While **p5.bezier** is designed to integrate with p5.js, it operates independently as well. To draw a Bézier curve on canvas, you can simply use `p5bezier.draw()`:
 
@@ -155,9 +155,9 @@ The call of `p5bezier.new` will not draw the curve on canvas automatically. To d
 
 ## Examples
 
-The [examples page](examples/) includes control points, freehand drawing, dashes, closest-point queries, smoothness, translated curves, and a WebGL graphics buffer. Each experiment produces a complete p5.js sketch you can copy or download as HTML. You can also save the canvas as a PNG. See [Development](#development) to run it locally.
+The [examples page](https://bezier.jiang.pl/) includes control points, freehand drawing, dashes, closest-point queries, smoothness, translated curves, and a WebGL graphics buffer. Each experiment produces a complete p5.js sketch you can copy or download as HTML. You can also save the canvas as a PNG. See [Development](#development) to run it locally.
 
-Read the [API and runnable examples in Markdown](examples/reference.md), the [agent index](examples/llms.txt), or the [homepage source](examples/). The complete reference is also present in the homepage HTML, so it is readable without JavaScript.
+Read the [API and runnable examples in Markdown](https://bezier.jiang.pl/reference.md), the [agent index](https://bezier.jiang.pl/llms.txt), or the [homepage source](examples/). The complete reference is also present in the homepage HTML, so it is readable without JavaScript.
 
 ### Projects and Demos
 

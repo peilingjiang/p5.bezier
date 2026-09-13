@@ -2,8 +2,8 @@
 
 > Bézier curves beyond four control points, by Peiling Jiang. MIT licensed. Repository version 0.8.0.
 
-- [Homepage and interactive playground](./)
-- [Agent index](llms.txt)
+- [Homepage and interactive playground](https://bezier.jiang.pl/)
+- [Agent index](https://bezier.jiang.pl/llms.txt)
 - [Source](https://github.com/peilingjiang/p5.bezier)
 
 ## Quickstart

@@ -4,15 +4,15 @@
 
 ## Start here
 
-- [Homepage](./): interactive experiments, install instructions, and a complete API reference in the initial HTML.
-- [Full reference and runnable examples](reference.md): Markdown quickstart, exact method signatures, return values, caveats, and seven complete p5.js sketches.
-- [Quickstart](./#quickstart): complete HTML and npm installation.
-- [API reference](./#reference): initBezier, draw, new, update, move, shortest, and the native Canvas adapter.
+- [Homepage](https://bezier.jiang.pl/): interactive experiments, install instructions, and a complete API reference in the initial HTML.
+- [Full reference and runnable examples](https://bezier.jiang.pl/reference.md): Markdown quickstart, exact method signatures, return values, caveats, and seven complete p5.js sketches.
+- [Quickstart](https://bezier.jiang.pl/#quickstart): complete HTML and npm installation.
+- [API reference](https://bezier.jiang.pl/#reference): initBezier, draw, new, update, move, shortest, and the native Canvas adapter.
 
 ## Source
 
 - [Repository](https://github.com/peilingjiang/p5.bezier): source code and development instructions.
-- [Library bundle](../lib/p5.bezier.min.js): the browser build used by this site.
-- [Type declarations](../lib/p5.bezier.d.ts): TypeScript method signatures.
+- [Library bundle](https://bezier.jiang.pl/lib/p5.bezier.min.js): the browser build used by this site.
+- [Type declarations](https://bezier.jiang.pl/lib/p5.bezier.d.ts): TypeScript method signatures.
 
 This is a browser library, not an HTTP service. No authentication, MCP server, or REST API is needed. Read the reference caveats before generating code, particularly for closed-curve updates, sampled nearest points, and native Canvas initialization.

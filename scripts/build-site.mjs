@@ -9,6 +9,9 @@ import {
 } from '../examples/recipes.mjs'
 
 const pagePath = new URL('../examples/index.html', import.meta.url)
+const { homepage } = JSON.parse(
+  await readFile(new URL('../package.json', import.meta.url), 'utf8'),
+)
 const formatOptions = await resolveConfig(fileURLToPath(pagePath))
 const escapeHTML = (text) =>
   text.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;')
@@ -71,7 +74,7 @@ const api = [
 const starter = decodeHTML(
   html.match(/id="starter-code"[\s\S]*?>([\s\S]*?)<\/code>/)[1],
 ).trim()
-const markdown = `# p5.bezier\n\n> Bézier curves beyond four control points, by Peiling Jiang. MIT licensed. Repository version 0.8.0.\n\n- [Homepage and interactive playground](./)\n- [Agent index](llms.txt)\n- [Source](https://github.com/peilingjiang/p5.bezier)\n\n## Quickstart\n\nInstall with \`npm install p5bezier\`, then \`import initBezier from 'p5bezier'\` in a bundler. The module expects a browser environment. Or save this complete HTML example:\n\n\`\`\`html\n${starter}\n\`\`\`\n\n${api}\n\n## Complete p5.js examples\n\nEach JavaScript block below is a complete global-mode sketch. Load p5.js and p5.bezier as in the HTML quickstart, then replace its inline script with one of these examples. The downloadable HTML sketches use the same pinned dependencies. The interactive site itself uses the bundled repository build.\n\n${snippets.map(({ mode, code }) => `### ${DESCRIPTIONS[mode][0]}\n\n${DESCRIPTIONS[mode][2]}\n\n\`\`\`javascript\n${code}\n\`\`\``).join('\n\n')}\n\n## Limitations\n\nSmoothness trades computation for sampling precision. shortest() returns a sampled vertex. update() expects a consistent count and fresh arrays. For closed curves, reconstruct the object to regenerate closure points. The library internally reduces very large point lists; this playground bounds freehand input to 80 points. Raw WebGL contexts are unsupported. Intersection, offset, curvature, and B-spline methods are not implemented. No authentication or HTTP API is required: this is a client-side JavaScript library.\n`
+const markdown = `# p5.bezier\n\n> Bézier curves beyond four control points, by Peiling Jiang. MIT licensed. Repository version 0.8.0.\n\n- [Homepage and interactive playground](${homepage})\n- [Agent index](${new URL('llms.txt', homepage)})\n- [Source](https://github.com/peilingjiang/p5.bezier)\n\n## Quickstart\n\nInstall with \`npm install p5bezier\`, then \`import initBezier from 'p5bezier'\` in a bundler. The module expects a browser environment. Or save this complete HTML example:\n\n\`\`\`html\n${starter}\n\`\`\`\n\n${api}\n\n## Complete p5.js examples\n\nEach JavaScript block below is a complete global-mode sketch. Load p5.js and p5.bezier as in the HTML quickstart, then replace its inline script with one of these examples. The downloadable HTML sketches use the same pinned dependencies. The interactive site itself uses the bundled repository build.\n\n${snippets.map(({ mode, code }) => `### ${DESCRIPTIONS[mode][0]}\n\n${DESCRIPTIONS[mode][2]}\n\n\`\`\`javascript\n${code}\n\`\`\``).join('\n\n')}\n\n## Limitations\n\nSmoothness trades computation for sampling precision. shortest() returns a sampled vertex. update() expects a consistent count and fresh arrays. For closed curves, reconstruct the object to regenerate closure points. The library internally reduces very large point lists; this playground bounds freehand input to 80 points. Raw WebGL contexts are unsupported. Intersection, offset, curvature, and B-spline methods are not implemented. No authentication or HTTP API is required: this is a client-side JavaScript library.\n`
 await writeFile(
   new URL('../examples/reference.md', import.meta.url),
   await format(markdown, { ...formatOptions, parser: 'markdown' }),
