@@ -8,44 +8,95 @@ export type Vertex = [number, number] | [number, number, number]
 export type VertexList = Vertex[]
 
 export type BezierCanvas = {
-  // biome-ignore lint/suspicious/noExplicitAny: p5 typing
-  canvas: any
-  // biome-ignore lint/suspicious/noExplicitAny: p5 typing
-  ctx: any
   dimension: Dimension
-  useP5: boolean
   beginPath: () => void
   moveTo: (...args: Vertex) => void
   lineTo: (...args: Vertex) => void
   closePath: (closeType?: CloseType) => void
+  beginDash: () => void
+  endDash: () => void
 }
 
-export function _getDimension(
+function _getDimension(
   // biome-ignore lint/suspicious/noExplicitAny: p5 typing
   context: any,
   isP3D: boolean,
 ): Dimension {
-  return context.constructor.name === 'WebGLRenderingContext' || isP3D ? 3 : 2
+  const name = context.constructor?.name
+  return isP3D ||
+    name === 'WebGLRenderingContext' ||
+    name === 'WebGL2RenderingContext'
+    ? 3
+    : 2
 }
 
-export function _getCanvasUtils(b: BezierCanvas) {
-  if (b.useP5) {
-    b.beginPath = b.canvas.beginShape
-    b.moveTo = b.canvas.vertex
-    b.lineTo = b.canvas.vertex
-    b.closePath = b.canvas.endShape
-  } else {
-    if (b.ctx instanceof WebGLRenderingContext) {
-      b.beginPath = () => {}
-      b.moveTo = (x, y, z = 0) => b.ctx.vertexAttrib3f(0, x, y, z)
-      b.lineTo = (x, y, z = 0) => b.ctx.vertexAttrib3f(0, x, y, z)
-      b.closePath = () => {}
-    } else {
-      b.beginPath = b.ctx.beginPath.bind(b.ctx)
-      b.moveTo = b.ctx.moveTo.bind(b.ctx)
-      b.lineTo = b.ctx.lineTo.bind(b.ctx)
-      b.closePath = b.ctx.closePath.bind(b.ctx)
+// biome-ignore lint/suspicious/noExplicitAny: p5 typing
+export function _getCanvasUtils(canvas: any): BezierCanvas {
+  // createGraphics wraps a renderer; createCanvas returns the renderer itself.
+  const renderer = canvas?._renderer ?? canvas
+  const ctx = renderer?.drawingContext
+  if (!ctx) throw new Error('[p5.bezier] Canvas is not supported')
+
+  const dimension = _getDimension(ctx, renderer.isP3D)
+  const sketch = renderer._pInst
+  if (!sketch) {
+    if (dimension === 3) {
+      throw new Error('[p5.bezier] WebGL requires a p5.js renderer')
     }
+    return {
+      dimension,
+      beginPath: ctx.beginPath.bind(ctx),
+      moveTo: ctx.moveTo.bind(ctx),
+      lineTo: ctx.lineTo.bind(ctx),
+      closePath: (closeType) => {
+        if (closeType === 'CLOSE') ctx.closePath()
+        if (renderer._doFill) ctx.fill()
+        if (renderer._doStroke) ctx.stroke()
+      },
+      beginDash: () => {
+        ctx.save()
+        ctx.fillStyle = 'rgba(0, 0, 0, 0)'
+      },
+      endDash: () => ctx.restore(),
+    }
+  }
+
+  let hasVertices = false
+  let pendingVertex: Vertex | null = null
+  return {
+    dimension,
+    beginPath: () => {
+      sketch.beginShape()
+      hasVertices = false
+      pendingVertex = null
+    },
+    lineTo: (x, y, z = 0) => {
+      if (pendingVertex) {
+        sketch.vertex(...pendingVertex)
+        pendingVertex = null
+      }
+      sketch.vertex(x, y, z)
+      hasVertices = true
+    },
+    moveTo: (x, y, z = 0) => {
+      // Defer the next vertex so dash gaps don't submit singleton shapes.
+      if (hasVertices) {
+        sketch.endShape()
+        sketch.beginShape()
+        hasVertices = false
+      }
+      pendingVertex = [x, y, z]
+    },
+    closePath: (closeType) => {
+      sketch.endShape(closeType === 'CLOSE' ? sketch.CLOSE : undefined)
+      hasVertices = false
+      pendingVertex = null
+    },
+    beginDash: () => {
+      sketch.push()
+      sketch.noFill()
+    },
+    endDash: () => sketch.pop(),
   }
 }
 
@@ -66,11 +117,6 @@ export function _dist(...args: number[]): number {
   }
 
   return 0
-}
-
-export function _setStyles(b: BezierCanvas) {
-  if (b.canvas._doFill) b.ctx.fill()
-  if (b.canvas._doStroke) b.ctx.stroke()
 }
 
 let warnedSmoothness = false
@@ -152,11 +198,11 @@ export function _getCloseCurvePoints(pointList: PointList): PointList {
   const second = pointList[1]
   const secondLast = pointList[len - 2]
 
-  return _copy([
-    [2 * last[0] - secondLast[0], 2 * last[1] - secondLast[1]] as Point,
-    [2 * first[0] - second[0], 2 * first[1] - second[1]] as Point,
-    first,
-  ])
+  return [
+    _interpolateVertex(secondLast, last, 2),
+    _interpolateVertex(second, first, 2),
+    first.slice() as Point,
+  ]
 }
 
 export function _interpolateVertex(v1: Vertex, v2: Vertex, t: number): Vertex {

@@ -58,7 +58,7 @@ const config = outputDir => ({
 
 module.exports = env => {
   if (env.development) {
-    return Object.assign({}, config('examples/lib'), {
+    return Object.assign({}, config('lib'), {
       mode: 'development',
       optimization: {
         minimize: false,

@@ -9,7 +9,6 @@
 	"main": "lib/p5.bezier.min.js",
 	"devDependencies": {
 		"@biomejs/biome": "^1.9.2",
-		"@types/p5": "^1.7.6",
 		"husky": "^9.1.6",
 		"lint-staged": "^15.2.10",
 		"prettier": "^3.3.3",

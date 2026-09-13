@@ -71,6 +71,25 @@ function setup() {
 }
 ```
 
+You can also pass a buffer returned by `createGraphics()`. In WebGL mode, supply `[x, y, z]` control points:
+
+```js
+const buffer = createGraphics(300, 300, WEBGL)
+const curves = initBezier(buffer)
+
+buffer.noFill()
+buffer.stroke(255)
+
+curves.draw([
+  [-100, 0, 0],
+  [0, -100, 40],
+  [100, 0, 0],
+])
+image(buffer, 0, 0)
+```
+
+Curves use the target canvas or buffer's current styles and transforms. Dashed curves draw only the stroke and restore the fill afterward. Raw WebGL contexts without a p5.js renderer are not supported.
+
 ## Draw a Bézier Curve
 
 The simplest way to use the library is to call `p5bezier.draw()` in your `draw()` function. You can adjust the curve's style using `fill()` or `strokeWeight()` just like other shapes.
@@ -151,6 +170,17 @@ Check out the [examples page](https://p5bezier.netlify.app) and their [source co
 1. More examples
 2. `offset()`, `intersection()`, and `curvature()`... functions for Bézier object
 3. Draw B-Spline curves
+
+## Development
+
+Install development dependencies and build the library:
+
+```sh
+bun install --frozen-lockfile
+bun run build # build the library
+# or
+bun run start # rebuild the library as you edit the source
+```
 
 ## References
 

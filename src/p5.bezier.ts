@@ -22,14 +22,9 @@ import {
   _dist,
   _getCanvasUtils,
   _getCloseCurvePoints,
-  _getDimension,
   _interpolateVertex,
-  _setStyles,
   _validateSmoothness,
 } from './utils'
-
-// biome-ignore lint/suspicious/noExplicitAny: p5 typing
-declare const p5: any
 
 window.console.log(`[p5.bezier] ${packageJson.version}`)
 
@@ -112,41 +107,11 @@ function _drawBezierCurve(
 /* -------------------------------------------------------------------------- */
 
 class P5Bezier {
-  private b: BezierCanvas = {
-    canvas: null,
-    ctx: null,
-    dimension: 2,
-    useP5: true,
-    beginPath: () => {},
-    moveTo: () => {},
-    lineTo: () => {},
-    closePath: () => {},
-  }
+  private b: BezierCanvas
 
   // biome-ignore lint/suspicious/noExplicitAny: p5 typing
   constructor(canvas: any) {
-    this.b.canvas = canvas
-    this.b.ctx = this.b.canvas.drawingContext
-
-    if (typeof p5 !== 'undefined' && canvas instanceof p5.Graphics) {
-      this.b.useP5 = true
-      this.b.dimension = _getDimension(this.b.ctx, false)
-    } else if (
-      (typeof p5 !== 'undefined' && canvas instanceof p5.Renderer) ||
-      canvas.drawingContext
-    ) {
-      this.b.useP5 = false
-
-      if (
-        typeof p5 === 'undefined' ||
-        (typeof p5 !== 'undefined' && !(canvas instanceof p5.Renderer))
-      )
-        window.console.warn('[p5.bezier] Support beyond p5.js is not tested')
-
-      this.b.dimension = _getDimension(this.b.ctx, canvas.isP3D)
-    } else throw new Error('[p5.bezier] Canvas is not supported')
-
-    _getCanvasUtils(this.b)
+    this.b = _getCanvasUtils(canvas)
   }
 
   draw(
@@ -172,10 +137,7 @@ class P5Bezier {
 
     this.b.lineTo(..._pL[_pL.length - 1])
 
-    if (this.b.useP5) this.b.closePath(closeType)
-    else if (closeType === 'CLOSE') this.b.closePath()
-
-    _setStyles(this.b)
+    this.b.closePath(closeType)
 
     return _pL
   }
@@ -277,7 +239,11 @@ class BezierCurve {
       this.vertexList.push(v)
     }
 
-    this._addVertex(this.controlPoints[this.controlPoints.length - 1] as Vertex)
+    // Sampling may stop just short of t=1 because of floating-point increments.
+    // Building or updating a curve must not issue any drawing commands.
+    this.vertexList.push(
+      this.controlPoints[this.controlPoints.length - 1].slice() as Vertex,
+    )
     this.dimension = this.vertexList[0].length
 
     return this.vertexList
@@ -314,12 +280,7 @@ class BezierCurve {
     this.b.beginPath()
     this.vertexList.map((v) => this._addVertex(v))
 
-    if (this.closeType === 'CLOSE') this.b.closePath()
-
-    if (this.b.useP5) this.b.closePath(this.closeType)
-    else if (this.closeType === 'CLOSE') this.b.closePath()
-
-    _setStyles(this.b)
+    this.b.closePath(this.closeType)
   }
 
   private _dashedCurve(dash: [number, number]): void {
@@ -336,8 +297,7 @@ class BezierCurve {
     let availableDist = 0
     let neededDist = solidPart
 
-    this.b.ctx.save()
-    this.b.ctx.fillStyle = 'rgba(0, 0, 0, 0)'
+    this.b.beginDash()
 
     this.b.beginPath()
     this.b.moveTo(...lastVertex)
@@ -370,8 +330,8 @@ class BezierCurve {
       toUseVertexInd++
     }
 
-    _setStyles(this.b)
-    this.b.ctx.restore()
+    this.b.closePath('OPEN')
+    this.b.endDash()
   }
 
   update(newControlPointList: PointList) {
