@@ -173,6 +173,8 @@ Read the [API and runnable examples in Markdown](examples/reference.md), the [ag
 
 ## Development
 
+Use Node.js 20.9 or newer and Bun for development. The release workflow uses Node.js 24.
+
 Install development dependencies and build the library:
 
 ```sh
